@@ -1,14 +1,5 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
-
-$config['assets']    = array(
-	"global_plugins" => "assets/global/plugins",
-	"global_css" => "assets/global/css",
-	"global_scripts" => "assets/global/scripts",
-	"layouts_layout" => "assets/layouts/layout",
-	"layouts_global" => "assets/layouts/global"
-);
-
 /*
 |--------------------------------------------------------------------------
 | Base Site URL
@@ -87,7 +78,7 @@ $config['url_suffix'] = '';
 | than english.
 |
 */
-$config['language']	= 'english';
+$config['language']	= 'indonesian';
 
 /*
 |--------------------------------------------------------------------------

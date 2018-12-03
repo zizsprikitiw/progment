@@ -6,10 +6,23 @@ class Index extends CI_Controller {
 	function __construct()
 	{
 			parent::__construct();
+			$this->load->database();
+			$this->load->library(array('ion_auth','form_validation'));
+			$this->load->helper(array('url','language'));
+			$this->load->config('custom');
+			
+			$this->lang->load('auth');
+			if (!$this->ion_auth->logged_in())
+			{
+				// redirect them to the login page
+				redirect('login', 'refresh');			
+			}
 	}
 	
 	public function index()
 	{
+		$data['user'] = $this->ion_auth->user()->row();
+		
 		//tambahan css plugin
 		$data['add_css'] = array(
 			base_url($this->config->item('assets')['global_plugins'])."/bootstrap-daterangepicker/daterangepicker.min.css",
