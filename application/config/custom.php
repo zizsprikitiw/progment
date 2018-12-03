@@ -17,3 +17,8 @@ $config['assets']    = array(
 $config['uploads']    = array(
 	"users" => "uploads/users",
 );
+
+$config['files']    = array(
+	"image_file_size" => 1048576,
+	"image_file_type" => "jpg,png,jpeg,gif",
+);

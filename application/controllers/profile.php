@@ -7,8 +7,8 @@ class Profile extends CI_Controller {
 	{
 			parent::__construct();
 			$this->load->database();
-			$this->load->library(array('ion_auth','form_validation'));
-			$this->load->helper(array('url','language'));
+			$this->load->library(array('ion_auth','form_validation','custom'));
+			$this->load->helper(array('url','language','file'));
 			$this->load->config('custom');
 			
 			$this->lang->load('auth');
@@ -40,5 +40,64 @@ class Profile extends CI_Controller {
 		);
 		
 		$this->load->view('profile',$data);
+	}
+	
+	// change avatar
+	function change_avatar()
+	{
+		$status = 'error';
+        $message = 'Upload image gagal';
+			
+		//set validation rules
+		$this->form_validation->set_rules('file_avatar', 'Image', "callback_check_image_required"); 
+
+		if ($this->form_validation->run() == false)
+		{			
+			//validation fails
+			$status = 'warning';
+            $message = validation_errors();
+		}
+		else
+		{
+			
+		}
+		echo json_encode(array("status" => $status, "message" => $message));
+	}
+	
+	//custom validation function for dropdown input
+	function check_image_required()
+	{			
+		if (!isset($_FILES['file_avatar']) || empty($_FILES['file_avatar']['name']) || ($_FILES['file_avatar']['name'] == ''))
+		{
+			$this->form_validation->set_message('check_image_required', 'Kolom %s belum diisi');
+			return FALSE;	
+		}else{
+			$max_file_size = $this->config->item('files')['image_file_size'];
+			if($_FILES['file_avatar']['size'] > $max_file_size){
+				//cek ukuran file
+				$this->form_validation->set_message('check_image_required', 'Ukuran file lebih dari '.$this->custom->bytesToSize($max_file_size));
+				return FALSE;	
+			}else{
+				//cek file type				
+				$file_type = $this->config->item('files')['image_file_type'];
+				$ext = strtolower(pathinfo($_FILES['file_avatar']['name'], PATHINFO_EXTENSION));
+				
+				if($ext == ""){
+					//tidak punya ekstensi file
+					$this->form_validation->set_message('check_image_required', 'Format file hanya '.$file_type);
+					return FALSE;
+				}else{
+					$str_pos = strpos($file_type, $ext);
+
+					if ($str_pos !== FALSE) {
+						return TRUE;	
+					}else{
+						$this->form_validation->set_message('check_image_required', 'Format file hanya '.$file_type);
+						return FALSE;					
+					}	
+				}
+							
+			}			
+		}
 	}
 }

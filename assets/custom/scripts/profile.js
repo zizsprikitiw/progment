@@ -112,8 +112,8 @@ var Profile = function() {
 	
 	var cropImage = function() {
 		var form1 = $('#form-change-avatar');
-		$("#file",form1).change(function(){
-			picture(this);
+		$("#file_avatar",form1).change(function(){
+			//picture(this);
 		});
 		
 		function picture(input) {
@@ -155,6 +155,57 @@ var Profile = function() {
 			}
 		}
 	}
+	
+    var uploadImage = function() {
+
+        jQuery('#change-avatar-btn').click(function() {
+			alert("test");
+			// var form = document.getElementById('form-change-avatar');					  
+			// var form_data = new FormData(form);	
+			// var fileInput = document.getElementById('file_avatar');
+			// var file = fileInput.files[0];					
+			// form_data.append("file_avatar", file);	
+						   
+			// $.ajax({
+				// type: "POST",
+				// url: base_url+"profile/change_avatar",
+				// data: form_data,
+				// processData: false,
+				// contentType: false,
+				// dataType: "JSON",
+				// success: function(data){
+					// if(data.status=='success'){
+						// toastr.success(data.message);
+					// } else if (data.status=='warning'){
+						// toastr.warning(data.message);
+					// } else {
+						// toastr.error(data.message);
+					// }
+				// },
+				// error: function (jqXHR, exception) {
+					  // var msgerror = ''; 
+					  // if (jqXHR.status === 0) {
+						  // msgerror = 'jaringan tidak terkoneksi.';
+					  // } else if (jqXHR.status == 404) {
+						  // msgerror = 'Halamam tidak ditemukan. [404]';
+					  // } else if (jqXHR.status == 500) {
+						  // msgerror = 'Internal Server Error [500].';
+					  // } else if (exception === 'parsererror') {
+						  // msgerror = 'Requested JSON parse gagal.';
+					  // } else if (exception === 'timeout') {
+						  // msgerror = 'RTO.';
+					  // } else if (exception === 'abort') {
+						  // msgerror = 'Gagal request ajax.';
+					  // } else {
+						  // msgerror = 'Error.\n' + jqXHR.responseText;
+					  // }
+					  // toastr.error("Error System", msgerror, 'error');
+				// }			
+			// });
+              
+		});
+		
+    }
 
     return {
         //main function to initiate the module
@@ -162,6 +213,7 @@ var Profile = function() {
 
             changePassword();
 			cropImage();
+			uploadImage();
 			
         }
 
