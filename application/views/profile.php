@@ -602,35 +602,43 @@
                                                         <p> Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum
                                                             eiusmod. </p>
                                                         <form action="#" role="form" id="form-change-avatar" class="row" enctype="multipart/form-data">
-                                                            <div class="form-group col-md-6">
-                                                                <div class="fileinput fileinput-new" data-provides="fileinput">
-                                                                    <div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
-                                                                        <img src="<?php echo base_url($this->config->item('assets')['custom_img']); ?>/200x150.png" alt="" /> </div>
-                                                                    <div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"> </div>
-                                                                    <div>
-                                                                        <span class="btn default btn-file">
-                                                                            <span class="fileinput-new"> Select image </span>
-                                                                            <span class="fileinput-exists"> Change </span>
-                                                                            <input type="file" name="file_avatar" id="file_avatar"> </span>
-                                                                        <a href="javascript:;" class="btn default fileinput-exists" data-dismiss="fileinput"> Remove </a>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="clearfix margin-top-10">
-                                                                    <span class="label label-danger"> NOTE! </span>
-                                                                    <span> Attached image thumbnail is supported in Latest Firefox, Chrome, Opera, Safari and Internet Explorer 10 only </span>
-                                                                </div>
+															<div class="fileinput fileinput-new" data-provides="fileinput">
+																<div class="form-group col-md-6">
+																	<div class="clearfix">
+																		<div class="fileinput-new thumbnail" style="width: 200px; height: 150px;">
+																			<img src="<?php echo base_url($this->config->item('assets')['custom_img']); ?>/200x150.png" alt="" /> </div>
+																		<div class="fileinput-preview fileinput-exists thumbnail" style="max-width: 200px; max-height: 150px;"> </div>
+																		<div>
+																			<span class="btn default btn-file">
+																				<span class="fileinput-new"> Select image </span>
+																				<span class="fileinput-exists"> Change </span>
+																				<input type="file" accept="image/x-png,image/gif,image/jpeg" name="file_avatar" id="file_avatar"> </span>
+																			<a href="javascript:;" class="btn default fileinput-exists" data-dismiss="fileinput"> Remove </a>
+																		</div>
+																	</div>
+																	<div class="clearfix margin-top-10">
+																		<span class="label label-danger"> NOTE! </span>
+																		<span> Attached image thumbnail is supported in Latest Firefox, Chrome, Opera, Safari and Internet Explorer 10 only </span>
+																	</div>
+																</div>
+																<div class="form-group col-md-6">
+																	<div class="fileinput-exists">
+																		<h4>Crop Image</h4>
+																		<div id="views"></div>
+																		<!--<div id="jcrop"></div>
+																		<input type="hidden" id="crop_x" name="x" />
+																		<input type="hidden" id="crop_y" name="y" />
+																		<input type="hidden" id="crop_w" name="w" />
+																		<input type="hidden" id="crop_h" name="h" />-->
+																		<span id="cropbutton" class="btn default margin-top-10">Crop</span>
+																	</div>
+																</div>
+																<div class="margin-top-10 col-md-12">
+																	<button class="btn green" type="submit" value="Submit" id="change-avatar-btn"> Submit </button>
+																	<button class="btn default" type="reset" value="Reset">Reset</button>
+																</div>
                                                             </div>
-															<div class="form-group col-md-6">
-																<div id="jcrop"></div>
-																<input type="hidden" id="crop_x" name="x" />
-                                                                <input type="hidden" id="crop_y" name="y" />
-                                                                <input type="hidden" id="crop_w" name="w" />
-                                                                <input type="hidden" id="crop_h" name="h" />
-															</div>
-                                                            <div class="margin-top-10 col-md-12">
-																<button class="btn green" type="submit" value="Submit" id="change-avatar-btn"> Submit </button>
-																<button class="btn default" type="reset" value="Reset">Reset</button>
-                                                            </div>
+															
                                                         </form>
                                                     </div>
                                                     <div id="tab_3-3" class="tab-pane">

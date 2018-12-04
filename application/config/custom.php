@@ -15,7 +15,7 @@ $config['assets']    = array(
 );
 
 $config['uploads']    = array(
-	"users" => "uploads/users",
+	"users" => "uploads/users/",
 );
 
 $config['files']    = array(

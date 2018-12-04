@@ -59,6 +59,64 @@ class Profile extends CI_Controller {
 		}
 		else
 		{
+			//$image_cropped = $_FILES["cropped_image"]["tmp_name"];
+			//var_dump($image_cropped);die();
+			$upload_path = $this->config->item('uploads')['users'];
+			if(!is_dir($upload_path)){
+				mkdir($upload_path,0777);
+			}
+			
+			$config['upload_path'] = "$upload_path";
+			$config['allowed_types'] = 'png|jpeg|jpg|gif';
+			$config['remove_spaces'] = TRUE;
+			$config['file_name'] = 'avatar.jpg';
+			$this->load->library('upload', $config);
+			$this->upload->initialize($config);
+
+			if (!$this->upload->do_upload('cropped_image'))
+			{
+				$message = $this->upload->display_errors('', '');
+				//return false;
+			} else {
+				$this->upload->data();
+			$status = 'success';
+			$message = 'Sukses upload image';
+			}
+			
+			
+			$file_name = $_FILES["cropped_image"]["name"];
+			$file_name = preg_replace("/ /", '_', $file_name);
+			$file_name = preg_replace("/&/", '_', $file_name);
+			$file_name = preg_replace("/{/", '_', $file_name);
+			$file_name = preg_replace("/}/", '_', $file_name);
+			$upload_file = $upload_path.$file_name;
+			
+			//move_uploaded_file($_FILES["cropped_image"]["tmp_name"],$upload_file);	//UPLOAD THE FILE
+					
+			//if(is_file($upload_file)){
+				// $ext = pathinfo($_FILES['file_avatar']['name'], PATHINFO_EXTENSION);
+				// $new_filename = str_replace('.'.$ext, '', $file_name);				
+				// $file_name = $new_filename.'_'.mdate("%Y%m%d-%H%i%s", $_SERVER['REQUEST_TIME']).'.'.$ext;
+				// $upload_file = $upload_path.$file_name;		
+				
+				
+				// $targ_w = $targ_h = 600;
+				// $jpeg_quality = 90;
+
+				// $src = $upload_file;
+
+				// $img_r = imagecreatefromjpeg($src);
+
+				// $dst_r = ImageCreateTrueColor( $targ_w, $targ_h );
+
+				// imagecopyresampled($dst_r,$img_r,0,0,intval($_POST['x']),intval($_POST['y']), $targ_w,$targ_h, intval($_POST['w']),intval($_POST['h']));
+
+				// header('Content-type: image/jpeg');
+				// imagejpeg($dst_r,null,$jpeg_quality);
+	
+				// $status = 'success';
+				// $message = 'Sukses upload image';
+			// }
 			
 		}
 		echo json_encode(array("status" => $status, "message" => $message));
