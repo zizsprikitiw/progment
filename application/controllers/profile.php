@@ -61,35 +61,113 @@ class Profile extends CI_Controller {
 		{
 			//$image_cropped = $_FILES["cropped_image"]["tmp_name"];
 			//var_dump($image_cropped);die();
+			
+			//path directory
 			$upload_path = $this->config->item('uploads')['users'];
-			if(!is_dir($upload_path)){
-				mkdir($upload_path,0777);
-			}
+			$upload_path_thumb50x50 = $this->config->item('uploads')['users_thumb50x50'];
+			//membuat directory jika belum ada
+			$this->custom->makeDir($upload_path);
+			$this->custom->makeDir($upload_path_thumb50x50);
+			
+			$user = $this->ion_auth->user()->row();
+			$file_name = "avatar_".$user->id.".jpg";
 			
 			$config['upload_path'] = "$upload_path";
-			$config['allowed_types'] = 'png|jpeg|jpg|gif';
+			$config['allowed_types'] = "*";
 			$config['remove_spaces'] = TRUE;
-			$config['file_name'] = 'avatar.jpg';
+			$config['file_name'] = $file_name;
+			$config['overwrite'] = TRUE; // true berfungsi untuk replace
+			//$config['max_width'] = '1024';
+			//$config['max_height'] = '768';
 			$this->load->library('upload', $config);
-			$this->upload->initialize($config);
-
+			//Original Image Upload - End
+			
 			if (!$this->upload->do_upload('cropped_image'))
 			{
+				$status = 'error';
 				$message = $this->upload->display_errors('', '');
-				//return false;
 			} else {
-				$this->upload->data();
-			$status = 'success';
-			$message = 'Sukses upload image';
+				$file_path = $this->upload->data();
+				$doc_path = $file_path['file_name'];
+				$this->load->library('image_lib');
+				//path directory
+				$upload_path_thumb50x50 = $this->config->item('uploads')['users_thumb50x50'];
+				//membuat directory jika belum ada
+				$this->custom->makeDir($upload_path_thumb50x50);
+				
+				//Thumbnail Image
+				$config['image_library'] = 'gd2';
+				$config['source_image'] =  "$upload_path/".$doc_path;
+				$config['new_image'] = "$upload_path/".$doc_path;
+				$config['width'] = 600;
+				$config['height'] = 600;
+				//load resize library
+				$this->image_lib->clear();
+				$this->image_lib->initialize($config);
+				$this->image_lib->resize();
+				//Thumbnail Image Upload - End			
+				
+				//Thumbnail Image 50x50
+				$config['image_library'] = 'gd2';
+				$config['source_image'] =  "$upload_path/".$doc_path;
+				$config['new_image'] = "$upload_path_thumb50x50/".$doc_path;
+				$config['width'] = 50;
+				$config['height'] = 50;
+				//load resize library
+				$this->image_lib->clear();
+				$this->image_lib->initialize($config);
+				$this->image_lib->resize();
+				//Thumbnail Image 50x50 Upload - End		
+				
+				$status = 'success';
+				$message = 'Sukses upload image';
 			}
+
+			//Thumbnail Image Upload - Start
+			// $config['image_library'] = 'gd2';
+			// $config['source_image'] =  "$upload_path/".$data['file_name'];
+			// $config['new_image'] = "$upload_path_thumb50x50/".$data['file_name'];
+			// $config['width'] = 50;
+			// $config['height'] = 50;
+
+			//load resize library
+			// $this->load->library('image_lib', $config);
+			// $this->image_lib->resize();
+			//Thumbnail Image Upload - End						
+						
+			
+			// $config['image_library'] = 'gd2';
+			// $config['source_image'] = $_FILES['cropped_image']['tmp_name'];
+			// $config['new_image'] = "$upload_path";
+			// $config['maintain_ratio'] = TRUE;
+			// $config['width']    = 600;
+			// $config['height']   = 600;
+			// $this->load->library('upload', $config);
+			// $this->upload->initialize($config);
+			
+			//load resize library
+			// $this->load->library('image_lib', $config);
+			// $this->image_lib->resize();
+			//Thumbnail Image Upload - End
+
+			// if (!$this->upload->do_upload('cropped_image'))
+			// {
+				// $message = $this->upload->display_errors('', '');
+				//return false;
+			// } else {
+				// $file_path = $this->upload->data();
+				// $doc_path = $file_path['file_name'];
+				// $status = 'success';
+				// $message = 'Sukses upload image'.$doc_path;
+			// }
 			
 			
-			$file_name = $_FILES["cropped_image"]["name"];
-			$file_name = preg_replace("/ /", '_', $file_name);
-			$file_name = preg_replace("/&/", '_', $file_name);
-			$file_name = preg_replace("/{/", '_', $file_name);
-			$file_name = preg_replace("/}/", '_', $file_name);
-			$upload_file = $upload_path.$file_name;
+			// $file_name = $_FILES["file_avatar"]["name"];
+			// $file_name = preg_replace("/ /", '_', $file_name);
+			// $file_name = preg_replace("/&/", '_', $file_name);
+			// $file_name = preg_replace("/{/", '_', $file_name);
+			// $file_name = preg_replace("/}/", '_', $file_name);
+			// $upload_file = $upload_path.$file_name;
 			
 			//move_uploaded_file($_FILES["cropped_image"]["tmp_name"],$upload_file);	//UPLOAD THE FILE
 					

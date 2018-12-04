@@ -31,5 +31,24 @@ class Custom
 			return $bytes . ' B';
 		}
 	}
-
+	
+	function makeDir($upload_path)
+	{ 
+		$dirs = explode('/', $upload_path);
+		foreach ($dirs as $key=>$val) {
+			if ($val == '') {
+				continue;
+			}
+			$pathArray = array();
+			for ($i = 0; $i <= $key; $i++) {
+				array_push($pathArray, $dirs[$i]);
+			}
+			$path = implode('/', $pathArray);
+			
+			if(!is_dir($path)){
+				mkdir($path,0777);
+			}
+		}
+		return true;
+	}
 }

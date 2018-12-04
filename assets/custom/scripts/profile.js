@@ -259,14 +259,18 @@ var Profile = function() {
 				$("#jcrop, #preview").html("");
 			}
 		}*/
+		
 		$('#form-change-avatar').submit(function(){
 			var form = document.getElementById('form-change-avatar');					  
 			var form_data = new FormData($(this)[0]);	
 			var fileInput = document.getElementById('file_avatar');
 			var file = fileInput.files[0];					
-			form_data.append("file_avatar", file);	
-			var blob = dataURLtoBlob(canvas.toDataURL('image/png'));
-			form_data.append("cropped_image", blob);
+			form_data.append("file_avatar", file);
+			
+			if (canvas != null) {
+				var blob = dataURLtoBlob(canvas.toDataURL('image/jpeg'));
+				form_data.append("cropped_image", blob);
+			}
 						   
 			$.ajax({
 				type: "POST",
@@ -307,57 +311,6 @@ var Profile = function() {
 			return false;
 		});
 	}
-	
-    var uploadImage = function() {
-		$('#form-change-avatar').submit(function(){
-			var form = document.getElementById('form-change-avatar');					  
-			var form_data = new FormData($(this)[0]);	
-			var fileInput = document.getElementById('file_avatar');
-			var file = fileInput.files[0];					
-			form_data.append("file_avatar", file);	
-			var blob = dataURLtoBlob(canvas.toDataURL('image/png'));
-			form_data.append("cropped_image[]", blob);
-						   
-			$.ajax({
-				type: "POST",
-				url: base_url+"profile/change_avatar",
-				data: form_data,
-				processData: false,
-				contentType: false,
-				dataType: "JSON",
-				success: function(data){
-					if(data.status=='success'){
-						toastr.success(data.message);
-					} else if (data.status=='warning'){
-						toastr.warning(data.message);
-					} else {
-						toastr.error(data.message);
-					}
-				},
-				error: function (jqXHR, exception) {
-					  var msgerror = ''; 
-					  if (jqXHR.status === 0) {
-						  msgerror = 'jaringan tidak terkoneksi.';
-					  } else if (jqXHR.status == 404) {
-						  msgerror = 'Halamam tidak ditemukan. [404]';
-					  } else if (jqXHR.status == 500) {
-						  msgerror = 'Internal Server Error [500].';
-					  } else if (exception === 'parsererror') {
-						  msgerror = 'Requested JSON parse gagal.';
-					  } else if (exception === 'timeout') {
-						  msgerror = 'RTO.';
-					  } else if (exception === 'abort') {
-						  msgerror = 'Gagal request ajax.';
-					  } else {
-						  msgerror = 'Error.\n' + jqXHR.responseText;
-					  }
-					  toastr.error("Error System", msgerror, 'error');
-				}			
-			});
-			return false;
-		});
-		
-    }
 
     return {
         //main function to initiate the module
@@ -365,7 +318,6 @@ var Profile = function() {
 
             changePassword();
 			cropImage();
-			//uploadImage();
 			
         }
 

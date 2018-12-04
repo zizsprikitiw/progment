@@ -16,6 +16,7 @@ $config['assets']    = array(
 
 $config['uploads']    = array(
 	"users" => "uploads/users/",
+	"users_thumb50x50" => "uploads/users/thumb50x50",
 );
 
 $config['files']    = array(
