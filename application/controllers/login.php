@@ -5,7 +5,7 @@ class Login extends CI_Controller {
 	{
 		parent::__construct();
 		$this->load->database();
-		$this->load->library(array('ion_auth','form_validation'));
+		$this->load->library(array('ion_auth','form_validation','custom'));
 		$this->load->helper(array('form','url','language'));
 		$this->load->library('session');
 		$this->load->config('custom');
@@ -23,6 +23,8 @@ class Login extends CI_Controller {
 		{
 			redirect('index', 'refresh');	
 		}
+		
+		$this->data['body_class'] = $this->custom->bodyClass('login');
 		
 		//tambahan css plugin
 		$this->data['add_css'] = array(

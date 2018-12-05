@@ -6,6 +6,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class Custom
 {
+	function bodyClass($parameter)
+	{ 
+		$attr = "";
+		switch ($parameter) {
+			case 'default' :
+				$attr = "page-header-fixed page-sidebar-closed-hide-logo page-content-white";
+			break;
+			case 'login' :
+				$attr = "login";
+			break;
+			case 'error_404' :
+				$attr = "page-404-full-page";
+			break;
+			default :
+				$attr = "";
+		}
+		return $attr;
+	}
+	
 	function bytesToSize($bytes, $precision = 2)
 	{  
 		$kilobyte = 1024;

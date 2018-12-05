@@ -7,7 +7,7 @@ class Index extends CI_Controller {
 	{
 			parent::__construct();
 			$this->load->database();
-			$this->load->library(array('ion_auth','form_validation'));
+			$this->load->library(array('ion_auth','form_validation','custom'));
 			$this->load->helper(array('url','language'));
 			$this->load->config('custom');
 			
@@ -21,10 +21,11 @@ class Index extends CI_Controller {
 	
 	public function index()
 	{
-		$data['user'] = $this->ion_auth->user()->row();
+		$this->data['user'] = $this->ion_auth->user()->row();
+		$this->data['body_class'] = $this->custom->bodyClass('default');
 		
 		//tambahan css plugin
-		$data['add_css'] = array(
+		$this->data['add_css'] = array(
 			base_url($this->config->item('assets')['global_plugins'])."/bootstrap-daterangepicker/daterangepicker.min.css",
 			base_url($this->config->item('assets')['global_plugins'])."/morris/morris.css",
 			base_url($this->config->item('assets')['global_plugins'])."/fullcalendar/fullcalendar.min.css",
@@ -32,7 +33,8 @@ class Index extends CI_Controller {
 		);
 		
 		//tambahan javascript plugin
-		$data['add_javascript'] = array(
+		$this->data['add_javascript'] = array(
+			base_url($this->config->item('assets')['custom_scripts'])."/dashboard.min.js",
 			base_url($this->config->item('assets')['global_plugins'])."/moment.min.js",
 			base_url($this->config->item('assets')['global_plugins'])."/bootstrap-daterangepicker/daterangepicker.min.js",
 			base_url($this->config->item('assets')['global_plugins'])."/morris/morris.min.js",
@@ -65,6 +67,6 @@ class Index extends CI_Controller {
 			base_url($this->config->item('assets')['global_plugins'])."/jqvmap/jqvmap/data/jquery.vmap.sampledata.js",
 		);
 		
-		$this->load->view('index',$data);
+		$this->load->view('index',$this->data);
 	}
 }

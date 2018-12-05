@@ -25,6 +25,9 @@
         <script src="<?php echo base_url($this->config->item('assets')['global_plugins']); ?>/jquery.blockui.min.js" type="text/javascript"></script>
         <script src="<?php echo base_url($this->config->item('assets')['global_plugins']); ?>/bootstrap-switch/js/bootstrap-switch.min.js" type="text/javascript"></script>
         <!-- END CORE PLUGINS -->
+        <!-- BEGIN THEME GLOBAL SCRIPTS -->
+        <script src="<?php echo base_url($this->config->item('assets')['global_scripts']); ?>/app.min.js" type="text/javascript"></script>
+        <!-- END THEME GLOBAL SCRIPTS -->
         <!-- BEGIN PAGE LEVEL PLUGINS -->
         <script src="<?php echo base_url($this->config->item('assets')['global_plugins']); ?>/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
         <script src="<?php echo base_url($this->config->item('assets')['global_plugins']); ?>/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script>
@@ -32,11 +35,8 @@
 			<script src="<?php echo $javascript; ?>" type="text/javascript"></script>
 		<?php } } ?>
         <!-- END PAGE LEVEL PLUGINS -->
-        <!-- BEGIN THEME GLOBAL SCRIPTS -->
-        <script src="<?php echo base_url($this->config->item('assets')['global_scripts']); ?>/app.min.js" type="text/javascript"></script>
-        <!-- END THEME GLOBAL SCRIPTS -->
         <!-- BEGIN PAGE LEVEL SCRIPTS -->
-        <script src="<?php echo base_url($this->config->item('assets')['global_scripts']); ?>/dashboard.min.js" type="text/javascript"></script>
+        <!--<script src="<?php echo base_url($this->config->item('assets')['custom_scripts']); ?>/dashboard.min.js" type="text/javascript"></script>-->
         <!-- END PAGE LEVEL SCRIPTS -->
 		<?php if ($this->ion_auth->logged_in()) { ?>
         <!-- BEGIN THEME LAYOUT SCRIPTS -->

@@ -10,6 +10,7 @@ class Profile extends CI_Controller {
 			$this->load->library(array('ion_auth','form_validation','custom'));
 			$this->load->helper(array('url','language','file'));
 			$this->load->config('custom');
+			$this->load->model('cms_model');	
 			
 			$this->lang->load('auth');
 			if (!$this->ion_auth->logged_in())
@@ -21,17 +22,18 @@ class Profile extends CI_Controller {
 	
 	public function index()
 	{
-		$data['user'] = $this->ion_auth->user()->row();
+		$this->data['user'] = $this->ion_auth->user()->row();
+		$this->data['body_class'] = $this->custom->bodyClass('default');
 		
 		//tambahan css plugin
-		$data['add_css'] = array(
+		$this->data['add_css'] = array(
 			base_url($this->config->item('assets')['global_plugins'])."/bootstrap-fileinput/bootstrap-fileinput.css",
 			base_url($this->config->item('assets')['global_plugins'])."/jcrop/css/jquery.Jcrop.min.css",
 			base_url($this->config->item('assets')['custom_css'])."/profile.css",
 		);
 		
 		//tambahan javascript plugin
-		$data['add_javascript'] = array(
+		$this->data['add_javascript'] = array(
 			base_url($this->config->item('assets')['global_plugins'])."/bootstrap-fileinput/bootstrap-fileinput.js",
 			base_url($this->config->item('assets')['global_plugins'])."/jquery.sparkline.min.js",
 			base_url($this->config->item('assets')['global_plugins'])."/jcrop/js/jquery.color.js",
@@ -39,14 +41,16 @@ class Profile extends CI_Controller {
 			base_url($this->config->item('assets')['custom_scripts'])."/profile.js",
 		);
 		
-		$this->load->view('profile',$data);
+		$this->_render_page('profile', $this->data);		
 	}
 	
 	// change avatar
 	function change_avatar()
 	{
+		$user_id = $this->session->userdata('user_id');
 		$status = 'error';
         $message = 'Upload image gagal';
+		
 			
 		//set validation rules
 		$this->form_validation->set_rules('file_avatar', 'Image', "callback_check_image_required"); 
@@ -59,18 +63,12 @@ class Profile extends CI_Controller {
 		}
 		else
 		{
-			//$image_cropped = $_FILES["cropped_image"]["tmp_name"];
-			//var_dump($image_cropped);die();
-			
 			//path directory
 			$upload_path = $this->config->item('uploads')['users'];
-			$upload_path_thumb50x50 = $this->config->item('uploads')['users_thumb50x50'];
 			//membuat directory jika belum ada
 			$this->custom->makeDir($upload_path);
-			$this->custom->makeDir($upload_path_thumb50x50);
 			
-			$user = $this->ion_auth->user()->row();
-			$file_name = "avatar_".$user->id.".jpg";
+			$file_name = "avatar_".$user_id.".jpg";
 			
 			$config['upload_path'] = "$upload_path";
 			$config['allowed_types'] = "*";
@@ -119,82 +117,18 @@ class Profile extends CI_Controller {
 				$this->image_lib->resize();
 				//Thumbnail Image 50x50 Upload - End		
 				
-				$status = 'success';
-				$message = 'Sukses upload image';
+				if(is_file("$upload_path/".$doc_path))
+				{
+					try {
+						$this->cms_model->update(array('id' => $user_id),array('photo'=>$doc_path),'users');	
+						$status = 'success';
+						$message = 'Sukses upload image';
+					} catch (Exception $e) {
+						$status = 'error';
+						$message = $e->getMessage();
+					}
+				}
 			}
-
-			//Thumbnail Image Upload - Start
-			// $config['image_library'] = 'gd2';
-			// $config['source_image'] =  "$upload_path/".$data['file_name'];
-			// $config['new_image'] = "$upload_path_thumb50x50/".$data['file_name'];
-			// $config['width'] = 50;
-			// $config['height'] = 50;
-
-			//load resize library
-			// $this->load->library('image_lib', $config);
-			// $this->image_lib->resize();
-			//Thumbnail Image Upload - End						
-						
-			
-			// $config['image_library'] = 'gd2';
-			// $config['source_image'] = $_FILES['cropped_image']['tmp_name'];
-			// $config['new_image'] = "$upload_path";
-			// $config['maintain_ratio'] = TRUE;
-			// $config['width']    = 600;
-			// $config['height']   = 600;
-			// $this->load->library('upload', $config);
-			// $this->upload->initialize($config);
-			
-			//load resize library
-			// $this->load->library('image_lib', $config);
-			// $this->image_lib->resize();
-			//Thumbnail Image Upload - End
-
-			// if (!$this->upload->do_upload('cropped_image'))
-			// {
-				// $message = $this->upload->display_errors('', '');
-				//return false;
-			// } else {
-				// $file_path = $this->upload->data();
-				// $doc_path = $file_path['file_name'];
-				// $status = 'success';
-				// $message = 'Sukses upload image'.$doc_path;
-			// }
-			
-			
-			// $file_name = $_FILES["file_avatar"]["name"];
-			// $file_name = preg_replace("/ /", '_', $file_name);
-			// $file_name = preg_replace("/&/", '_', $file_name);
-			// $file_name = preg_replace("/{/", '_', $file_name);
-			// $file_name = preg_replace("/}/", '_', $file_name);
-			// $upload_file = $upload_path.$file_name;
-			
-			//move_uploaded_file($_FILES["cropped_image"]["tmp_name"],$upload_file);	//UPLOAD THE FILE
-					
-			//if(is_file($upload_file)){
-				// $ext = pathinfo($_FILES['file_avatar']['name'], PATHINFO_EXTENSION);
-				// $new_filename = str_replace('.'.$ext, '', $file_name);				
-				// $file_name = $new_filename.'_'.mdate("%Y%m%d-%H%i%s", $_SERVER['REQUEST_TIME']).'.'.$ext;
-				// $upload_file = $upload_path.$file_name;		
-				
-				
-				// $targ_w = $targ_h = 600;
-				// $jpeg_quality = 90;
-
-				// $src = $upload_file;
-
-				// $img_r = imagecreatefromjpeg($src);
-
-				// $dst_r = ImageCreateTrueColor( $targ_w, $targ_h );
-
-				// imagecopyresampled($dst_r,$img_r,0,0,intval($_POST['x']),intval($_POST['y']), $targ_w,$targ_h, intval($_POST['w']),intval($_POST['h']));
-
-				// header('Content-type: image/jpeg');
-				// imagejpeg($dst_r,null,$jpeg_quality);
-	
-				// $status = 'success';
-				// $message = 'Sukses upload image';
-			// }
 			
 		}
 		echo json_encode(array("status" => $status, "message" => $message));
@@ -235,5 +169,15 @@ class Profile extends CI_Controller {
 							
 			}			
 		}
+	}
+	
+	function _render_page($view, $data=null, $returnhtml=false)//I think this makes more sense
+	{
+
+		$this->viewdata = (empty($data)) ? $this->data: $data;
+
+		$view_html = $this->load->view($view, $this->viewdata, $returnhtml);
+
+		if ($returnhtml) return $view_html;//This will return html on 3rd argument being true
 	}
 }

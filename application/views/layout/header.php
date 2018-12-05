@@ -47,7 +47,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- END HEAD -->
 	
 	<?php if ($this->ion_auth->logged_in()) { ?>
-    <body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
+    <body class="<?php echo $body_class; ?>">
         <div class="page-wrapper">
             <?php $this->load->view('layout/top_menu'); ?>
             <!-- BEGIN HEADER & CONTENT DIVIDER -->
@@ -83,5 +83,5 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <!-- END PAGE BAR -->
 					
 	<?php } else { ?>
-    <body class="login">
+    <body class="<?php echo $body_class; ?>">
     <?php } ?>    

@@ -625,11 +625,6 @@
 																	<div class="fileinput-exists">
 																		<h4>Crop Image</h4>
 																		<div id="views"></div>
-																		<!--<div id="jcrop"></div>
-																		<input type="hidden" id="crop_x" name="x" />
-																		<input type="hidden" id="crop_y" name="y" />
-																		<input type="hidden" id="crop_w" name="w" />
-																		<input type="hidden" id="crop_h" name="h" />-->
 																		<span id="cropbutton" class="btn default margin-top-10">Crop</span>
 																	</div>
 																</div>
