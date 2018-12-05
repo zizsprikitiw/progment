@@ -10,6 +10,7 @@ class Index extends CI_Controller {
 			$this->load->library(array('ion_auth','form_validation','custom'));
 			$this->load->helper(array('url','language'));
 			$this->load->config('custom');
+			$this->load->model('cms_model');
 			
 			$this->lang->load('auth');
 			if (!$this->ion_auth->logged_in())
@@ -21,6 +22,10 @@ class Index extends CI_Controller {
 	
 	public function index()
 	{
+		$query = $this->cms_model->get_bidang();
+		var_dump($query);die();
+		
+		$this->data['user_menu'] = $this->cms_model->get_user_menu($this->uri->rsegment(1));
 		$this->data['user'] = $this->ion_auth->user()->row();
 		$this->data['body_class'] = $this->custom->bodyClass('default');
 		

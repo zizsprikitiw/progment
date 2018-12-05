@@ -1074,6 +1074,68 @@ class Ion_auth_model extends CI_Model
 
 					return FALSE;
 				}
+				
+				//===================================================================================================
+				//TAMBAHAN
+				//===================================================================================================
+				//get users groups	
+				$query = $this->db->query("select ug.*, gr.name from users_groups ug left join groups gr on ug.group_id=gr.id where ug.user_id=".$user->id);				
+				
+				if ($query->num_rows > 0){											
+					$group_id = '';
+					$group_name = '';
+					$list = $query->result();
+					foreach($list as $group_item){
+						if($group_id != ''){
+							$group_id = $group_id.', ';
+							$group_name = $group_name.', ';
+						}
+						$group_id = $group_id.$group_item->group_id;
+						$group_name = $group_name.$group_item->name;
+					}
+					
+					$user->group_name = $group_name;
+					$user->group_id = $group_id;
+				}else{
+					$user->group_id = '0';
+					$user->group_name = '';
+				}
+				
+				//pusat
+				$query = $this->db->query("select pusat_id, nama_pusat_singkatan as pusat_name from v_users where id=".$user->id." LIMIT 1");
+				$row = $query->row();				
+				if($row->pusat_id == ''){
+					$user->pusat_id = '0';
+					$user->pusat_name = '';	
+				}else{
+					$user->pusat_id = $row->pusat_id;
+					$user->pusat_name = $row->pusat_name;	
+				}							
+				
+				//get posisi 
+				$tahun = mdate("%Y", time());								
+				$query = $this->db->query("select distinct up.posisi_id, p.nama from users_posisi up left join posisi p on up.posisi_id=p.id where up.proyek_id in (select id from proyek where pusat_id=".$user->pusat_id." and tahun=".$tahun.") and up.user_id=".$user->id." and up.posisi_id is not null");				
+							
+				if ($query->num_rows > 0){	
+					$posisi_id = '';
+					$posisi_name = '';
+					$list = $query->result();
+					foreach($list as $posisi_item){
+						if($posisi_id != ''){
+							$posisi_id = $posisi_id.', ';
+							$posisi_name = $posisi_name.', ';
+						}
+						$posisi_id = $posisi_id.$posisi_item->posisi_id;
+						$posisi_name = $posisi_name.$posisi_item->nama;
+					}					
+				}else{
+					$posisi_id = '0';
+					$posisi_name = '';
+				}
+				
+				$user->posisi_id = $posisi_id;
+				$user->posisi_name = $posisi_name;					
+				//===================================================================================================
 
 				$this->set_session($user);
 
@@ -2028,6 +2090,12 @@ class Ion_auth_model extends CI_Model
 		    'user_id'              => $user->id, //everyone likes to overwrite id so we'll use user_id
 		    'old_last_login'       => $user->last_login,
 		    'last_check'           => time(),
+			'group_id'			   => $user->group_id,		//TAMBAHAN
+			'group_name'  		   => $user->group_name,  //TAMBAHAN
+			'pusat_id'			   => $user->pusat_id,  //TAMBAHAN
+			'pusat_name'	       => $user->pusat_name,  //TAMBAHAN
+			'posisi_id'    		   => $user->posisi_id,  //TAMBAHAN
+			'posisi_name'    	   => $user->posisi_name
 		);
 
 		$this->session->set_userdata($session_data);

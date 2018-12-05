@@ -50,7 +50,6 @@ class Profile extends CI_Controller {
 		$user_id = $this->session->userdata('user_id');
 		$status = 'error';
         $message = 'Upload image gagal';
-		
 			
 		//set validation rules
 		$this->form_validation->set_rules('file_avatar', 'Image', "callback_check_image_required"); 

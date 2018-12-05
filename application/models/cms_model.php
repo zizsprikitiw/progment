@@ -475,10 +475,6 @@ class cms_model extends CI_Model {
 			$menus[] = $item->functions_id;
 		}
 		
-		//get fungsional menu
-		$fungsional_id = $this->session->userdata('fungsional_id');
-		$user_menu = $this->fungsional_menu($fungsional_id);		//get user group menu
-		
 		//$menus = array();
 		foreach($user_menu as $item){
 			$menus[] = $item->functions_id;
