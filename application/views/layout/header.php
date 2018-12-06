@@ -65,12 +65,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         <div class="page-bar">
                             <ul class="page-breadcrumb">
                                 <li>
-                                    <a href="index.html">Home</a>
+                                    <a href="<?php echo site_url(); ?>">Beranda</a>
                                     <i class="fa fa-circle"></i>
                                 </li>
+								<?php if(!empty($title)) { ?>
                                 <li>
-                                    <span>Dashboard</span>
+                                    <span><?php echo $title; ?></span>
                                 </li>
+								<?php } ?>
                             </ul>
                             <div class="page-toolbar">
                                 <div id="dashboard-report-range" class="pull-right tooltips btn btn-sm" data-container="body" data-placement="bottom" data-original-title="Change dashboard date range">

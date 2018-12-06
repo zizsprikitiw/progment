@@ -1,9 +1,7 @@
 <?php $this->load->view('layout/header'); ?>
 						
-				<!-- BEGIN PAGE TITLE-->
-                        <h1 class="page-title"> User Profile 2
-                            <small>user profile sample</small>
-                        </h1>
+						<!-- BEGIN PAGE TITLE-->
+                        <h1 class="page-title"> <?php echo $title; ?> </h1>
                         <!-- END PAGE TITLE-->
                         <!-- END PAGE HEADER-->
                         <div class="profile">

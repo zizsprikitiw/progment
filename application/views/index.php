@@ -1,8 +1,6 @@
 <?php $this->load->view('layout/header'); ?>
                         <!-- BEGIN PAGE TITLE-->
-                        <h1 class="page-title"> Admin Dashboard
-                            <small>statistics, charts, recent events and reports</small>
-                        </h1>
+                        <h1 class="page-title"> <?php echo $user_menu['page_title'] ?> </h1>
                         <!-- END PAGE TITLE-->
                         <!-- END PAGE HEADER-->
                         <!-- BEGIN DASHBOARD STATS 1-->

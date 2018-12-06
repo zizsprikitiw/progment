@@ -321,7 +321,7 @@
                                         <a href="<?php echo site_url('profile'); ?>">
                                             <i class="icon-user"></i> My Profile </a>
                                     </li>
-                                    <li>
+                                    <!--<li>
                                         <a href="app_calendar.html">
                                             <i class="icon-calendar"></i> My Calendar </a>
                                     </li>
@@ -341,7 +341,7 @@
                                     <li>
                                         <a href="page_user_lock_1.html">
                                             <i class="icon-lock"></i> Lock Screen </a>
-                                    </li>
+                                    </li>-->
                                     <li>
                                         <a href="<?php echo site_url('login/logout'); ?>">
                                             <i class="icon-key"></i> Log Out </a>

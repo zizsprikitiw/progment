@@ -4,10 +4,10 @@
 					<div class="col-md-12 page-404">
 						<div class="number font-red"> 404 </div>
 						<div class="details">
-							<h3>Oops! You're lost.</h3>
-							<p> We can not find the page you're looking for.
+							<h3>Oops! Halaman tidak ditemukan.</h3>
+							<p> Kami tidak dapat menemukan halaman yang Anda akses.
 								<br/>
-								<a href="<?php echo site_url();?>"> Return home </a>. </p>
+								<a href="<?php echo site_url();?>"> Kembali ke Beranda </a>. </p>
 						</div>
 					</div>
 				</div>

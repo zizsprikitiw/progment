@@ -1079,9 +1079,9 @@ class Ion_auth_model extends CI_Model
 				//TAMBAHAN
 				//===================================================================================================
 				//get users groups	
-				$query = $this->db->query("select ug.*, gr.name from users_groups ug left join groups gr on ug.group_id=gr.id where ug.user_id=".$user->id);				
+				$query = $this->db->query("select ug.*, gr.name from users_groups ug left join groups gr on ug.group_id=gr.id where ug.user_id=".$user->id);	
 				
-				if ($query->num_rows > 0){											
+				if ($query->num_rows() > 0){											
 					$group_id = '';
 					$group_name = '';
 					$list = $query->result();
@@ -1116,7 +1116,7 @@ class Ion_auth_model extends CI_Model
 				$tahun = mdate("%Y", time());								
 				$query = $this->db->query("select distinct up.posisi_id, p.nama from users_posisi up left join posisi p on up.posisi_id=p.id where up.proyek_id in (select id from proyek where pusat_id=".$user->pusat_id." and tahun=".$tahun.") and up.user_id=".$user->id." and up.posisi_id is not null");				
 							
-				if ($query->num_rows > 0){	
+				if ($query->num_rows() > 0){	
 					$posisi_id = '';
 					$posisi_name = '';
 					$list = $query->result();

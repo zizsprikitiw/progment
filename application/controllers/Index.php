@@ -22,9 +22,7 @@ class Index extends CI_Controller {
 	
 	public function index()
 	{
-		$query = $this->cms_model->get_bidang();
-		var_dump($query);die();
-		
+		$this->data['title'] = "Beranda";
 		$this->data['user_menu'] = $this->cms_model->get_user_menu($this->uri->rsegment(1));
 		$this->data['user'] = $this->ion_auth->user()->row();
 		$this->data['body_class'] = $this->custom->bodyClass('default');

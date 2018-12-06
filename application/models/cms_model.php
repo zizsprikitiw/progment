@@ -14,7 +14,7 @@ class cms_model extends CI_Model {
 	{
 		$query = $this->db->query("select id as id_item,CONCAT(nama,' (',nama_pusat,')') as nama_item from v_bidang order by nama_pusat asc, nama asc");
 		
-		if ($query->num_rows > 0){				
+		if ($query->num_rows() > 0){				
 			return $query->result();						
 		}
 	}
@@ -23,7 +23,7 @@ class cms_model extends CI_Model {
 	{
 		$query = $this->db->query("select id as id_item, name as nama_item from groups order by name asc");
 		
-		if ($query->num_rows > 0){				
+		if ($query->num_rows() > 0){				
 			return $query->result();						
 		}
 	}		
@@ -32,7 +32,7 @@ class cms_model extends CI_Model {
 	{
 		$query = $this->db->query("select id as id_item, nama as nama_item from fungsional order by nama asc");
 		
-		if ($query->num_rows > 0){				
+		if ($query->num_rows() > 0){				
 			return $query->result();						
 		}
 	}	
@@ -41,7 +41,7 @@ class cms_model extends CI_Model {
 	{
 		$query = $this->db->query("select id as id_item, nama as nama_item from struktural order by eselon asc");
 		
-		if ($query->num_rows > 0){				
+		if ($query->num_rows() > 0){				
 			return $query->result();						
 		}
 	}	
@@ -50,7 +50,7 @@ class cms_model extends CI_Model {
 	{
 		$query = $this->db->query("select id as id_item, nama as nama_item from posisi order by no_urut asc");
 		
-		if ($query->num_rows > 0){				
+		if ($query->num_rows() > 0){				
 			return $query->result();						
 		}
 	}	
@@ -68,7 +68,7 @@ class cms_model extends CI_Model {
 	{
 		$query = $this->db->query("select id as id_item, nama as nama_item from pusat order by nama asc");
 		
-		if ($query->num_rows > 0){				
+		if ($query->num_rows() > 0){				
 			return $query->result();						
 		}
 	}
@@ -77,7 +77,7 @@ class cms_model extends CI_Model {
 	{
 		$query = $this->db->query("select id as id_item, singkatan as nama_item from pusat order by nama asc");
 		
-		if ($query->num_rows > 0){				
+		if ($query->num_rows() > 0){				
 			return $query->result();						
 		}
 	}
@@ -86,7 +86,7 @@ class cms_model extends CI_Model {
 	{
 		$query = $this->db->query("select id as id_item, nama as nama_item from approval_type");
 		
-		if ($query->num_rows > 0){				
+		if ($query->num_rows() > 0){				
 			return $query->result();						
 		}
 	}	
@@ -95,7 +95,7 @@ class cms_model extends CI_Model {
 	{
 		$query = $this->db->query("select distinct tahun as id_item, tahun as nama_item from ".$table_name." order by tahun desc");
 		
-		if ($query->num_rows > 0){				
+		if ($query->num_rows() > 0){				
 			return $query->result();						
 		}
 	}
@@ -104,7 +104,7 @@ class cms_model extends CI_Model {
 	{		
 		$query = $this->db->query("select id as id_item, singkatan as nama_item from ".$table_name." where pusat_id=".$pusat_id." and tahun=".$tahun." and ref_id IS NULL order by no_urut");
 		
-		if ($query->num_rows > 0){				
+		if ($query->num_rows() > 0){				
 			return $query->result();						
 		}
 	}
@@ -113,7 +113,7 @@ class cms_model extends CI_Model {
 	{
 		$query = $this->db->query("select id as id_item, nama as nama_item from klasifikasi_laporan");
 		
-		if ($query->num_rows > 0){				
+		if ($query->num_rows() > 0){				
 			return $query->result();						
 		}
 	}
@@ -132,7 +132,7 @@ class cms_model extends CI_Model {
 				
 		$query = $this->db->get($table_name);							
 		
-		if ($query->num_rows > 0){	
+		if ($query->num_rows() > 0){	
 			$hasil = $query->result();
 							
 			if($hasil[0]->max_no_urut == ''){
@@ -147,7 +147,7 @@ class cms_model extends CI_Model {
 	{
 		$query = $this->db->query("select id as id_item, nama as nama_item from ".$table_name." where ref_id IS NULL and url<>'proyek' order by no_urut asc");
 		
-		if ($query->num_rows > 0){				
+		if ($query->num_rows() > 0){				
 			return $query->result();						
 		}
 	}
@@ -156,7 +156,7 @@ class cms_model extends CI_Model {
 	{
 		$query = $this->db->query("select id as id_item, nama as nama_item from icon_list where ref_id IS NULL order by nama asc");
 		
-		if ($query->num_rows > 0){				
+		if ($query->num_rows() > 0){				
 			return $query->result();						
 		}
 	}
@@ -240,7 +240,7 @@ class cms_model extends CI_Model {
 	{
 		$query = $this->db->query("select up.proyek_id as proyek_id, p.nama as nama_posisi, pr.nama as nama_proyek, pr.tahun, up.wp, gl.nama as nama_gl, gl.singkatan as singkatan_gl, ld.nama as nama_ld, ld.singkatan as singkatan_ld from users_posisi up join proyek pr on up.proyek_id=pr.id left join posisi p on up.posisi_id=p.id left join groups_leader gl on up.wp=gl.singkatan and up.proyek_id=gl.proyek_id left join leader ld on (up.wp=ld.singkatan or substring(up.wp from 1 for 4)=ld.singkatan) and up.proyek_id=ld.proyek_id where up.user_id=".$id." and (pr.tahun>=".$start_year." and pr.tahun<=".$end_year.") order by pr.tahun desc, pr.no_urut asc, p.no_urut asc");
 		
-		if ($query->num_rows > 0){				
+		if ($query->num_rows() > 0){				
 			return $query->result();						
 		}
 	}
@@ -249,7 +249,7 @@ class cms_model extends CI_Model {
 	{
 		$query = $this->db->query("select distinct ap.functions_id, fn.nama, fn.halaman, fn.url, fn.icon, fn.button_id, fn.no_urut, bm.name as button_name, bm.class as button_class from authority_project ap join functions fn on ap.functions_id=fn.id join button_menu bm on fn.button_id=bm.id where ap.posisi_id in (select up.posisi_id from users_posisi up where up.user_id=".$id." and up.proyek_id=".$project_id.") and fn.button_id is not null and fn.tampil='1' order by fn.no_urut");
 		
-		if ($query->num_rows > 0){				
+		if ($query->num_rows() > 0){				
 			return $query->result();						
 		}
 	}	
@@ -904,7 +904,7 @@ class cms_model extends CI_Model {
 		$this->db->where($where); 		
 		$query = $this->db->get('note');							
 		
-		if ($query->num_rows > 0){	
+		if ($query->num_rows() > 0){	
 			$hasil = $query->result();
 							
 			if($hasil[0]->$field_name_as == ''){
@@ -922,7 +922,7 @@ class cms_model extends CI_Model {
 		$this->db->select_max('no_urut', 'max_no_urut');	
 		$query = $this->db->get('posisi');							
 		
-		if ($query->num_rows > 0){	
+		if ($query->num_rows() > 0){	
 			$hasil = $query->result();
 							
 			if($hasil[0]->max_no_urut == ''){
@@ -941,7 +941,7 @@ class cms_model extends CI_Model {
 		$this->db->where(array('approval_type_id' => $approval_type_id,'out_'.$field_out_name.'_id' => $field_out_val)); 						
 		$query = $this->db->get('approval_level');							
 		
-		if ($query->num_rows > 0){	
+		if ($query->num_rows() > 0){	
 			$hasil = $query->result();
 							
 			if($hasil[0]->max_level == ''){
@@ -999,7 +999,7 @@ class cms_model extends CI_Model {
 		
 		$query = $this->db->query("select distinct tahun as id_item, tahun as nama_item from log_book where status=".$jenis.$where_user_id." order by tahun desc");
 		
-		//if ($query->num_rows > 0){				
+		//if ($query->num_rows() > 0){				
 			return $query->result();						
 		//}
 	}
@@ -1008,7 +1008,7 @@ class cms_model extends CI_Model {
 	{
 		$query = $this->db->query("select distinct tahun as id_item, tahun as nama_item from v_tugas where user_id=".$user_id." order by tahun desc");
 		
-		//if ($query->num_rows > 0){				
+		//if ($query->num_rows() > 0){				
 			return $query->result();						
 		//}
 	}
@@ -1017,7 +1017,7 @@ class cms_model extends CI_Model {
 	{
 		$query = $this->db->query("select distinct tahun as id_item, tahun as nama_item from v_users_proyek where user_id=".$user_id." and tahun is not null order by tahun desc");
 		
-		if ($query->num_rows > 0){				
+		if ($query->num_rows() > 0){				
 			return $query->result();						
 		}				
 	}
@@ -1026,7 +1026,7 @@ class cms_model extends CI_Model {
 	{
 		$query = $this->db->query("select distinct proyek_id as id_item, judul_proyek as nama_item from v_users_proyek where user_id=".$user_id." and tahun=".$tahun." and pusat_id=".$pusat_id);
 		
-		if ($query->num_rows > 0){				
+		if ($query->num_rows() > 0){				
 			return $query->result();						
 		}				
 	}
