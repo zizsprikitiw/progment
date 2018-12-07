@@ -15,6 +15,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
 		<!-- BEGIN PAGE LEVEL PLUGINS -->
 		<link href="<?php echo base_url($this->config->item('assets')['global_plugins']); ?>/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css" />
+		<link href="<?php echo base_url($this->config->item('assets')['global_plugins']); ?>/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" type="text/css" />
 		<?php if(!empty($add_css)) { foreach($add_css as $css){  ?>
 			<link href="<?php echo $css; ?>" rel="stylesheet" type="text/css" />
 		<?php } } ?>
@@ -75,11 +76,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 								<?php } ?>
                             </ul>
                             <div class="page-toolbar">
-                                <div id="dashboard-report-range" class="pull-right tooltips btn btn-sm" data-container="body" data-placement="bottom" data-original-title="Change dashboard date range">
-                                    <i class="icon-calendar"></i>&nbsp;
-                                    <span class="thin uppercase hidden-xs"></span>&nbsp;
-                                    <i class="fa fa-angle-down"></i>
-                                </div>
+								<div class="btn-group">
+									<div id="proyek_selected" class="pull-right tooltips btn btn-sm" href="javascript:;" data-toggle="dropdown" data-hover="dropdown" data-container="body" data-placement="bottom" data-close-others="true" data-original-title="Pilih Program">
+										<i class="icon-briefcase"></i>&nbsp;
+										<span class="thin uppercase hidden-xs"></span>&nbsp;
+										<i class="fa fa-angle-down"></i>
+									</div>
+									<div class="dropdown-menu pull-right hold-on-click dropdown-checkboxes" role="menu">
+										<form action="#">
+											<div class="form-group">
+												<select class="form-control" id="filter_proyek_year"></select>
+												<select class="form-control" id="filter_proyek"></select>
+											</div>
+											<div class="input-group">
+                                                <button type="submit" class="btn btn-sm green">Apply</button>
+												<button type="button" class="btn btn-sm default">Cancel</button>
+                                            </div>
+										</form>
+									</div>
+								</div>
                             </div>
                         </div>
                         <!-- END PAGE BAR -->

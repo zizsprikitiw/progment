@@ -31,6 +31,8 @@
         <!-- BEGIN PAGE LEVEL PLUGINS -->
         <script src="<?php echo base_url($this->config->item('assets')['global_plugins']); ?>/bootstrap-toastr/toastr.min.js" type="text/javascript"></script>
         <script src="<?php echo base_url($this->config->item('assets')['global_plugins']); ?>/jquery-validation/js/jquery.validate.min.js" type="text/javascript"></script>
+        <script src="<?php echo base_url($this->config->item('assets')['global_plugins']); ?>/bootstrap-select/js/bootstrap-select.min.js" type="text/javascript"></script>
+        <script src="<?php echo base_url($this->config->item('assets')['pages_scripts']); ?>/components-bootstrap-select.min.js" type="text/javascript"></script>
 		<?php if(!empty($add_javascript)) { foreach($add_javascript as $javascript){  ?>
 			<script src="<?php echo $javascript; ?>" type="text/javascript"></script>
 		<?php } } ?>

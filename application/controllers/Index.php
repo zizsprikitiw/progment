@@ -37,6 +37,7 @@ class Index extends CI_Controller {
 		
 		//tambahan javascript plugin
 		$this->data['add_javascript'] = array(
+			base_url($this->config->item('assets')['custom_scripts'])."/beranda.js",
 			base_url($this->config->item('assets')['custom_scripts'])."/dashboard.min.js",
 			base_url($this->config->item('assets')['global_plugins'])."/moment.min.js",
 			base_url($this->config->item('assets')['global_plugins'])."/bootstrap-daterangepicker/daterangepicker.min.js",
@@ -71,5 +72,35 @@ class Index extends CI_Controller {
 		);
 		
 		$this->load->view('index',$this->data);
+	}
+	
+	public function data_init()
+	{
+		$user_id = $this->session->userdata('user_id');
+		$table_name = 'v_users_proyek';
+		$is_distinct = 'true';
+		$select = 'proyek_id,singkatan';
+		$where = 'user_id='.$user_id.' AND tahun=2018';
+		$where_in_field = '';
+		$where_in_array = array();
+		$order_by = 'proyek_id ASC';
+		$group_by = '';
+		$limit = '';
+		
+		$list_proyek_year = $this->cms_model->get_year_proyek_by_user($user_id); 
+		$list_proyek = $this->cms_model->get_query_rows($table_name, $is_distinct, $select, $where, $where_in_field, $where_in_array, $order_by, $group_by, $limit);
+		$filter_proyek_year = array();
+		$filter_proyek = array();
+		
+		foreach ($list_proyek_year as $list_item) {
+			$filter_proyek_year[] = array("id_item" => $list_item->tahun, "nama_item" => $list_item->tahun);
+		}
+		foreach ($list_proyek as $list_item) {
+			$filter_proyek[] = array("id_item" => $list_item->proyek_id, "nama_item" => $list_item->singkatan);
+		}
+		
+		$data['filter_proyek_year'] = $filter_proyek_year;	
+		$data['filter_proyek'] = $filter_proyek;	
+		echo json_encode($data);
 	}
 }
