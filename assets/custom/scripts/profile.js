@@ -85,23 +85,23 @@ var Profile = function() {
 							}
 						},
 						error: function (jqXHR, exception) {
-							  var msgerror = ''; 
-							  if (jqXHR.status === 0) {
-								  msgerror = 'jaringan tidak terkoneksi.';
-							  } else if (jqXHR.status == 404) {
-								  msgerror = 'Halamam tidak ditemukan. [404]';
-							  } else if (jqXHR.status == 500) {
-								  msgerror = 'Internal Server Error [500].';
-							  } else if (exception === 'parsererror') {
-								  msgerror = 'Requested JSON parse gagal.';
-							  } else if (exception === 'timeout') {
-								  msgerror = 'RTO.';
-							  } else if (exception === 'abort') {
-								  msgerror = 'Gagal request ajax.';
-							  } else {
-								  msgerror = 'Error.\n' + jqXHR.responseText;
-							  }
-							  toastr.error("Error System", msgerror, 'error');
+							var msgerror = ''; 
+							if (jqXHR.status === 0) {
+								msgerror = 'jaringan tidak terkoneksi.';
+							} else if (jqXHR.status == 404) {
+								msgerror = 'Halamam tidak ditemukan. [404]';
+							} else if (jqXHR.status == 500) {
+								msgerror = 'Internal Server Error [500].';
+							} else if (exception === 'parsererror') {
+								msgerror = 'Requested JSON parse gagal.';
+							} else if (exception === 'timeout') {
+								msgerror = 'RTO.';
+							} else if (exception === 'abort') {
+								msgerror = 'Gagal request ajax.';
+							} else {
+								msgerror = 'Error.\n' + jqXHR.responseText;
+							}
+							toastr.error("Error System", msgerror, 'error');
 						}			
 					});
                 }
@@ -289,23 +289,23 @@ var Profile = function() {
 					}
 				},
 				error: function (jqXHR, exception) {
-					  var msgerror = ''; 
-					  if (jqXHR.status === 0) {
-						  msgerror = 'jaringan tidak terkoneksi.';
-					  } else if (jqXHR.status == 404) {
-						  msgerror = 'Halamam tidak ditemukan. [404]';
-					  } else if (jqXHR.status == 500) {
-						  msgerror = 'Internal Server Error [500].';
-					  } else if (exception === 'parsererror') {
-						  msgerror = 'Requested JSON parse gagal.';
-					  } else if (exception === 'timeout') {
-						  msgerror = 'RTO.';
-					  } else if (exception === 'abort') {
-						  msgerror = 'Gagal request ajax.';
-					  } else {
-						  msgerror = 'Error.\n' + jqXHR.responseText;
-					  }
-					  toastr.error("Error System", msgerror, 'error');
+					var msgerror = ''; 
+					if (jqXHR.status === 0) {
+						msgerror = 'jaringan tidak terkoneksi.';
+					} else if (jqXHR.status == 404) {
+						msgerror = 'Halamam tidak ditemukan. [404]';
+					} else if (jqXHR.status == 500) {
+						msgerror = 'Internal Server Error [500].';
+					} else if (exception === 'parsererror') {
+						msgerror = 'Requested JSON parse gagal.';
+					} else if (exception === 'timeout') {
+						msgerror = 'RTO.';
+					} else if (exception === 'abort') {
+						msgerror = 'Gagal request ajax.';
+					} else {
+						msgerror = 'Error.\n' + jqXHR.responseText;
+					}
+					toastr.error("Error System", msgerror, 'error');
 				}			
 			});
 			return false;
