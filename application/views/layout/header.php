@@ -83,7 +83,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 										<i class="fa fa-angle-down"></i>
 									</div>
 									<div class="dropdown-menu pull-right hold-on-click dropdown-checkboxes" role="menu">
-										<form action="#">
+										<form action="#" id="form-filter-program">
 											<div class="form-group">
 												<select class="form-control" id="filter_proyek_year"></select>
 												<select class="form-control" id="filter_proyek"></select>

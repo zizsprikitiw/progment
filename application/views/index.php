@@ -109,7 +109,7 @@
                                     </div>
                                     <div class="portlet-body">
                                         <div class="task-content">
-                                            <div class="scroller" style="height: 312px;" data-always-visible="1" data-rail-visible1="1">
+                                            <div class="scroller" style="height: 400px;" data-always-visible="1" data-rail-visible1="1">
                                                 <!-- START TASK LIST -->
                                                 <ul class="task-list">
                                                     <li>
@@ -445,29 +445,12 @@
                                 <!-- END PORTLET-->
                             </div>
                             <div class="col-lg-6 col-xs-12 col-sm-12">
-								<!-- BEGIN PORTLET-->
-                                <div class="portlet light calendar bordered">
-                                    <div class="portlet-title ">
-                                        <div class="caption">
-                                            <i class="icon-calendar font-dark hide"></i>
-                                            <span class="caption-subject font-dark bold uppercase">Feeds</span>
-                                        </div>
-                                    </div>
-                                    <div class="portlet-body">
-                                        <div id="calendar"> </div>
-                                    </div>
-                                </div>
-                                <!-- END PORTLET-->
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6 col-xs-12 col-sm-12">
-                                <div class="portlet light portlet-fit bordered">
+								<div class="portlet light portlet-fit bordered">
                                     <div class="portlet-title">
                                         <div class="caption">
                                             <i class="icon-directions font-green hide"></i>
-                                            <span class="caption-subject bold font-dark uppercase "> Activities</span>
-                                            <span class="caption-helper">Horizontal Timeline</span>
+                                            <span class="caption-subject bold font-dark uppercase "> Agenda</span>
+                                            <span class="caption-helper">Program LSU-05</span>
                                         </div>
                                         <div class="actions">
                                             <div class="btn-group">
@@ -492,7 +475,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="portlet-body">
+                                    <div class="portlet-body" id="timeline-header">
                                         <div class="cd-horizontal-timeline mt-timeline-horizontal" data-spacing="60">
                                             <div class="timeline">
                                                 <div class="events-wrapper">
@@ -848,6 +831,23 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-6 col-xs-12 col-sm-12">
+                                <!-- BEGIN PORTLET-->
+                                <div class="portlet light calendar bordered">
+                                    <div class="portlet-title ">
+                                        <div class="caption">
+                                            <i class="icon-calendar font-dark hide"></i>
+                                            <span class="caption-subject font-dark bold uppercase">Kalender</span>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <div id="kalender"> </div>
+                                    </div>
+                                </div>
+                                <!-- END PORTLET-->
 							</div>
                             <div class="col-lg-6 col-xs-12 col-sm-12">
                                 <!-- BEGIN PORTLET-->
