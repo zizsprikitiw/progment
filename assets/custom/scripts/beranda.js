@@ -86,14 +86,58 @@ var Beranda = function() {
 		}	
 	}
 	
+    var loadDashboardStat = function() {
+		var e = document.getElementById("filter_proyek");
+		var proyek_selected = e.options[e.selectedIndex].value;
+		
+		$.ajax({
+			url : base_url+"index/data_dashboard_stat" ,
+			type: "POST",
+			dataType: "JSON",
+			data: {"proyek_id":proyek_selected},
+			success: function(data)
+			{
+				$('#count_member').html(data.count_member);
+				$('#count_wp').html(data.count_wp);
+				// $('.counter').counterUp({
+					// delay: 40,
+					// time: 1
+				// });
+			},
+			error: function (jqXHR, exception) {
+				var msgerror = ''; 
+				if (jqXHR.status === 0) {
+					msgerror = 'jaringan tidak terkoneksi.';
+				} else if (jqXHR.status == 404) {
+					msgerror = 'Halamam tidak ditemukan. [404]';
+				} else if (jqXHR.status == 500) {
+					msgerror = 'Internal Server Error [500].';
+				} else if (exception === 'parsererror') {
+					msgerror = 'Requested JSON parse gagal.';
+				} else if (exception === 'timeout') {
+					msgerror = 'RTO.';
+				} else if (exception === 'abort') {
+					msgerror = 'Gagal request ajax.';
+				} else {
+					msgerror = 'Error.\n' + jqXHR.responseText;
+				}
+				toastr.error("Error System", msgerror, 'error');
+			}		
+		});
+    }
+	
     var loadTimeline = function() {
+		var e = document.getElementById("filter_proyek");
+		var proyek_selected = e.options[e.selectedIndex].value;
+		
 		$.ajax({
 			url : base_url+"index/data_timeline" ,
 			type: "POST",
 			dataType: "JSON",
+			data: {"proyek_id":proyek_selected},
 			success: function(data)
 			{
-				$('#timeline-header').html(data.deskripsi);
+				$('#timeline-program').html(data.deskripsi);
 				jqueryTimeline();
 			},
 			error: function (jqXHR, exception) {
@@ -126,10 +170,14 @@ var Beranda = function() {
 		var orgChart = new getOrgChart(peopleElement, {
 			enableDetailsView: false,
 			enableEdit: false,
+			enableZoom: false,
+			enableMove: false,
+			enableSearch: false,
 			enableExportToImage: true,
 			primaryFields: ["name", "title", "phone", "mail"],
 			photoFields: ["image"],
-			expandToLevel: 100,
+			expandToLevel: 100,		
+			color: "lightblue",			
 			layout: getOrgChart.MIXED_HIERARCHY_RIGHT_LINKS
 		});
 		
@@ -141,7 +189,7 @@ var Beranda = function() {
 			success: function(data)
 			{
 				orgChart.loadFromJSON(data.data_struktur);
-				//$('#proyek_selected span').html(year_selected+' - '+proyek_selected);
+				//setInterval(function(){ $('a[title="GetOrgChart jquery plugin"]').hide(); }, 10);
 				
 			},
 			error: function (jqXHR, exception) {
@@ -167,6 +215,9 @@ var Beranda = function() {
 	}
 	
 	var calendarProgram = function() {
+		var e = document.getElementById("filter_proyek");
+		var proyek_selected = e.options[e.selectedIndex].value;
+		
 		if (!jQuery().fullCalendar) {
 			return;
 		}
@@ -201,14 +252,15 @@ var Beranda = function() {
 				};
 			}
 		}
-
+		
+		$('#kalender').fullCalendar('destroy'); // destroy the calendar
 		$('#kalender').fullCalendar({
 			header: h,
 			timeFormat: 'H:mm',
 			locale: 'id',
 			disableDragging: false,
 			editable: false,
-			eventLimit: true,
+			//eventLimit: true,
 			events: function (start, end, timezone, callback) {				
 				$.ajax({
 					type: 'POST',
@@ -218,6 +270,7 @@ var Beranda = function() {
 					data: {
 						start: Math.round(new Date(start).getTime()/1000),
 						end: Math.round(new Date(end).getTime()/1000),        
+						proyek_id: proyek_selected,        
 					},
 					success: function(data) {                            
 						var events = [];
@@ -292,7 +345,7 @@ var Beranda = function() {
 				url: 'http://google.com/'
 			}];
 			
-		console.log(test);
+		//console.log(test);
 
 		/*$('#kalender').fullCalendar('destroy'); // destroy the calendar
 		$('#kalender').fullCalendar({ //re-initialize the calendar
@@ -343,7 +396,7 @@ var Beranda = function() {
 			}]
 		});*/
 	}
-	
+
 	var jqueryTimeline = function() {
 		var timelines = $('.cd-horizontal-timeline');
 		var eventsMinDistance;
@@ -615,6 +668,7 @@ var Beranda = function() {
 	}
 	
 	var loadContent = function() {
+		loadDashboardStat();
 		loadTimeline();
 		organisasiChart();
         calendarProgram();

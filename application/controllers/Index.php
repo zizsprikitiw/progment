@@ -107,6 +107,27 @@ class Index extends CI_Controller {
 		echo json_encode($data);
 	}
 	
+	public function data_dashboard_stat()
+	{
+		$user_id = $this->session->userdata('user_id');
+		$proyek_id = $this->input->post('proyek_id');
+		$table_name = 'v_users_posisi';
+		$is_distinct = 'false';
+		$select = 'COUNT(id) as member, COUNT(distinct leader_id) as wp';
+		$where = 'proyek_id='.$proyek_id;
+		$where_in_field = '';
+		$where_in_array = array();
+		$order_by = '';
+		$group_by = '';
+		$limit = '1';
+		
+		$list_stat = $this->cms_model->get_query_rows($table_name, $is_distinct, $select, $where, $where_in_field, $where_in_array, $order_by, $group_by, $limit);
+		
+		$data['count_member'] = '<span data-counter="counterup" data-value="'.$list_stat[0]->member.'">0</span>';	
+		$data['count_wp'] = '<span data-counter="counterup" data-value="'.$list_stat[0]->wp.'">0</span>';	
+		echo json_encode($data);
+	}
+	
 	public function data_struktur_organisasi()
 	{
 		$user_id = $this->session->userdata('user_id');
@@ -154,360 +175,94 @@ class Index extends CI_Controller {
 	
 	public function data_timeline()
 	{
+		$proyek_id = $this->input->post('proyek_id');
+		$datatable_name = "v_agenda";	
+		$search_column = '';
+		$search_order = array();
+		$order_by = 'first_date asc';
+		$where = "status = 1 AND proyek_id = $proyek_id";
+		
+		$list = $this->cms_model->get_datatables_where($datatable_name, $search_column, $search_order, $where, $order_by);
+		
+		setlocale(LC_ALL, "IND");
 		$deskripsi = '';
 		$deskripsi .= '<div class="cd-horizontal-timeline mt-timeline-horizontal" data-spacing="60">
-                                            <div class="timeline">
-                                                <div class="events-wrapper">
-                                                    <div class="events">
-                                                        <ol>
-                                                            <li>
-                                                                <a href="#0" data-date="16/01/2014" class="border-after-red bg-after-red selected">16 Jan</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="#0" data-date="28/02/2014" class="border-after-red bg-after-red">28 Feb</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="#0" data-date="20/04/2014" class="border-after-red bg-after-red">20 Mar</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="#0" data-date="20/05/2014" class="border-after-red bg-after-red">20 May</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="#0" data-date="09/07/2014" class="border-after-red bg-after-red">09 Jul</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="#0" data-date="30/08/2014" class="border-after-red bg-after-red">30 Aug</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="#0" data-date="15/09/2014" class="border-after-red bg-after-red">15 Sep</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="#0" data-date="01/11/2014" class="border-after-red bg-after-red">01 Nov</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="#0" data-date="10/12/2014" class="border-after-red bg-after-red">10 Dec</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="#0" data-date="19/01/2015" class="border-after-red bg-after-red">29 Jan</a>
-                                                            </li>
-                                                            <li>
-                                                                <a href="#0" id="test_pest" data-date="03/03/2015" class="border-after-red bg-after-red">3 Mar - 1</a>
-                                                            </li>
-                                                        </ol>
-                                                        <span class="filling-line bg-red" aria-hidden="true"></span>
-                                                    </div>
-                                                    <!-- .events -->
-                                                </div>
-                                                <!-- .events-wrapper -->
-                                                <ul class="cd-timeline-navigation mt-ht-nav-icon">
-                                                    <li>
-                                                        <a href="#0" class="prev inactive btn btn-outline red md-skip">
-                                                            <i class="fa fa-chevron-left"></i>
-                                                        </a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="#0" class="next btn btn-outline red md-skip">
-                                                            <i class="fa fa-chevron-right"></i>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                                <!-- .cd-timeline-navigation -->
-                                            </div>
-                                            <!-- .timeline -->
-                                            <div class="events-content">
-                                                <ol>
-                                                    <li class="selected" data-date="16/01/2014">
-                                                        <div class="mt-title">
-                                                            <h2 class="mt-content-title">New User</h2>
-                                                        </div>
-                                                        <div class="mt-author">
-                                                            <div class="mt-avatar">
-                                                                <img src="../assets/pages/media/users/avatar80_3.jpg" />
-                                                            </div>
-                                                            <div class="mt-author-name">
-                                                                <a href="javascript:;" class="font-blue-madison">Andres Iniesta</a>
-                                                            </div>
-                                                            <div class="mt-author-datetime font-grey-mint">16 January 2014 : 7:45 PM</div>
-                                                        </div>
-                                                        <div class="clearfix"></div>
-                                                        <div class="mt-content border-grey-steel">
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. Pellentesque mi felis, aliquam at iaculis eu, mi felis, aliquam at iaculis mi felis, aliquam
-                                                                at iaculis finibus eu ex. Integer efficitur tincidunt malesuada. Sed sit amet molestie elit, vel placerat ipsum. Ut consectetur odio non est rhoncus volutpat.</p>
-                                                            <a href="javascript:;" class="btn btn-circle red btn-outline">Read More</a>
-                                                            <a href="javascript:;" class="btn btn-circle btn-icon-only blue">
-                                                                <i class="fa fa-plus"></i>
-                                                            </a>
-                                                            <a href="javascript:;" class="btn btn-circle btn-icon-only green pull-right">
-                                                                <i class="fa fa-twitter"></i>
-                                                            </a>
-                                                        </div>
-                                                    </li>
-                                                    <li data-date="28/02/2014">
-                                                        <div class="mt-title">
-                                                            <h2 class="mt-content-title">Sending Shipment</h2>
-                                                        </div>
-                                                        <div class="mt-author">
-                                                            <div class="mt-avatar">
-                                                                <img src="../assets/pages/media/users/avatar80_3.jpg" />
-                                                            </div>
-                                                            <div class="mt-author-name">
-                                                                <a href="javascript:;" class="font-blue-madison">Hugh Grant</a>
-                                                            </div>
-                                                            <div class="mt-author-datetime font-grey-mint">28 February 2014 : 10:15 AM</div>
-                                                        </div>
-                                                        <div class="clearfix"></div>
-                                                        <div class="mt-content border-grey-steel">
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. Pellentesque mi felis, aliquam at iaculis eu, finibus eu ex. Integer efficitur leo eget
-                                                                dolor tincidunt, et dignissim risus lacinia. Nam in egestas nunc. Suspendisse potenti. Cras ullamcorper tincidunt malesuada. Sed sit amet molestie elit, vel placerat ipsum. Ut consectetur
-                                                                odio non est rhoncus volutpat. Nullam interdum, neque quis vehicula ornare, lacus elit dignissim purus, quis ultrices erat tortor eget felis. Cras commodo id massa at condimentum. Praesent
-                                                                dignissim luctus risus sed sodales.</p>
-                                                            <a href="javascript:;" class="btn btn-circle btn-outline green-jungle">Download Shipment List</a>
-                                                            <div class="btn-group dropup pull-right">
-                                                                <button class="btn btn-circle blue-steel dropdown-toggle" type="button" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false"> Actions
-                                                                    <i class="fa fa-angle-down"></i>
-                                                                </button>
-                                                                <ul class="dropdown-menu pull-right" role="menu">
-                                                                    <li>
-                                                                        <a href="javascript:;">Action </a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:;">Another action </a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:;">Something else here </a>
-                                                                    </li>
-                                                                    <li class="divider"> </li>
-                                                                    <li>
-                                                                        <a href="javascript:;">Separated link </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li data-date="20/04/2014">
-                                                        <div class="mt-title">
-                                                            <h2 class="mt-content-title">Blue Chambray</h2>
-                                                        </div>
-                                                        <div class="mt-author">
-                                                            <div class="mt-avatar">
-                                                                <img src="../assets/pages/media/users/avatar80_1.jpg" />
-                                                            </div>
-                                                            <div class="mt-author-name">
-                                                                <a href="javascript:;" class="font-blue">Rory Matthew</a>
-                                                            </div>
-                                                            <div class="mt-author-datetime font-grey-mint">20 April 2014 : 10:45 PM</div>
-                                                        </div>
-                                                        <div class="clearfix"></div>
-                                                        <div class="mt-content border-grey-steel">
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. Pellentesque mi felis, aliquam at iaculis eu, finibus eu ex. Integer efficitur leo eget
-                                                                dolor tincidunt, et dignissim risus lacinia. Nam in egestas nunc. Suspendisse potenti. Cras ullamcorper tincidunt malesuada. Sed sit amet molestie elit, vel placerat ipsum. Ut consectetur
-                                                                odio non est rhoncus volutpat. Nullam interdum, neque quis vehicula ornare, lacus elit dignissim purus, quis ultrices erat tortor eget felis. Cras commodo id massa at condimentum. Praesent
-                                                                dignissim luctus risus sed sodales.</p>
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde? Iste voluptatibus minus veritatis
-                                                                qui ut. laudantium ipsa ad debitis unde? Iste voluptatibus minus veritatis qui ut. </p>
-                                                            <a href="javascript:;" class="btn btn-circle red">Read More</a>
-                                                        </div>
-                                                    </li>
-                                                    <li data-date="20/05/2014">
-                                                        <div class="mt-title">
-                                                            <h2 class="mt-content-title">Timeline Received</h2>
-                                                        </div>
-                                                        <div class="mt-author">
-                                                            <div class="mt-avatar">
-                                                                <img src="../assets/pages/media/users/avatar80_2.jpg" />
-                                                            </div>
-                                                            <div class="mt-author-name">
-                                                                <a href="javascript:;" class="font-blue-madison">Andres Iniesta</a>
-                                                            </div>
-                                                            <div class="mt-author-datetime font-grey-mint">20 May 2014 : 12:20 PM</div>
-                                                        </div>
-                                                        <div class="clearfix"></div>
-                                                        <div class="mt-content border-grey-steel">
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. Pellentesque mi felis, aliquam at iaculis eu, finibus eu ex. Integer efficitur leo eget
-                                                                dolor tincidunt, et dignissim risus lacinia. Nam in egestas nunc. Suspendisse potenti. Cras ullamcorper tincidunt malesuada. Sed sit amet molestie elit, vel placerat ipsum. Ut consectetur
-                                                                odio non est rhoncus volutpat. Nullam interdum, neque quis vehicula ornare, lacus elit dignissim purus, quis ultrices erat tortor eget felis. Cras commodo id massa at condimentum. Praesent
-                                                                dignissim luctus risus sed sodales.</p>
-                                                            <a href="javascript:;" class="btn btn-circle green-turquoise">Read More</a>
-                                                        </div>
-                                                    </li>
-                                                    <li data-date="09/07/2014">
-                                                        <div class="mt-title">
-                                                            <h2 class="mt-content-title">Event Success</h2>
-                                                        </div>
-                                                        <div class="mt-author">
-                                                            <div class="mt-avatar">
-                                                                <img src="../assets/pages/media/users/avatar80_1.jpg" />
-                                                            </div>
-                                                            <div class="mt-author-name">
-                                                                <a href="javascript:;" class="font-blue-madison">Matt Goldman</a>
-                                                            </div>
-                                                            <div class="mt-author-datetime font-grey-mint">9 July 2014 : 8:15 PM</div>
-                                                        </div>
-                                                        <div class="clearfix"></div>
-                                                        <div class="mt-content border-grey-steel">
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde.</p>
-                                                            <a href="javascript:;"
-                                                                class="btn btn-circle btn-outline purple-medium">View Summary</a>
-                                                            <div class="btn-group dropup pull-right">
-                                                                <button class="btn btn-circle green dropdown-toggle" type="button" data-toggle="dropdown" data-hover="dropdown" data-close-others="true" aria-expanded="false"> Actions
-                                                                    <i class="fa fa-angle-down"></i>
-                                                                </button>
-                                                                <ul class="dropdown-menu pull-right" role="menu">
-                                                                    <li>
-                                                                        <a href="javascript:;">Action </a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:;">Another action </a>
-                                                                    </li>
-                                                                    <li>
-                                                                        <a href="javascript:;">Something else here </a>
-                                                                    </li>
-                                                                    <li class="divider"> </li>
-                                                                    <li>
-                                                                        <a href="javascript:;">Separated link </a>
-                                                                    </li>
-                                                                </ul>
-                                                            </div>
-                                                        </div>
-                                                    </li>
-                                                    <li data-date="30/08/2014">
-                                                        <div class="mt-title">
-                                                            <h2 class="mt-content-title">Conference Call</h2>
-                                                        </div>
-                                                        <div class="mt-author">
-                                                            <div class="mt-avatar">
-                                                                <img src="../assets/pages/media/users/avatar80_1.jpg" />
-                                                            </div>
-                                                            <div class="mt-author-name">
-                                                                <a href="javascript:;" class="font-blue-madison">Rory Matthew</a>
-                                                            </div>
-                                                            <div class="mt-author-datetime font-grey-mint">30 August 2014 : 5:45 PM</div>
-                                                        </div>
-                                                        <div class="clearfix"></div>
-                                                        <div class="mt-content border-grey-steel">
-                                                            <img class="timeline-body-img pull-left" src="../assets/pages/media/blog/5.jpg" alt="">
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde? Iste voluptatibus minus veritatis
-                                                                qui ut. laudantium ipsa ad debitis unde? Iste voluptatibus minus veritatis qui ut. </p>
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde? Iste voluptatibus minus veritatis
-                                                                qui ut. laudantium ipsa ad debitis unde? Iste voluptatibus minus veritatis qui ut. </p>
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde? Iste voluptatibus minus veritatis
-                                                                qui ut. laudantium ipsa ad debitis unde? Iste voluptatibus minus veritatis qui ut. </p>
-                                                            <a href="javascript:;" class="btn btn-circle red">Read More</a>
-                                                        </div>
-                                                    </li>
-                                                    <li data-date="15/09/2014">
-                                                        <div class="mt-title">
-                                                            <h2 class="mt-content-title">Conference Decision</h2>
-                                                        </div>
-                                                        <div class="mt-author">
-                                                            <div class="mt-avatar">
-                                                                <img src="../assets/pages/media/users/avatar80_5.jpg" />
-                                                            </div>
-                                                            <div class="mt-author-name">
-                                                                <a href="javascript:;" class="font-blue-madison">Jessica Wolf</a>
-                                                            </div>
-                                                            <div class="mt-author-datetime font-grey-mint">15 September 2014 : 8:30 PM</div>
-                                                        </div>
-                                                        <div class="clearfix"></div>
-                                                        <div class="mt-content border-grey-steel">
-                                                            <img class="timeline-body-img pull-right" src="../assets/pages/media/blog/6.jpg" alt="">
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iusto, optio, dolorum provident rerum aut hic quasi placeat iure tempora laudantium ipsa ad debitis unde? Iste voluptatibus minus veritatis
-                                                                qui ut.</p>
-                                                            <a href="javascript:;" class="btn btn-circle green-sharp">Read More</a>
-                                                        </div>
-                                                    </li>
-                                                    <li data-date="01/11/2014">
-                                                        <div class="mt-title">
-                                                            <h2 class="mt-content-title">Timeline Received</h2>
-                                                        </div>
-                                                        <div class="mt-author">
-                                                            <div class="mt-avatar">
-                                                                <img src="../assets/pages/media/users/avatar80_2.jpg" />
-                                                            </div>
-                                                            <div class="mt-author-name">
-                                                                <a href="javascript:;" class="font-blue-madison">Andres Iniesta</a>
-                                                            </div>
-                                                            <div class="mt-author-datetime font-grey-mint">1 November 2014 : 12:20 PM</div>
-                                                        </div>
-                                                        <div class="clearfix"></div>
-                                                        <div class="mt-content border-grey-steel">
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. Pellentesque mi felis, aliquam at iaculis eu, finibus eu ex. Integer efficitur leo eget
-                                                                dolor tincidunt, et dignissim risus lacinia. Nam in egestas nunc. Suspendisse potenti. Cras ullamcorper tincidunt malesuada. Sed sit amet molestie elit, vel placerat ipsum. Ut consectetur
-                                                                odio non est rhoncus volutpat. Nullam interdum, neque quis vehicula ornare, lacus elit dignissim purus, quis ultrices erat tortor eget felis. Cras commodo id massa at condimentum. Praesent
-                                                                dignissim luctus risus sed sodales.</p>
-                                                            <a href="javascript:;" class="btn btn-circle green-turquoise">Read More</a>
-                                                        </div>
-                                                    </li>
-                                                    <li data-date="10/12/2014">
-                                                        <div class="mt-title">
-                                                            <h2 class="mt-content-title">Timeline Received</h2>
-                                                        </div>
-                                                        <div class="mt-author">
-                                                            <div class="mt-avatar">
-                                                                <img src="../assets/pages/media/users/avatar80_2.jpg" />
-                                                            </div>
-                                                            <div class="mt-author-name">
-                                                                <a href="javascript:;" class="font-blue-madison">Andres Iniesta</a>
-                                                            </div>
-                                                            <div class="mt-author-datetime font-grey-mint">10 December 2015 : 12:20 PM</div>
-                                                        </div>
-                                                        <div class="clearfix"></div>
-                                                        <div class="mt-content border-grey-steel">
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. Pellentesque mi felis, aliquam at iaculis eu, finibus eu ex. Integer efficitur leo eget
-                                                                dolor tincidunt, et dignissim risus lacinia. Nam in egestas nunc. Suspendisse potenti. Cras ullamcorper tincidunt malesuada. Sed sit amet molestie elit, vel placerat ipsum. Ut consectetur
-                                                                odio non est rhoncus volutpat. Nullam interdum, neque quis vehicula ornare, lacus elit dignissim purus, quis ultrices erat tortor eget felis. Cras commodo id massa at condimentum. Praesent
-                                                                dignissim luctus risus sed sodales.</p>
-                                                            <a href="javascript:;" class="btn btn-circle green-turquoise">Read More</a>
-                                                        </div>
-                                                    </li>
-                                                    <li data-date="19/01/2015">
-                                                        <div class="mt-title">
-                                                            <h2 class="mt-content-title">Timeline Received</h2>
-                                                        </div>
-                                                        <div class="mt-author">
-                                                            <div class="mt-avatar">
-                                                                <img src="../assets/pages/media/users/avatar80_2.jpg" />
-                                                            </div>
-                                                            <div class="mt-author-name">
-                                                                <a href="javascript:;" class="font-blue-madison">Andres Iniesta</a>
-                                                            </div>
-                                                            <div class="mt-author-datetime font-grey-mint">19 January 2015 : 12:20 PM</div>
-                                                        </div>
-                                                        <div class="clearfix"></div>
-                                                        <div class="mt-content border-grey-steel">
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. Pellentesque mi felis, aliquam at iaculis eu, finibus eu ex. Integer efficitur leo eget
-                                                                dolor tincidunt, et dignissim risus lacinia. Nam in egestas nunc. Suspendisse potenti. Cras ullamcorper tincidunt malesuada. Sed sit amet molestie elit, vel placerat ipsum. Ut consectetur
-                                                                odio non est rhoncus volutpat. Nullam interdum, neque quis vehicula ornare, lacus elit dignissim purus, quis ultrices erat tortor eget felis. Cras commodo id massa at condimentum. Praesent
-                                                                dignissim luctus risus sed sodales.</p>
-                                                            <a href="javascript:;" class="btn btn-circle green-turquoise">Read More</a>
-                                                        </div>
-                                                    </li>
-                                                    <li data-date="03/03/2015">
-                                                        <div class="mt-title">
-                                                            <h2 class="mt-content-title">Timeline Received</h2>
-                                                        </div>
-                                                        <div class="mt-author">
-                                                            <div class="mt-avatar">
-                                                                <img src="../assets/pages/media/users/avatar80_2.jpg" />
-                                                            </div>
-                                                            <div class="mt-author-name">
-                                                                <a href="javascript:;" class="font-blue-madison">Andres Iniesta</a>
-                                                            </div>
-                                                            <div class="mt-author-datetime font-grey-mint">3 March 2015 : 12:20 PM</div>
-                                                        </div>
-                                                        <div class="clearfix"></div>
-                                                        <div class="mt-content border-grey-steel">
-                                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam euismod eleifend ipsum, at posuere augue. Pellentesque mi felis, aliquam at iaculis eu, finibus eu ex. Integer efficitur leo eget
-                                                                dolor tincidunt, et dignissim risus lacinia. Nam in egestas nunc. Suspendisse potenti. Cras ullamcorper tincidunt malesuada. Sed sit amet molestie elit, vel placerat ipsum. Ut consectetur
-                                                                odio non est rhoncus volutpat. Nullam interdum, neque quis vehicula ornare, lacus elit dignissim purus, quis ultrices erat tortor eget felis. Cras commodo id massa at condimentum. Praesent
-                                                                dignissim luctus risus sed sodales.</p>
-                                                            <a href="javascript:;" class="btn btn-circle green-turquoise">Read More</a>
-                                                        </div>
-                                                    </li>
-                                                </ol>
-                                            </div>
-                                            <!-- .events-content -->
-                                        </div>';
+							<div class="timeline">
+								<div class="events-wrapper">
+									<div class="events">
+										<ol>';
+										
+		$n=1;
+		foreach ($list as $list_item) {
+		$data_date = date("d/m/Y", strtotime($list_item->first_date));
+		$text_date = strftime("%d %b",strtotime($list_item->first_date));
+		$selected = $n==1?'selected':'';
+		$deskripsi .=						'<li><a href="#0" data-date="'.$data_date.'" class="border-after-red bg-after-red '.$selected.'">'.$text_date.'</a></li>';
+		$n++;
+		}
+		
+		$deskripsi .=					'</ol>
+										<span class="filling-line bg-red" aria-hidden="true"></span>
+									</div>
+									<!-- .events -->
+								</div>
+								<!-- .events-wrapper -->
+								<ul class="cd-timeline-navigation mt-ht-nav-icon">
+									<li>
+										<a href="#0" class="prev inactive btn btn-outline red md-skip">
+											<i class="fa fa-chevron-left"></i>
+										</a>
+									</li>
+									<li>
+										<a href="#0" class="next btn btn-outline red md-skip">
+											<i class="fa fa-chevron-right"></i>
+										</a>
+									</li>
+								</ul>
+								<!-- .cd-timeline-navigation -->
+							</div>
+							<!-- .timeline -->
+							<div class="events-content">
+								<ol>';
+		$n=1;
+		foreach ($list as $list_item) {
+		$data_date = date("d/m/Y", strtotime($list_item->first_date));
+		$text_date = strftime("%a, %d %b %Y : %R",strtotime($list_item->first_date));
+		$nama_agenda = $list_item->nama_agenda;
+		$lokasi = $list_item->lokasi;
+		$pengirim = $list_item->pengirim;
+		$isi = $list_item->deskripsi;
+		$photo = base_url($this->config->item('uploads')['users_thumb50x50']).'/'.$list_item->photo;
+		$selected = $n==1?'selected':'';
+		$deskripsi .= 				'<li class="'.$selected.'" data-date="'.$data_date.'">
+										<div class="mt-title">
+											<h2 class="mt-content-title">'.$nama_agenda.'</h2>
+										</div>
+										<div class="mt-author">
+											<div class="mt-avatar">
+												<img src="'.$photo.'" onerror="this.src = \''.base_url($this->config->item('assets')['custom_img'])."/50x50.png".'\'" />
+											</div>
+											<div class="mt-author-name">
+												<a href="javascript:;" class="font-blue-madison">'.$pengirim.'</a>
+											</div>
+											<div class="mt-author-datetime font-grey-mint">'.$text_date.' <span class="icon-pointer"></span> '.$lokasi.'</div>
+										</div>
+										<div class="clearfix"></div>
+										<div class="mt-content border-grey-steel">
+											<p>'.$isi.'</p>
+											<a href="javascript:;" class="btn btn-circle red btn-outline">Read More</a>
+											<a href="javascript:;" class="btn btn-circle btn-icon-only blue">
+												<i class="fa fa-plus"></i>
+											</a>
+										</div>
+									</li>';
+		$n++;
+		}
+		
+		$deskripsi .= 			'</ol>
+							</div>
+							<!-- .events-content -->
+						</div>';
 		
 		$data['deskripsi'] = $deskripsi;
 
@@ -518,11 +273,12 @@ class Index extends CI_Controller {
 	{
 		$start = $this->input->post('start');
 		$end = $this->input->post('end');
+		$proyek_id = $this->input->post('proyek_id');
 		$datatable_name = "v_agenda";	
 		$search_column = '';
-		$search_order = array('nama_agenda' => 'asc');
+		$search_order = array();
 		$order_by = 'first_date asc';
-		$where = "status = 1 AND (
+		$where = "status = 1 AND proyek_id = $proyek_id AND (
 					(to_char(first_date, 'YYYY-MM-DD') BETWEEN '".date("Y-m-d", $start)."' AND '".date("Y-m-d", $end)."')
 					OR (to_char(last_date, 'YYYY-MM-DD') BETWEEN '".date("Y-m-d", $start)."' AND '".date("Y-m-d", $end)."')
 					OR ('".date("Y-m-d", $end)."' BETWEEN to_char(first_date, 'YYYY-MM-DD') AND to_char(last_date, 'YYYY-MM-DD'))
