@@ -1,3 +1,5 @@
+				</div>
+            <!-- END CONTAINER -->
 		<?php if ($this->ion_auth->logged_in()) { ?>
             <!-- BEGIN FOOTER -->
             <div class="page-footer">

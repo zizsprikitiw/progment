@@ -7,7 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
     <head>
         <meta charset="utf-8" />
-        <title>Progment Pustekbang | <?php if(!empty($title)) echo $title; ?></title>
+        <title>Progment Pustekbang | <?php echo !empty($title)?$title:$user_menu['page_title']; ?></title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta content="width=device-width, initial-scale=1" name="viewport" />
         <meta content="Preview page of Metronic Admin Theme #1 for statistics, charts, recent events and reports" name="description" />
@@ -48,7 +48,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- END HEAD -->
 	
 	<?php if ($this->ion_auth->logged_in()) { ?>
-    <body class="<?php echo $body_class; ?>">
+    <body class="<?php echo !empty($body_class)?$body_class:$this->custom->bodyClass('default'); ?>">
         <div class="page-wrapper">
             <?php $this->load->view('layout/top_menu'); ?>
             <!-- BEGIN HEADER & CONTENT DIVIDER -->
@@ -69,12 +69,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <a href="<?php echo site_url(); ?>">Beranda</a>
                                     <i class="fa fa-circle"></i>
                                 </li>
-								<?php if(!empty($title)) { ?>
                                 <li>
-                                    <span><?php echo $title; ?></span>
+                                    <span><?php echo !empty($title)?$title:$user_menu['page_title']; ?></span>
                                 </li>
-								<?php } ?>
                             </ul>
+							<?php if($this->uri->rsegment(1)=='index') { ?>
                             <div class="page-toolbar">
 								<div class="btn-group">
 									<div id="proyek_selected" class="pull-right tooltips btn btn-sm" href="javascript:;" data-toggle="dropdown" data-hover="dropdown" data-container="body" data-placement="bottom" data-close-others="true" data-original-title="Pilih Program">
@@ -96,6 +95,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 									</div>
 								</div>
                             </div>
+							<?php } ?>
                         </div>
                         <!-- END PAGE BAR -->
 					

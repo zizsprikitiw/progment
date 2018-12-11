@@ -1,5 +1,4 @@
 <?php $this->load->view('layout/header'); ?>
-						
 						<!-- BEGIN PAGE TITLE-->
                         <h1 class="page-title"> <?php echo $title; ?> </h1>
                         <!-- END PAGE TITLE-->
@@ -1074,6 +1073,5 @@
                         </div>
                     </div>
                     <!-- END CONTENT BODY -->
-                </div>
-                <!-- END CONTENT -->
+	<?php $this->load->view('layout/quick_sidebar'); ?>	
 <?php $this->load->view('layout/footer'); ?>

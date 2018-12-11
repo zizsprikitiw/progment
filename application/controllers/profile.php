@@ -25,7 +25,6 @@ class Profile extends CI_Controller {
 		$this->data['title'] = "Profile";
 		$this->data['user_menu'] = $this->cms_model->get_user_menu($this->uri->rsegment(1));
 		$this->data['user'] = $this->ion_auth->user()->row();
-		$this->data['body_class'] = $this->custom->bodyClass('default');
 		
 		//tambahan css plugin
 		$this->data['add_css'] = array(
