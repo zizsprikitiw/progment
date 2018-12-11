@@ -57,6 +57,12 @@
 											echo '<ul class="sub-menu">';
 										}
 									}else{
+										if($menu_item['open'] == 'true'){
+											$open = ' active';
+										}else{
+											$open = '';
+										}	
+										
 										//sub menu									
 										$str_menu = '<li class="nav-item '.$has_sub.$open.'"><a href="'.$menu_item['url'].'" class="nav-link "><i class="'.$menu_item['icon'].'" ></i><span class="title">'.$menu_item['nama'].'</span></a></li>';
 										echo $str_menu;

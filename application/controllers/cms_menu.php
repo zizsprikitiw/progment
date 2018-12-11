@@ -27,6 +27,23 @@ class Cms_menu extends CI_Controller {
 		$this->data['user_menu'] = $this->cms_model->get_user_menu($this->uri->rsegment(1));
 		$this->data['user'] = $this->ion_auth->user()->row();
 		
+		//tambahan css plugin
+		$this->data['add_css'] = array(
+			base_url($this->config->item('assets')['global_plugins'])."/datatables/datatables.min.css",
+			base_url($this->config->item('assets')['global_plugins'])."/datatables/plugins/bootstrap/datatables.bootstrap.css",
+			base_url($this->config->item('assets')['global_plugins'])."/bootstrap-sweetalert/sweetalert.css",
+		);
+		
+		//tambahan javascript plugin
+		$this->data['add_javascript'] = array(
+			base_url($this->config->item('assets')['pages_scripts'])."/ui-sweetalert.min.js",
+			base_url($this->config->item('assets')['global_scripts'])."/datatable.js",
+			base_url($this->config->item('assets')['global_plugins'])."/datatables/datatables.min.js",
+			base_url($this->config->item('assets')['global_plugins'])."/datatables/plugins/bootstrap/datatables.bootstrap.js",
+			base_url($this->config->item('assets')['global_plugins'])."/bootstrap-sweetalert/sweetalert.min.js",
+			base_url($this->config->item('assets')['custom_scripts'])."/cms_menu.js",
+		);
+		
 		$this->_render_page('cms/cms_menu', $this->data);			
 	}		
 	
@@ -70,7 +87,7 @@ class Cms_menu extends CI_Controller {
 			$no++;
 			$row = array();
 			$row[] = $no;
-			$row[] = '<h3><i class="'.$main_item->icon.'">&nbsp;'.$main_item->nama.'</h3>';
+			$row[] = '<i class="'.$main_item->icon.'"></i> '.$main_item->nama;
 			
 			if($main_item->direct_url == ''){
 				$row[] = $main_item->url;
@@ -86,32 +103,32 @@ class Cms_menu extends CI_Controller {
 			}
 						
 			//add html for action  
-			$str_aksi = '<div align="right">';
+			$str_aksi = '';
 			
 			//tambahkan tombol menu khusus untuk kegiatan, di kunci dari nama link
 			if($main_item->url == 'proyek'){
-				$str_aksi = $str_aksi.'<a class="btn btn-xs btn-primary" href="javascript:void()" title="Tambah Sub Menu" onclick="add_sub_proyek('."'".$main_item->id."'".')"><i class="fa fa-sitemap"></i></a>
+				$str_aksi = $str_aksi.'<a class="btn btn-xs btn-primary" href="javascript:;" title="Tambah Sub Menu" onclick="add_sub_proyek('."'".$main_item->id."'".')"><i class="fa fa-sitemap"></i></a>
 				  ';
 			}
 			
 			if($main_len > 1){
 				if($i == 1){
 					//urutan 1
-					$str_aksi = $str_aksi.'<a class="btn btn-xs btn-default" href="javascript:void()" title="Turun posisi" onclick="data_edit_posisi('."'".$main_item->id."','down'".')"><i class="fa fa-chevron-down"></i></a>';
+					$str_aksi = $str_aksi.'<a class="btn btn-xs btn-default" href="javascript:;" title="Turun posisi" onclick="data_edit_posisi('."'".$main_item->id."','down'".')"><i class="fa fa-chevron-down"></i></a>';
 				}elseif($i == $main_len){
 					//urutan akhir
-					$str_aksi = $str_aksi.'<a class="btn btn-xs btn-default" href="javascript:void()" title="Naik posisi" onclick="data_edit_posisi('."'".$main_item->id."','up'".')"><i class="fa fa-chevron-up"></i></a>';
+					$str_aksi = $str_aksi.'<a class="btn btn-xs btn-default" href="javascript:;" title="Naik posisi" onclick="data_edit_posisi('."'".$main_item->id."','up'".')"><i class="fa fa-chevron-up"></i></a>';
 				}else{
 					//urutan diantara
-					$str_aksi = $str_aksi.'<a class="btn btn-xs btn-default" href="javascript:void()" title="Naik posisi" onclick="data_edit_posisi('."'".$main_item->id."','up'".')"><i class="fa fa-chevron-up"></i></a>
-					<a class="btn btn-xs btn-default" href="javascript:void()" title="Turun posisi" onclick="data_edit_posisi('."'".$main_item->id."','down'".')"><i class="fa fa-chevron-down"></i></a>';
+					$str_aksi = $str_aksi.'<a class="btn btn-xs btn-default" href="javascript:;" title="Naik posisi" onclick="data_edit_posisi('."'".$main_item->id."','up'".')"><i class="fa fa-chevron-up"></i></a>
+					<a class="btn btn-xs btn-default" href="javascript:;" title="Turun posisi" onclick="data_edit_posisi('."'".$main_item->id."','down'".')"><i class="fa fa-chevron-down"></i></a>';
 				}
 			}
 			$i++;
 			
 			$row[] = $str_aksi.'
-					<a class="btn btn-xs btn-warning" href="javascript:void()" title="Edit" onclick="data_edit('."'".$main_item->id."'".')"><i class="fa fa-pencil"></i></a>
-				  <a class="btn btn-xs btn-danger" href="javascript:void()" title="Hapus" onclick="data_delete('."'".$main_item->id."','".$main_item->nama."'".')"><i class="fa fa-times"></i></a></div>';
+					<a class="btn btn-xs btn-warning" href="javascript:;" title="Edit" onclick="data_edit('."'".$main_item->id."'".')"><i class="fa fa-pencil"></i></a>
+				  <a class="btn btn-xs btn-danger" href="javascript:;" title="Hapus" onclick="data_delete('."'".$main_item->id."','".$main_item->nama."'".')"><i class="fa fa-times"></i></a>';
 																			
 			$data[] = $row;
 						
@@ -146,14 +163,14 @@ class Cms_menu extends CI_Controller {
 						if($sub_sub_len > 1){
 							if($k == 1){
 								//urutan 1
-								$str_aksi = $str_aksi.'<a class="btn btn-xs btn-info" href="javascript:void()" title="Turun posisi" onclick="data_edit_posisi('."'".$sub_item->id."','down'".')"><i class="fa fa-chevron-down"></i></a>';
+								$str_aksi = $str_aksi.'<a class="btn btn-xs btn-info" href="javascript:;" title="Turun posisi" onclick="data_edit_posisi('."'".$sub_item->id."','down'".')"><i class="fa fa-chevron-down"></i></a>';
 							}elseif($k == $sub_sub_len){
 								//urutan akhir
-								$str_aksi = $str_aksi.'<a class="btn btn-xs btn-info" href="javascript:void()" title="Naik posisi" onclick="data_edit_posisi('."'".$sub_item->id."','up'".')"><i class="fa fa-chevron-up"></i></a>';
+								$str_aksi = $str_aksi.'<a class="btn btn-xs btn-info" href="javascript:;" title="Naik posisi" onclick="data_edit_posisi('."'".$sub_item->id."','up'".')"><i class="fa fa-chevron-up"></i></a>';
 							}else{
 								//urutan diantara
-								$str_aksi = $str_aksi.'<a class="btn btn-xs btn-info" href="javascript:void()" title="Naik posisi" onclick="data_edit_posisi('."'".$sub_item->id."','up'".')"><i class="fa fa-chevron-up"></i></a>
-								<a class="btn btn-xs btn-info" href="javascript:void()" title="Turun posisi" onclick="data_edit_posisi('."'".$sub_item->id."','down'".')"><i class="fa fa-chevron-down"></i></a>';
+								$str_aksi = $str_aksi.'<a class="btn btn-xs btn-info" href="javascript:;" title="Naik posisi" onclick="data_edit_posisi('."'".$sub_item->id."','up'".')"><i class="fa fa-chevron-up"></i></a>
+								<a class="btn btn-xs btn-info" href="javascript:;" title="Turun posisi" onclick="data_edit_posisi('."'".$sub_item->id."','down'".')"><i class="fa fa-chevron-down"></i></a>';
 							}
 						}
 						$k++;
@@ -167,7 +184,11 @@ class Cms_menu extends CI_Controller {
 						
 						$row[] = $str_aksi.'
 								<a class="btn btn-xs btn-warning" href="javascript:void()" title="Edit" onclick="'.$fungsi_edit.'('."'".$sub_item->id."'".')"><i class="fa fa-pencil"></i></a>
-							  <a class="btn btn-xs btn-danger" href="javascript:void()" title="Hapus" onclick="data_delete('."'".$sub_item->id."','".$sub_item->nama."'".')"><i class="fa fa-times"></i></a></div>';
+							  <a class="btn btn-xs btn-danger mt-sweetalert" href="javascript:void()" data-title="Do you agree to the Terms and Conditions?" data-type="warning" data-allow-outside-click="true" data-show-confirm-button="true" data-show-cancel-button="true"
+                                    data-cancel-button-class="btn-danger" data-cancel-button-text="No, I do not agree" data-confirm-button-text="Yes, I agree" data-confirm-button-class="btn-info" title="Hapus" onclick="data_delete('."'".$sub_item->id."','".$sub_item->nama."'".')"><i class="fa fa-times"></i></a>
+							  <button class="btn btn-primary mt-sweetalert" data-title="Do you agree to the Terms and Conditions?" data-type="warning" data-allow-outside-click="true" data-show-confirm-button="true" data-show-cancel-button="true"
+                                    data-cancel-button-class="btn-danger" data-cancel-button-text="No, I do not agree" data-confirm-button-text="Yes, I agree" data-confirm-button-class="btn-info">Custom Confirm & Cancel Button</button>
+							  </div>';
 						
 						$data[] = $row;
 					}

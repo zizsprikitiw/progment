@@ -561,6 +561,7 @@ class cms_model extends CI_Model {
 							
 						if(trim($list_menu[$i]->url) == $url_page){
 							$data[$parentId]['open'] = 'true';	
+							$data[$n]['open'] = 'true';	
 							$page_title = $list_menu[$i]->halaman;
 							$page_icon = $list_menu[$i]->icon;
 						}
@@ -594,6 +595,7 @@ class cms_model extends CI_Model {
 							
 							if(trim($list_menu[$j]->url) == $url_page){
 								$data[$parentId]['open'] = 'true';	
+								$data[$n]['open'] = 'true';	
 								$page_title = $list_menu[$j]->halaman;
 								$page_icon = $list_menu[$i]->icon;
 							}
