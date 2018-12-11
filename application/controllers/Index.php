@@ -40,6 +40,7 @@ class Index extends CI_Controller {
 		$this->data['add_javascript'] = array(
 			base_url($this->config->item('assets')['custom_scripts'])."/beranda.js",
 			base_url($this->config->item('assets')['custom_scripts'])."/dashboard.min.js",
+			base_url($this->config->item('assets')['pages_scripts'])."/portlet-draggable.min.js",
 			base_url($this->config->item('assets')['global_plugins'])."/moment.min.js",
 			base_url($this->config->item('assets')['global_plugins'])."/bootstrap-daterangepicker/daterangepicker.min.js",
 			base_url($this->config->item('assets')['global_plugins'])."/morris/morris.min.js",

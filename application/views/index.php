@@ -58,10 +58,10 @@
                         </div>
                         <div class="clearfix"></div>
                         <!-- END DASHBOARD STATS 1-->
-                        <div class="row">
-                            <div class="col-lg-6 col-xs-12 col-sm-12">
+                        <div class="row" id="sortable_portlets">
+                            <div class="col-lg-6 col-xs-12 col-sm-12 column sortable">
                                 <!-- BEGIN PORTLET-->
-                                   <div class="portlet light tasks-widget bordered">
+                                <div class="portlet portlet-sortable light tasks-widget bordered">
                                     <div class="portlet-title">
                                         <div class="caption">
                                             <i class="icon-share font-dark hide"></i>
@@ -443,61 +443,8 @@
                                     </div>
                                 </div>
                                 <!-- END PORTLET-->
-                            </div>
-                            <div class="col-lg-6 col-xs-12 col-sm-12">
-								<div class="portlet light portlet-fit bordered">
-                                    <div class="portlet-title">
-                                        <div class="caption">
-                                            <i class="icon-directions font-green hide"></i>
-                                            <span class="caption-subject bold font-dark uppercase "> Agenda</span>
-                                            <span class="caption-helper">Program LSU-05</span>
-                                        </div>
-                                        <div class="actions">
-                                            <div class="btn-group">
-                                                <a class="btn blue btn-outline btn-circle btn-sm" href="javascript:;" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"> Actions
-                                                    <i class="fa fa-angle-down"></i>
-                                                </a>
-                                                <ul class="dropdown-menu pull-right">
-                                                    <li>
-                                                        <a href="javascript:;"> Action 1</a>
-                                                    </li>
-                                                    <li class="divider"> </li>
-                                                    <li>
-                                                        <a href="javascript:;">Action 2</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript:;">Action 3</a>
-                                                    </li>
-                                                    <li>
-                                                        <a href="javascript:;">Action 4</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="portlet-body" id="timeline-program"></div>
-								</div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-lg-6 col-xs-12 col-sm-12">
-                                <!-- BEGIN PORTLET-->
-                                <div class="portlet light calendar bordered">
-                                    <div class="portlet-title ">
-                                        <div class="caption">
-                                            <i class="icon-calendar font-dark hide"></i>
-                                            <span class="caption-subject font-dark bold uppercase">Kalender</span>
-                                        </div>
-                                    </div>
-                                    <div class="portlet-body">
-                                        <div id="kalender"> </div>
-                                    </div>
-                                </div>
-                                <!-- END PORTLET-->
-							</div>
-                            <div class="col-lg-6 col-xs-12 col-sm-12">
-                                <!-- BEGIN PORTLET-->
-                                <div class="portlet light bordered">
+								<!-- BEGIN PORTLET-->
+                                <div class="portlet portlet-sortable light bordered">
                                     <div class="portlet-title">
                                         <div class="caption">
                                             <i class="icon-share font-red-sunglo hide"></i>
@@ -539,6 +486,58 @@
                                     </div>
                                 </div>
                                 <!-- END PORTLET-->
+                                
+								<!-- empty sortable porlet required for each columns! -->
+                                <div class="portlet portlet-sortable-empty"> </div>
+							</div>
+                            <div class="col-lg-6 col-xs-12 col-sm-12 column sortable">
+								<div class="portlet portlet-sortable light portlet-fit bordered">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <i class="icon-directions font-green hide"></i>
+                                            <span class="caption-subject bold font-dark uppercase "> Agenda</span>
+                                            <span class="caption-helper">Program LSU-05</span>
+                                        </div>
+                                        <div class="actions">
+                                            <div class="btn-group">
+                                                <a class="btn blue btn-outline btn-circle btn-sm" href="javascript:;" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"> Actions
+                                                    <i class="fa fa-angle-down"></i>
+                                                </a>
+                                                <ul class="dropdown-menu pull-right">
+                                                    <li>
+                                                        <a href="javascript:;"> Action 1</a>
+                                                    </li>
+                                                    <li class="divider"> </li>
+                                                    <li>
+                                                        <a href="javascript:;">Action 2</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="javascript:;">Action 3</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="javascript:;">Action 4</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body" id="timeline-program"></div>
+								</div>
+								<!-- BEGIN PORTLET-->
+                                <div class="portlet portlet-sortable light calendar bordered">
+                                    <div class="portlet-title ">
+                                        <div class="caption">
+                                            <i class="icon-calendar font-dark hide"></i>
+                                            <span class="caption-subject font-dark bold uppercase">Kalender</span>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+                                        <div id="kalender"> </div>
+                                    </div>
+                                </div>
+                                <!-- END PORTLET-->
+								<!-- empty sortable porlet required for each columns! -->
+                                <div class="portlet portlet-sortable-empty"> </div>
                             </div>
                         </div>
                     </div>
