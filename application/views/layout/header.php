@@ -13,6 +13,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <meta content="Preview page of Metronic Admin Theme #1 for statistics, charts, recent events and reports" name="description" />
         <meta content="" name="author" />
         <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
+		<!-- BEGIN PAGE FIRST SCRIPTS -->
+        <script src="<?php echo base_url($this->config->item('assets')['global_plugins']); ?>/pace/pace.min.js" type="text/javascript"></script>
+        <!-- END PAGE FIRST SCRIPTS -->
+		<!-- BEGIN PAGE TOP STYLES -->
+        <link href="<?php echo base_url($this->config->item('assets')['global_plugins']); ?>/pace/themes/pace-theme-flash.css" rel="stylesheet" type="text/css" />
+        <!-- END PAGE TOP STYLES -->
 		<!-- BEGIN PAGE LEVEL PLUGINS -->
 		<link href="<?php echo base_url($this->config->item('assets')['global_plugins']); ?>/bootstrap-toastr/toastr.min.css" rel="stylesheet" type="text/css" />
 		<link href="<?php echo base_url($this->config->item('assets')['global_plugins']); ?>/bootstrap-select/css/bootstrap-select.css" rel="stylesheet" type="text/css" />
@@ -73,7 +79,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                     <span><?php echo !empty($title)?$title:$user_menu['page_title']; ?></span>
                                 </li>
                             </ul>
-							<?php if($this->uri->rsegment(1)=='index') { ?>
+							<?php if($this->uri->rsegment(1)=='index'&&$this->uri->rsegment(2)=='index') { ?>
                             <div class="page-toolbar">
 								<div class="btn-group">
 									<div id="proyek_selected" class="pull-right tooltips btn btn-sm" href="javascript:;" data-toggle="dropdown" data-hover="dropdown" data-container="body" data-placement="bottom" data-close-others="true" data-original-title="Pilih Program">
@@ -88,8 +94,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 												<select class="form-control" id="filter_proyek"></select>
 											</div>
 											<div class="input-group">
-                                                <button type="submit" class="btn btn-sm green">Apply</button>
-												<button type="button" class="btn btn-sm default">Cancel</button>
+                                                <button type="submit" class="btn btn-sm green close-toggle" >Apply</button>
+												<button type="button" class="btn btn-sm default close-toggle" >Cancel</button>
                                             </div>
 										</form>
 									</div>

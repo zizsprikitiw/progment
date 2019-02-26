@@ -14,7 +14,7 @@ class Cms_menu extends CI_Controller {
 		$this->load->config('custom');
 		$this->load->model('cms_model');	
 		
-		$this->lang->load('auth');
+		$this->lang->load(array('auth','custom'));
 		if (!$this->ion_auth->logged_in())
 		{
 			// redirect them to the login page
@@ -128,7 +128,8 @@ class Cms_menu extends CI_Controller {
 			
 			$row[] = $str_aksi.'
 					<a class="btn btn-xs btn-warning" href="javascript:;" title="Edit" onclick="data_edit('."'".$main_item->id."'".')"><i class="fa fa-pencil"></i></a>
-				  <a class="btn btn-xs btn-danger" href="javascript:;" title="Hapus" onclick="data_delete('."'".$main_item->id."','".$main_item->nama."'".')"><i class="fa fa-times"></i></a>';
+				  <a class="btn btn-xs btn-danger mt-sweetalert" href="javascript:;" data-title="'.lang('confirm_question').'" data-type="warning" data-allow-outside-click="true" data-show-confirm-button="true" data-show-cancel-button="true"
+                                    data-cancel-button-class="btn-danger" data-cancel-button-text="'.lang('cancel_button').'" data-confirm-button-text="'.lang('confirm_button').'" data-confirm-button-class="btn-info" href="javascript:;" title="Hapus" onclick="data_delete('."'".$main_item->id."','".$main_item->nama."'".')"><i class="fa fa-times"></i></a>';
 																			
 			$data[] = $row;
 						
@@ -183,12 +184,10 @@ class Cms_menu extends CI_Controller {
 						
 						
 						$row[] = $str_aksi.'
-								<a class="btn btn-xs btn-warning" href="javascript:void()" title="Edit" onclick="'.$fungsi_edit.'('."'".$sub_item->id."'".')"><i class="fa fa-pencil"></i></a>
-							  <a class="btn btn-xs btn-danger mt-sweetalert" href="javascript:void()" data-title="Do you agree to the Terms and Conditions?" data-type="warning" data-allow-outside-click="true" data-show-confirm-button="true" data-show-cancel-button="true"
-                                    data-cancel-button-class="btn-danger" data-cancel-button-text="No, I do not agree" data-confirm-button-text="Yes, I agree" data-confirm-button-class="btn-info" title="Hapus" onclick="data_delete('."'".$sub_item->id."','".$sub_item->nama."'".')"><i class="fa fa-times"></i></a>
-							  <button class="btn btn-primary mt-sweetalert" data-title="Do you agree to the Terms and Conditions?" data-type="warning" data-allow-outside-click="true" data-show-confirm-button="true" data-show-cancel-button="true"
-                                    data-cancel-button-class="btn-danger" data-cancel-button-text="No, I do not agree" data-confirm-button-text="Yes, I agree" data-confirm-button-class="btn-info">Custom Confirm & Cancel Button</button>
-							  </div>';
+								<a class="btn btn-xs btn-warning" href="javascript:;" title="Edit" onclick="'.$fungsi_edit.'('."'".$sub_item->id."'".')"><i class="fa fa-pencil"></i></a>
+							  <a class="btn btn-xs btn-danger mt-sweetalert" href="javascript:;" data-title="'.lang('confirm_question').'" data-type="warning" data-allow-outside-click="true" data-show-confirm-button="true" data-show-cancel-button="true"
+                                    data-cancel-button-class="btn-danger" data-cancel-button-text="'.lang('cancel_button').'" data-confirm-button-text="'.lang('confirm_button').'" data-confirm-button-class="btn-info" href="javascript:;" title="Hapus" onclick="data_delete('."'".$sub_item->id."','".$sub_item->nama."'".')"><i class="fa fa-times"></i></a>
+							   </div>';
 						
 						$data[] = $row;
 					}

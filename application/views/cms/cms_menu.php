@@ -14,7 +14,7 @@
                                         </div>
                                         <div class="actions">
                                             <div class="btn-group btn-group-devided">
-                                                <button onClick="loadFormAdd()" class="btn sbold green" > Add New
+                                                <button onClick="loadFormAdd()" class="btn sbold green" > Tambah Menu
 													<i class="fa fa-plus"></i>
 												</button>
                                             </div>

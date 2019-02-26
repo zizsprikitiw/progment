@@ -263,9 +263,9 @@ var Profile = function() {
 		$('#form-change-avatar').submit(function(){
 			var form = document.getElementById('form-change-avatar');					  
 			var form_data = new FormData($(this)[0]);	
-			var fileInput = document.getElementById('file_avatar');
-			var file = fileInput.files[0];					
-			form_data.append("file_avatar", file);
+			// var fileInput = document.getElementById('file_avatar');
+			// var file = fileInput.files[0];					
+			// form_data.append("file_avatar", file);
 			
 			if (canvas != null) {
 				var blob = dataURLtoBlob(canvas.toDataURL('image/jpeg'));
@@ -281,6 +281,7 @@ var Profile = function() {
 				dataType: "JSON",
 				success: function(data){
 					if(data.status=='success'){
+						$('#form-change-avatar')[0].reset();
 						toastr.success(data.message);
 					} else if (data.status=='warning'){
 						toastr.warning(data.message);

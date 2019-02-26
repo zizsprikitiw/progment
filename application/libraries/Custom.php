@@ -6,12 +6,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class Custom
 {
+	public function __construct()
+	{
+		$this->CI =& get_instance();
+		$this->CI->load->model('cms_model');
+	}
+	
 	function bodyClass($parameter)
 	{ 
 		$attr = "";
 		switch ($parameter) {
 			case 'default' :
-				$attr = "page-header-fixed page-sidebar-closed-hide-logo page-content-white";
+				$attr = "page-header-fixed page-sidebar-closed-hide-logo page-container-bg-solid page-content-white page-sidebar-closed";
 			break;
 			case 'login' :
 				$attr = "login";
@@ -23,6 +29,19 @@ class Custom
 				$attr = "";
 		}
 		return $attr;
+	}
+	
+	function statusColor($parameter)
+	{ 
+		switch (strtolower($parameter)) {
+			case 'new' : $label = 'default'; break;
+			case 'proses' : $label = 'info'; break;
+			case 'pending' : $label = 'warning'; break;
+			case 'completed' : $label = 'success'; break;
+			case 'urgent' : $label = 'danger'; break;
+			default : $label = "default";
+		}
+		return $label;
 	}
 	
 	function bytesToSize($bytes, $precision = 2)
@@ -69,5 +88,43 @@ class Custom
 			}
 		}
 		return true;
+	}
+	
+	public function sendEmail($to,$subject,$message,$attach){
+		$this->CI =& get_instance();
+		$this->CI->load->library('email');
+
+		//konfigurasi email
+		$config = array();
+		$config['charset'] = 'utf-8';
+		$config['useragent'] = 'Codeigniter';
+		$config['protocol']= "smtp";
+		$config['mailtype']= "html";
+		$config['smtp_host']= "ssl://smtp.googlemail.com";
+		$config['smtp_port']= 465;
+		$config['smtp_timeout']= "5";
+		$config['smtp_user'] = 'pustekbang1225@gmail.com';
+		$config['smtp_pass'] = 'Adm1n12345';        
+		$config['crlf']="\r\n";
+		$config['newline']="\r\n";
+		$config['newline']="\r\n";
+		$config['wordwrap'] = TRUE;
+
+		$this->CI->email->initialize($config);
+		$this->CI->email->from('pustekbang1225@gmail.com', 'Admin Pustekbang');
+		$this->CI->email->to($to);
+		$this->CI->email->subject($subject);
+		$this->CI->email->message($message);
+		$this->CI->email->attach($attach);
+		
+		// $this->email->send();
+		$status = FALSE;
+		if($this->CI->email->send()){
+			$status = TRUE;
+		} else{
+			//echo $this->email->print_debugger(array('headers'));
+			$status = FALSE;
+		}
+		return $status;
 	}
 }

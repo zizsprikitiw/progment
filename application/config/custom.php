@@ -7,6 +7,8 @@ $config['assets']    = array(
 	"global_scripts" => "assets/global/scripts",
 	"layouts_layout" => "assets/layouts/layout",
 	"layouts_global" => "assets/layouts/global",
+	"apps_css" => "assets/apps/css",
+	"apps_scripts" => "assets/apps/scripts",
 	"custom_css" => "assets/custom/css",
 	"custom_scripts" => "assets/custom/scripts",
 	"custom_img" => "assets/custom/img",
@@ -17,9 +19,15 @@ $config['assets']    = array(
 $config['uploads']    = array(
 	"users" => "uploads/users/",
 	"users_thumb50x50" => "uploads/users/thumb50x50",
+	"tasks" => "uploads/tasks",
+	"agenda" => "uploads/agenda",
 );
 
 $config['files']    = array(
 	"image_file_size" => 1048576,
 	"image_file_type" => "jpg,png,jpeg,gif",
+	"doc_file_size" => 1048576,
+	"doc_file_type" => "doc,pdf,jpg,png,jpeg,gif",
+	"pdf_file_type" => "pdf",
+	"all_file_type" => "*",
 );

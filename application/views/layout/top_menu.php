@@ -24,10 +24,10 @@
                             <!-- DOC: Apply "dropdown-hoverable" class after below "dropdown" and remove data-toggle="dropdown" data-hover="dropdown" data-close-others="true" attributes to enable hover dropdown mode -->
                             <!-- DOC: Remove "dropdown-hoverable" and add data-toggle="dropdown" data-hover="dropdown" data-close-others="true" attributes to the below A element with dropdown-toggle class -->
                             <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
-                                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                <!--<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                     <i class="icon-bell"></i>
                                     <span class="badge badge-default"> 7 </span>
-                                </a>
+                                </a>-->
                                 <ul class="dropdown-menu">
                                     <li class="external">
                                         <h3>
@@ -125,10 +125,10 @@
                             <!-- BEGIN INBOX DROPDOWN -->
                             <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
                             <li class="dropdown dropdown-extended dropdown-inbox" id="header_inbox_bar">
-                                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                <!--<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                     <i class="icon-envelope-open"></i>
                                     <span class="badge badge-default"> 4 </span>
-                                </a>
+                                </a>-->
                                 <ul class="dropdown-menu">
                                     <li class="external">
                                         <h3>You have
@@ -200,7 +200,7 @@
                             <!-- BEGIN TODO DROPDOWN -->
                             <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
                             <li class="dropdown dropdown-extended dropdown-tasks" id="header_task_bar">
-                                <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                <!--<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                     <i class="icon-calendar"></i>
                                     <span class="badge badge-default"> 3 </span>
                                 </a>
@@ -305,7 +305,7 @@
                                             </li>
                                         </ul>
                                     </li>
-                                </ul>
+                                </ul>-->
                             </li>
                             <!-- END TODO DROPDOWN -->
                             <!-- BEGIN USER LOGIN DROPDOWN -->
@@ -352,9 +352,9 @@
                             <!-- BEGIN QUICK SIDEBAR TOGGLER -->
                             <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
                             <li class="dropdown dropdown-quick-sidebar-toggler">
-                                <a href="javascript:;" class="dropdown-toggle">
+                                <!--<a href="javascript:;" class="dropdown-toggle">
                                     <i class="icon-logout"></i>
-                                </a>
+                                </a>-->
                             </li>
                             <!-- END QUICK SIDEBAR TOGGLER -->
                         </ul>
