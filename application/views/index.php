@@ -67,7 +67,7 @@
                                         <div class="caption">
                                             <i class="icon-share font-dark hide"></i>
                                             <span class="caption-subject font-dark bold uppercase">Tasks</span>
-                                            <span class="caption-helper" id="modul_caption"></span>
+                                            <span class="caption-helper" id="tasks_caption"></span>
                                         </div>
                                         <div class="actions">
                                             <div class="btn-group">
@@ -95,51 +95,50 @@
 													<th>#</th>
 													<th>Nama Dokumen</th>
 													<th>Status</th>
+													<th><i class="fa fa-download"></i></th>
+												</tr>
+											</thead>
+											<tbody>
+											</tbody>
+										</table>
+                                    </div>
+                                </div>
+                                <!-- END PORTLET-->
+								
+								<!-- BEGIN PORTLET-->
+                                <div class="portlet portlet-sortable light bordered">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <i class="icon-share font-red-sunglo hide"></i>
+                                            <span class="caption-subject font-dark bold uppercase">Drive</span>
+											<span class="caption-helper" id="drive_caption"></span>
+                                        </div>
+										<div class="actions">
+                                            <div class="btn-group">
+                                                <a class="btn btn-sm blue btn-outline btn-circle" href="javascript:;" data-toggle="dropdown" data-hover="dropdown" data-close-others="true"> Modul
+                                                    <i class="fa fa-angle-down"></i>
+                                                </a>
+                                                <ul class="dropdown-menu pull-right" id="filter_modul_drive"></ul>
+                                            </div>
+											<div class="btn-group">
+												<a class="btn btn-sm blue btn-circle" href="javascript:;" onClick="loadFormAttachFileDrive()" > 
+													<i class="fa fa-plus"></i> Drive
+                                                </a>
+											</div>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+										<table class="table table-bordered" id="table_file_drive">
+											<thead>
+												<tr>
+													<th>#</th>
+													<th>Nama Dokumen</th>
 													<th>Aksi</th>
 												</tr>
 											</thead>
 											<tbody>
 											</tbody>
 										</table>
-                                    </div>
-                                </div>
-                                <!-- END PORTLET-->
-								
-								<!-- BEGIN PORTLET-->
-                                <div class="portlet portlet-sortable light bordered">
-                                    <div class="portlet-title">
-                                        <div class="caption">
-                                            <i class="icon-share font-red-sunglo hide"></i>
-                                            <span class="caption-subject font-dark bold uppercase">Format Dokumen</span>
-                                            <span class="caption-helper"></span>
-                                        </div>
-                                    </div>
-                                    <div class="portlet-body">
-										<table class="table table-bordered" id="table_format_dokumen">
-											<thead>
-												<tr>
-													<th>#</th>
-													<th>Nama Dokumen</th>
-												</tr>
-											</thead>
-											<tbody>
-											</tbody>
-										</table>
-                                    </div>
-                                </div>
-                                <!-- END PORTLET-->
-								
-								<!-- BEGIN PORTLET-->
-                                <div class="portlet portlet-sortable light bordered">
-                                    <div class="portlet-title">
-                                        <div class="caption">
-                                            <i class="icon-share font-red-sunglo hide"></i>
-                                            <span class="caption-subject font-dark bold uppercase">Struktur Organisasi</span>
-                                            <span class="caption-helper"></span>
-                                        </div>
-                                    </div>
-                                    <div class="portlet-body">
-										<div id="people"></div>
                                     </div>
                                 </div>
                                 <!-- END PORTLET-->
@@ -165,6 +164,7 @@
                                     </div>
                                     <div class="portlet-body" id="timeline-program"></div>
 								</div>
+								
 								<!-- BEGIN PORTLET-->
                                 <div class="portlet portlet-sortable light calendar bordered">
                                     <div class="portlet-title ">
@@ -175,6 +175,21 @@
                                     </div>
                                     <div class="portlet-body">
                                         <div id="kalender"> </div>
+                                    </div>
+                                </div>
+                                <!-- END PORTLET-->
+								
+								<!-- BEGIN PORTLET-->
+                                <div class="portlet portlet-sortable light bordered">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <i class="icon-share font-red-sunglo hide"></i>
+                                            <span class="caption-subject font-dark bold uppercase">Struktur Organisasi</span>
+                                            <span class="caption-helper"></span>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+										<div id="people"></div>
                                     </div>
                                 </div>
                                 <!-- END PORTLET-->
@@ -435,6 +450,66 @@
 					</div>	<!--END modal-dialog-->
 				</div>
 				<!-- Modal END:ATTACH FILE AGENDA-->
+				<!-- Modal BEGIN:ATTACH FILE DRIVE-->
+				<div id="modalFormAttachFileDrive" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<!-- Form starts.  -->
+							  <div class="modal-header">			                        
+								<h4 class="modal-title">Tambah</h4>
+							  </div>
+							  <div class="modal-body">									  		 											
+									<form class="form-horizontal" role="form" id="add_form_file_drive" action="#" autocomplete="nope"  enctype="multipart/form-data">
+										<input type="hidden" value="" name="id"/> 							
+										<input type="hidden" value="" name="modul_id"/> 							
+										
+										<div class="form-group">
+										  <label class="col-lg-3 control-label" for="nama">Modul</label>
+										  <div class="col-lg-5">
+											<select name="modul_id" id="filter_modul_drive_form" class="form-control"></select>
+										  </div>							  
+										</div>
+										
+										<div class="form-group">
+										  <label class="col-lg-3 control-label" for="nama">Nama Dokumen</label>
+										  <div class="col-lg-5">
+											<input type="text" name="nama_dokumen" class="form-control">
+										  </div>							  
+										</div>	
+										
+										<div class="form-group">
+										  <label class="col-lg-3 control-label" for="singkatan">File</label>
+										  <div class="col-lg-9">
+											<div class="fileinput fileinput-new" data-provides="fileinput">
+												<div class="input-group input-large">
+													<div class="form-control uneditable-input input-fixed input-medium" data-trigger="fileinput">
+														<i class="fa fa-file fileinput-exists"></i>&nbsp;
+														<span class="fileinput-filename"> </span>
+													</div>
+													<span class="input-group-addon btn default btn-file">
+														<span class="fileinput-new"> Select file </span>
+														<span class="fileinput-exists"> Change </span>
+														<input type="file" name="filename" id="filename"> </span>
+													<a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput"> Remove </a>
+												</div>
+											</div>
+											<div class="clearfix margin-top-10">
+												<span class="label label-success">NOTE!</span> <b>File support:</b> <i><?php echo $this->config->item('files')['doc_file_type']; ?>.</i>
+											</div>
+										  </div>							  
+										</div> 
+									</form>
+																
+									<div id="modal_message"></div>
+							  </div>	<!--END modal-body-->
+							  <div class="modal-footer">										
+								<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>		
+								<button type="button" class="btn green" onClick="saveFileDrive()">Upload</button>								
+							  </div>
+						</div>	<!--END modal-content-->
+					</div>	<!--END modal-dialog-->
+				</div>
+				<!-- Modal END:ATTACH FILE DRIVE-->
 				<!-- Modal BEGIN:DELETE DATA-->										
 				<div id="modalDeleteForm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 					<div class="modal-dialog modal-sm">
@@ -466,6 +541,38 @@
 						</div>	<!--END modal-content-->
 					</div>	<!--END modal-dialog-->
 				</div>
-				<!-- Modal END:DELETE DATA-->				
+				<!-- Modal END:DELETE DATA-->	
+				<!-- Modal BEGIN:DELETE DATA DRIVE-->										
+				<div id="modalDeleteDriveForm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+					<div class="modal-dialog modal-sm">
+						<div class="modal-content">									
+							<!-- Form starts.  -->	
+							<form class="form-horizontal" role="form" id="delete_drive_form" action="#">
+							  <div class="modal-header">			                        
+								<h4 class="modal-title">Hapus</h4>
+							  </div>
+							  <div class="modal-body">
+									<input type="hidden" value="" name="id_delete_data"/> 																					
+									<div class="form-group" align="center">
+										<div class="col-lg-12">
+											<div id="delete_text"></div>																	  
+										</div>																							
+									</div> 
+									<div class="form-group" align="center">
+										<div class="col-lg-12">
+											<b >Anda yakin ?!</b>	
+										</div>	
+									</div> 
+									 <div id="modal_delete_message"></div>
+							  </div>	<!--END modal-body-->
+							  <div class="modal-footer">										
+								<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>	
+								<button type="button" id="btnDelete" onClick="data_delete_drive('','')" class="btn btn-sm btn-success">Hapus</button>								
+							  </div>
+						  </form>
+						</div>	<!--END modal-content-->
+					</div>	<!--END modal-dialog-->
+				</div>
+				<!-- Modal END:DELETE DATA DRIVE-->				
 	<?php $this->load->view('layout/quick_sidebar'); ?>	
 <?php $this->load->view('layout/footer'); ?>	

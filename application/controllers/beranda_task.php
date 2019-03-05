@@ -452,8 +452,14 @@ class Beranda_task extends CI_Controller {
 							'filename' => $file_path['file_name'],
 						);
 						
-						$tasks_file_id = $this->cms_model->save($add_data, 'tasks_file');	
-						$additional_data['tasks_file_id'] = $tasks_file_id;
+						try {				
+							$tasks_file_id = $this->cms_model->save($add_data, 'tasks_file');	
+							$additional_data['tasks_file_id'] = $tasks_file_id;
+						} catch (Exception $e) {
+							if(is_file("$upload_path/".$doc_path)){
+								unlink("$upload_path/".$doc_path);
+							}	
+						}
 					}
 				}		
 			}

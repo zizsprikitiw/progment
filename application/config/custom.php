@@ -20,6 +20,7 @@ $config['uploads']    = array(
 	"users" => "uploads/users/",
 	"users_thumb50x50" => "uploads/users/thumb50x50",
 	"tasks" => "uploads/tasks",
+	"drive" => "uploads/drive",
 	"agenda" => "uploads/agenda",
 );
 

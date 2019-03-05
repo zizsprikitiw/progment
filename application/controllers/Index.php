@@ -250,6 +250,43 @@ class Index extends CI_Controller {
 		echo json_encode($data);
 	}
 	
+	public function data_select_modul_drive()
+	{
+		$user_id = $this->session->userdata('user_id');
+		$proyek_id = $this->input->post('proyek_id');
+		$table_name = 'v_drive_modul';
+		$is_distinct = 'false';
+		$select = 'id,nama_modul,count_drive';
+		$where = 'proyek_id='.$proyek_id.'';
+		$where_in_field = '';
+		$where_in_array = array();
+		$order_by = 'id ASC';
+		$group_by = '';
+		$limit = '';
+		
+		$list_modul = $this->cms_model->get_query_rows($table_name, $is_distinct, $select, $where, $where_in_field, $where_in_array, $order_by, $group_by, $limit);
+		$filter_modul = '';
+		
+		if(count($list_modul)>0) {
+			$filter_modul .= '<li class="active" data-id="0" data-name="All">
+								<a href="javascript:;"> All</a>
+							</li>';
+			foreach ($list_modul as $list_item) {
+				$filter_modul .= '<li data-id="'.$list_item->id.'" data-name="'.$list_item->nama_modul.'">
+									<a href="javascript:;"> '.$list_item->nama_modul.' 
+									<span class="badge badge-info"> '.$list_item->count_drive.' </span></a>
+								</li>';
+			}
+		} else {
+			$filter_modul .= '<li class="active" data-id="0" data-name="Modul tidak ada">
+								<a href="javascript:;"> Modul tidak ada 
+							</li>';
+		}
+		
+		$data['filter_modul_drive'] = $filter_modul;		
+		echo json_encode($data);
+	}
+	
 	public function data_form_file_agenda()
 	{
 		$user_id = $this->session->userdata('user_id');
@@ -266,6 +303,25 @@ class Index extends CI_Controller {
 		echo json_encode($data);
 	}
 	
+	public function data_form_file_drive()
+	{
+		$user_id = $this->session->userdata('user_id');
+		$proyek_id = $this->input->post('proyek_id');
+		$table_name = 'drive_modul';
+		$where = 'proyek_id='.$proyek_id.'';
+		$order_by = 'id ASC';
+		$filter_modul = array();
+		
+		$list_modul = $this->cms_model->query_get_by_criteria($table_name, $where, $order_by);
+		
+		foreach ($list_modul as $list_item) {
+			$filter_modul[] = array("id_item" => $list_item->id, "nama_item" => $list_item->nama_modul);
+		}
+		
+		$data['filter_modul_drive_form'] = $filter_modul;
+		echo json_encode($data);
+	}
+	
 	function data_save_file_agenda()
 	{
 		$status = 'error';
@@ -274,7 +330,6 @@ class Index extends CI_Controller {
 		$agenda_id = $this->input->post('agenda_id');														
 		$jenis_file_agenda = $this->input->post('jenis_file_agenda');			
 		$filename = $this->input->post('filename');	
-		$comment = '';
 		
 		if(!empty($_FILES['filename']['name']) && $_FILES['filename']['name']!='' && $_FILES['filename']['name']!='undefined')
 		{
@@ -329,6 +384,9 @@ class Index extends CI_Controller {
 					} catch (Exception $e) {
 						$status = 'error';
 						$message = $e->getMessage();
+						if(is_file("$upload_path/".$doc_path)){
+							unlink("$upload_path/".$doc_path);
+						}	
 					}
 				}
 			}		
@@ -336,7 +394,82 @@ class Index extends CI_Controller {
 			$status = 'warning';
 			$message = 'Isian harus salah satu diisi';				
 		}
-		echo json_encode(array("status" => $status, "message" => $message, "comment" => $comment));
+		echo json_encode(array("status" => $status, "message" => $message));
+	}
+	
+	function data_save_file_drive()
+	{
+		$status = 'error';
+        $message = 'File drive gagal diupload';		
+		$user_id = $this->session->userdata('user_id');													
+		$modul_id = $this->input->post('modul_id');			
+		$nama_dokumen = $this->input->post('nama_dokumen');			
+		$filename = $this->input->post('filename');	
+		
+		if(!empty($_FILES['filename']['name']) && $_FILES['filename']['name']!='' && $_FILES['filename']['name']!='undefined')
+		{
+			//path directory
+			$upload_path = $this->config->item('uploads')['drive'];
+			//membuat directory jika belum ada
+			$this->custom->makeDir($upload_path);
+			
+			$file_name = $_FILES["filename"]["name"];
+			$file_name = preg_replace("/ /", '_', $file_name);
+			$file_name = preg_replace("/&/", '_', $file_name);
+			$file_name = preg_replace("/{/", '_', $file_name);
+			$file_name = preg_replace("/}/", '_', $file_name);
+			$upload_file = $upload_path.'/'.$file_name;
+			
+			if(is_file($upload_file)){
+				$ext = pathinfo($_FILES['filename']['name'], PATHINFO_EXTENSION);
+				$new_filename = str_replace('.'.$ext, '', $file_name);				
+				$file_name = $new_filename.'_'.mdate("%Y%m%d-%H%i%s", $_SERVER['REQUEST_TIME']).'.'.$ext;		
+			}
+			
+			$config['upload_path'] = "$upload_path";
+			$config['allowed_types'] = "*";
+			$config['remove_spaces'] = TRUE;
+			$config['file_name'] = $file_name;
+			$config['overwrite'] = TRUE; // true berfungsi untuk replace
+			//$config['max_width'] = '1024';
+			//$config['max_height'] = '768';
+			$this->load->library('upload', $config);
+			
+			if (!$this->upload->do_upload('filename'))
+			{
+				$status = 'error';
+				$message = $this->upload->display_errors('', '');
+			} else {
+				$file_path = $this->upload->data();
+				$doc_path = $file_path['file_name'];
+				
+				if(is_file("$upload_path/".$doc_path))
+				{
+					$add_data = array(
+						'user_id' => $user_id,
+						'modul_id' => $modul_id,
+						'nama_dokumen' => $nama_dokumen,
+						'filename' => $file_path['file_name'],
+					);
+					
+					try {				
+						$drive_id = $this->cms_model->save($add_data, 'drive');	
+						$status = 'success';
+						$message = 'File drive berhasil diupload';
+					} catch (Exception $e) {
+						$status = 'error';
+						$message = $e->getMessage();
+						if(is_file("$upload_path/".$doc_path)){
+							unlink("$upload_path/".$doc_path);
+						}	
+					}
+				}
+			}		
+		}else{
+			$status = 'warning';
+			$message = 'Isian harus salah satu diisi';				
+		}
+		echo json_encode(array("status" => $status, "message" => $message));
 	}
 	
 	public function data_form_add_task()
@@ -599,13 +732,14 @@ class Index extends CI_Controller {
 		echo json_encode($output);
 	}
 	
-	public function data_list_format_dokumen()
+	public function data_list_drive()
 	{
+		$is_admin = $this->cms_model->user_is_admin(); 
 		$user_id = $this->session->userdata('user_id');
-		$proyek_id = $this->input->post('proyek_id');
+		$modul_id = $this->input->post('modul_id');
 		
-		$datatable_name = 'format_dokumen';
-		$where = 'proyek_id = '.$proyek_id.'';
+		$datatable_name = 'drive';
+		$where = $modul_id!=0?('modul_id = '.$modul_id):'';
 		$search_column = array('nama_dokumen');
 		$search_order = array();
 		$order_by = 'id ASC';		
@@ -615,10 +749,16 @@ class Index extends CI_Controller {
 		$data = array();
 		$no = $_POST['start'];
 		foreach ($list as $list_item) {
+			$aksi = '';
+			if($is_admin){
+				$aksi .= '<a class="btn btn-xs btn-danger" href="javascript:void()" title="Hapus" onclick="data_delete_drive('."'".$list_item->id."','".$list_item->filename."'".')"><i class="fa fa-times"></i></a>';
+			}
+			
 			$no++;
 			$row = array();
 			$row[] = $no;
-			$row[] = '<a href="'.base_url('uploads/format_dokumen/'.$list_item->filename).'" target="_blank">'.$list_item->nama_dokumen.'</a>';		
+			$row[] = '<a href="'.base_url($this->config->item('uploads')['drive']).'/'.$list_item->filename.'" target="_blank">'.$list_item->nama_dokumen.'</a>';		
+			$row[] = $aksi;	
 			$data[] = $row;
 		}
 		
@@ -851,7 +991,7 @@ class Index extends CI_Controller {
 		
 		$data['count_member'] = '<span data-counter="counterup" data-value="'.$list_member[0]->member.'">0</span>';	
 		$data['count_wp'] = '<span data-counter="counterup" data-value="'.$list_member[0]->wp.'">0</span>';	
-		$data['count_tasks'] = '<span data-counter="counterup" data-value="6">0</span>/'.$list_tasks[0]->total_tasks.' ';	
+		$data['count_tasks'] = '<span data-counter="counterup" data-value="0">0</span>/'.$list_tasks[0]->total_tasks.' ';	
 		$data['avg_progress'] = '<span data-counter="counterup" data-value="'.round($list_tasks[0]->percentage,0,PHP_ROUND_HALF_UP).'">0</span>%';	
 		echo json_encode($data);
 	}
@@ -973,6 +1113,20 @@ class Index extends CI_Controller {
 		$pengirim = $list_item->pengirim;
 		$isi = $list_item->deskripsi;
 		$photo = base_url($this->config->item('uploads')['users_thumb50x50']).'/'.$list_item->photo;
+		
+		$mom = $this->db->query("select filename, submit_date
+										from agenda_file
+										where jenis_file = 1 AND agenda_id=".$list_item->id."
+										order by submit_date desc
+										limit 1")->row();
+		$link_mom = count($mom)>0?'<a href="'.base_url($this->config->item('uploads')['agenda']).'/'.$mom->filename.'" target="_blank" class="btn btn-icon-only blue" data-toggle="tooltip" title="Download MOM" data-placement="right" ><i class="fa fa-sticky-note-o"></i></a>':'';
+		$absensi = $this->db->query("select filename, submit_date
+										from agenda_file
+										where jenis_file = 2 AND agenda_id=".$list_item->id."
+										order by submit_date desc
+										limit 1")->row();
+		$link_absensi = count($absensi)>0?'<a href="'.base_url($this->config->item('uploads')['agenda']).'/'.$absensi->filename.'" target="_blank" class="btn btn-icon-only green" data-toggle="tooltip" title="Download Absensi" data-placement="right" ><i class="fa fa-file-text-o"></i></a>':'';
+							
 		$deskripsi .= 				'<li data-id="'.$list_item->id.'" data-date="'.$data_date.'">
 										<div class="mt-title">
 											<h2 class="mt-content-title">'.$nama_agenda.'</h2>
@@ -989,8 +1143,8 @@ class Index extends CI_Controller {
 										<div class="clearfix"></div>
 										<div class="mt-content border-grey-steel">
 											<p>'.$isi.'</p>
-											<a href="javascript:;" class="btn btn-icon-only blue" data-toggle="tooltip" title="Download MOM" data-placement="right" ><i class="fa fa-sticky-note-o"></i></a>
-											<a href="javascript:;" class="btn btn-icon-only green" data-toggle="tooltip" title="Download Absensi" data-placement="right" ><i class="fa fa-file-text-o"></i></a>
+											'.$link_mom.'
+											'.$link_absensi.'
 											<a href="javascript:;" onclick="loadFormAttachFileAgenda('."'".$list_item->id."'".')" class="btn btn-circle btn-icon-only red pull-right" data-toggle="tooltip" title="Attach file" data-placement="left" >
 												<i class="fa fa-plus"></i>
 											</a>
@@ -1079,6 +1233,36 @@ class Index extends CI_Controller {
 			//hapus note
 			try {				
 				$this->cms_model->delete('agenda_file', array('id' => $file_id));		
+				$status = 'success';
+				$message = 'Data behasil dihapus';
+				
+				if(is_file($upload_file)){
+					unlink($upload_file);
+				}	
+			} catch (Exception $e) {
+				$status = 'error';
+				$message = $e->getMessage;
+			}				
+		}
+		
+		echo json_encode(array("status" => $status, "message" => $message));
+	}
+	
+	public function data_delete_drive()
+	{			
+        $file_id = $this->input->post('id_delete_data');						
+		$file_row = $this->cms_model->row_get_by_id($file_id, 'drive');
+		$status = 'error';
+		$message = '';
+		
+		//hapus file
+		if($file_row->filename != ""){
+			$upload_path = $this->config->item('uploads')['drive'];																		
+			$upload_file = $upload_path.'/'.$file_row->filename;
+			
+			//hapus note
+			try {				
+				$this->cms_model->delete('drive', array('id' => $file_id));		
 				$status = 'success';
 				$message = 'Data behasil dihapus';
 				

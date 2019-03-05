@@ -1,10 +1,10 @@
 var loadContent = function() {
 	loadSelectModul();
+	loadSelectModulDrive();
 	loadDashboardStat();
 	loadTimeline();
 	organisasiChart();
 	calendarProgram();
-	loadTabelFormatDokumen();
 }
 	
 //function load select filter
@@ -134,7 +134,7 @@ var loadSelectModul = function() {
 				if ($(this).hasClass('active')){
 					var modul_id = $(this).data('id');
 					var modul_name = $(this).data('name');
-					$('#modul_caption').html(modul_name);
+					$('#tasks_caption').html(modul_name);
 					//loadTask(modul_id);
 					loadTabelTask(modul_id);
 				}
@@ -144,9 +144,62 @@ var loadSelectModul = function() {
 					var modul_name = $(this).data('name');
 					$('#filter_modul li').removeClass("active");
 					$(this).addClass("active");
-					$('#modul_caption').html(modul_name);
+					$('#tasks_caption').html(modul_name);
 					//loadTask(modul_id);
 					loadTabelTask(modul_id);
+				});
+			});
+		},
+		error: function (jqXHR, exception) {
+			var msgerror = ''; 
+			if (jqXHR.status === 0) {
+				msgerror = 'jaringan tidak terkoneksi.';
+			} else if (jqXHR.status == 404) {
+				msgerror = 'Halamam tidak ditemukan. [404]';
+			} else if (jqXHR.status == 500) {
+				msgerror = 'Internal Server Error [500].';
+			} else if (exception === 'parsererror') {
+				msgerror = 'Requested JSON parse gagal.';
+			} else if (exception === 'timeout') {
+				msgerror = 'RTO.';
+			} else if (exception === 'abort') {
+				msgerror = 'Gagal request ajax.';
+			} else {
+				msgerror = 'Error.\n' + jqXHR.responseText;
+			}
+			toastr.error("Error System", msgerror, 'error');
+		}		
+	});
+}
+
+//function load select modul drive
+var loadSelectModulDrive = function() {
+	var e = document.getElementById("filter_proyek");
+	var proyek_selected = e.options[e.selectedIndex].value;
+	
+	$.ajax({
+		url : base_url+"index/data_select_modul_drive" ,
+		type: "POST",
+		dataType: "JSON",
+		data: {"proyek_id":proyek_selected},
+		success: function(data)
+		{				
+			$('#filter_modul_drive').html(data.filter_modul_drive);
+			$('#filter_modul_drive li').each(function(){
+				if ($(this).hasClass('active')){
+					var modul_id = $(this).data('id');
+					var modul_name = $(this).data('name');
+					$('#drive_caption').html(modul_name);
+					loadTabelDrive(modul_id);
+				}
+
+				$(this).click(function(){
+					var modul_id = $(this).data('id');
+					var modul_name = $(this).data('name');
+					$('#filter_modul_drive li').removeClass("active");
+					$(this).addClass("active");
+					$('#drive_caption').html(modul_name);
+					loadTabelDrive(modul_id);
 				});
 			});
 		},
@@ -1014,6 +1067,50 @@ var loadFormAddTask = function() {
 	});					
 }
 
+var loadFormAttachFileDrive = function() {
+	var e = document.getElementById("filter_proyek");
+	var proyek_selected = e.options[e.selectedIndex].value;
+	//save_method = 'add';
+	$('#add_form_file_drive')[0].reset(); // reset form on modals		  
+	$('#modal_message').html('');  //reset message					 		
+  
+	//Ajax Load data from ajax
+	$.ajax({
+		url : base_url+"index/data_form_file_drive",
+		type: "POST",
+		dataType: "JSON",
+		data: {proyek_id:proyek_selected},
+		success: function(data)
+		{
+			var item_sel=["filter_modul_drive_form"];
+			var item_select = {"filter_modul_drive_form":-1};															
+			select_box(data,item_select, item_sel);	
+															
+			$('#modalFormAttachFileDrive').modal('show'); // show bootstrap modal
+			$('.modal-title').text('Upload File Drive'); // Set Title to Bootstrap modal title
+		},
+		error: function (jqXHR, exception) {
+			var msgerror = ''; 
+			if (jqXHR.status === 0) {
+				msgerror = 'jaringan tidak terkoneksi.';
+			} else if (jqXHR.status == 404) {
+				msgerror = 'Halamam tidak ditemukan. [404]';
+			} else if (jqXHR.status == 500) {
+				msgerror = 'Internal Server Error [500].';
+			} else if (exception === 'parsererror') {
+				msgerror = 'Requested JSON parse gagal.';
+			} else if (exception === 'timeout') {
+				msgerror = 'RTO.';
+			} else if (exception === 'abort') {
+				msgerror = 'Gagal request ajax.';
+			} else {
+				msgerror = 'Error.\n' + jqXHR.responseText;
+			}
+			toastr.error("Error System", msgerror, 'error');
+		}		
+	});					
+}
+
 var loadFormAddAgenda = function() {
 	var e = document.getElementById("filter_proyek");
 	var proyek_selected = e.options[e.selectedIndex].value;
@@ -1275,6 +1372,53 @@ function saveFileAgenda() {
 	});
 }
 
+function saveFileDrive() {
+	var form = document.getElementById('add_form_file_drive');					  
+	var form_data = new FormData(form);	
+			
+	// ajax adding data to database
+	$.ajax({
+		url : base_url+"index/data_save_file_drive",
+		type: "POST",
+		data: form_data,
+		processData: false,
+		contentType: false,
+		dataType: "JSON",
+		success: function(data)
+		{
+			if(data.status=='success'){
+				//saved data																
+				$('#modalFormAttachFileDrive').modal('hide');	
+				loadSelectModulDrive();
+				toastr.success(data.message);
+			} else if (data.status=='warning'){
+				toastr.warning(data.message);
+			} else {
+				toastr.error(data.message);
+			}			   					  
+		},
+		error: function (jqXHR, exception) {
+			var msgerror = ''; 
+			if (jqXHR.status === 0) {
+				msgerror = 'jaringan tidak terkoneksi.';
+			} else if (jqXHR.status == 404) {
+				msgerror = 'Halamam tidak ditemukan. [404]';
+			} else if (jqXHR.status == 500) {
+				msgerror = 'Internal Server Error [500].';
+			} else if (exception === 'parsererror') {
+				msgerror = 'Requested JSON parse gagal.';
+			} else if (exception === 'timeout') {
+				msgerror = 'RTO.';
+			} else if (exception === 'abort') {
+				msgerror = 'Gagal request ajax.';
+			} else {
+				msgerror = 'Error.\n' + jqXHR.responseText;
+			}
+			toastr.error("Error System", msgerror, 'error');
+		}		
+	});
+}
+
 var loadTabelTask = function(modul_id) {
 	var e = document.getElementById("filter_proyek");
 	var proyek_selected = e.options[e.selectedIndex].value;
@@ -1317,20 +1461,21 @@ var loadTabelTask = function(modul_id) {
 	});//end load data table
 }
 
-var loadTabelFormatDokumen = function() {
+var loadTabelDrive = function(modul_id) {
 	var e = document.getElementById("filter_proyek");
 	var proyek_selected = e.options[e.selectedIndex].value;
 	//load data table																
-	$('#table_format_dokumen').DataTable({ 			
+	$('#table_file_drive').DataTable({ 			
 		"processing": true, //Feature control the processing indicator.
 		"serverSide": true, //Feature control DataTables' server-side processing mode.
 		
 		// Load data for the table's content from an Ajax source
 		"ajax": {
-			"url": base_url+"index/data_list_format_dokumen",
+			"url": base_url+"index/data_list_drive",
 			"type": "POST",				
 			"data": function ( d ) {
-				d.proyek_id = proyek_selected;								
+				d.proyek_id = proyek_selected;
+				d.modul_id = modul_id;				
 			}
 		},
 		"destroy": true,
@@ -1343,7 +1488,7 @@ var loadTabelFormatDokumen = function() {
 			},
 			{
 				"className": "dt-center", 
-				"targets": [0],
+				"targets": [0,2],
 				"width": '10%'
 			},
 		],
@@ -1435,6 +1580,58 @@ var data_delete = function (id, nama_id){
 					toastr.success(data.message);
 					$('#modalDeleteForm').modal('hide');		
 					$('#table_file_agenda').DataTable().ajax.reload();
+				} else {
+					toastr.error(data.message);
+				}			
+			},
+			error: function (jqXHR, exception) {
+				var msgerror = ''; 
+				if (jqXHR.status === 0) {
+					msgerror = 'jaringan tidak terkoneksi.';
+				} else if (jqXHR.status == 404) {
+					msgerror = 'Halamam tidak ditemukan. [404]';
+				} else if (jqXHR.status == 500) {
+					msgerror = 'Internal Server Error [500].';
+				} else if (exception === 'parsererror') {
+					msgerror = 'Requested JSON parse gagal.';
+				} else if (exception === 'timeout') {
+					msgerror = 'RTO.';
+				} else if (exception === 'abort') {
+					msgerror = 'Gagal request ajax.';
+				} else {
+					msgerror = 'Error.\n' + jqXHR.responseText;
+				}
+				toastr.error("Error System", msgerror, 'error');
+			}		
+		});					
+	}				
+}			
+
+
+var data_delete_drive = function (id, nama_id){
+	if(id != ''){
+		//show modal confirmation
+		$('#delete_drive_form')[0].reset(); // reset form on modals
+		$('#modal_delete_message').html('');  //reset message
+		
+		$('#modalDeleteDriveForm [name="id_delete_data"]').val(id);
+		$('#modalDeleteDriveForm #delete_text').html('<b >Hapus data ' + nama_id + '</b>');	
+		$('#modalDeleteDriveForm').modal('show'); // show bootstrap modal when complete loaded
+		$('.modal-title').text('Hapus Data'); // Set Title to Bootstrap modal title	
+	}else{
+		//lakukan hapus data
+		// ajax hapus data to database
+		$.ajax({
+			url: base_url+"index/data_delete_drive",
+			type: "POST",
+			data: $('#delete_drive_form').serialize(),
+			dataType: "JSON",
+			success: function(data)
+			{
+				if(data.status=='success'){
+					toastr.success(data.message);
+					$('#modalDeleteDriveForm').modal('hide');		
+					loadSelectModulDrive();
 				} else {
 					toastr.error(data.message);
 				}			
