@@ -882,13 +882,18 @@ class Index extends CI_Controller {
 			
 			$file_current = $this->db->query("select user_id, submit_date, filename from v_tasks_file_current where tasks_id=".$list_item->id." AND jenis_file=2 AND status_atasan='1' AND status_awo='1'
 							order by submit_date desc limit 1")->row();
+							
+			$link_doc = '';
+			if(!empty($file_current)) {
+				$link_doc = '<a href="'.base_url($this->config->item('uploads')['tasks']).'/'.$file_current->user_id.'/'.$file_current->filename.'" target="_blank"  class="btn btn-xs red" data-toggle="tooltip" title="Download Dokumen" data-placement="left" ><i class="fa fa-file-pdf-o"></i></a>';
+			}
 			
 			$no++;
 			$row = array();
 			$row[] = $no;
 			$row[] = (in_array($user_id,$members)?'<a href="'.base_url('index/task/'.base64_encode($list_item->id)).'">':'').'<span data-toggle="tooltip" data-html="true" data-placement="right" title="PIC: '.$list_item->nama_pic.'<br>AWO: '.$list_item->nama_approval.'">'.$list_item->nama_task.'</span>'.(in_array($user_id,$members)?'</a>':'');		
 			$row[] = '<span class="label label-sm label-'.$this->custom->statusColor($list_item->nama_status).'">'.$list_item->nama_status.' <span class="badge bg-white bg-font-white" style="height:17px">'.$list_item->progress.'%</span></span> '.$reminder;		
-			$row[] = count($file_current)>0?'<a href="'.base_url($this->config->item('uploads')['tasks']).'/'.$file_current->user_id.'/'.$file_current->filename.'" target="_blank"  class="btn btn-xs red" data-toggle="tooltip" title="Download Dokumen" data-placement="left" ><i class="fa fa-file-pdf-o"></i></a>':'';
+			$row[] = $link_doc;
 			$data[] = $row;
 		}
 		
