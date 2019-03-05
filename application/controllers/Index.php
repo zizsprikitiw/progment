@@ -1124,7 +1124,11 @@ class Index extends CI_Controller {
 										where jenis_file = 1 AND agenda_id=".$list_item->id."
 										order by submit_date desc
 										limit 1")->row();
-		$link_mom = count($mom)>0?'<a href="'.base_url($this->config->item('uploads')['agenda']).'/'.$mom->filename.'" target="_blank" class="btn btn-icon-only blue" data-toggle="tooltip" title="Download MOM" data-placement="right" ><i class="fa fa-sticky-note-o"></i></a>':'';
+		$link_mom = '';
+		if(!empty($mom)) {
+			$link_mom = '<a href="'.base_url($this->config->item('uploads')['agenda']).'/'.$mom->filename.'" target="_blank" class="btn btn-icon-only blue" data-toggle="tooltip" title="Download MOM" data-placement="right" ><i class="fa fa-sticky-note-o"></i></a>';
+		}
+			
 		$absensi = $this->db->query("select filename, submit_date
 										from agenda_file
 										where jenis_file = 2 AND agenda_id=".$list_item->id."
