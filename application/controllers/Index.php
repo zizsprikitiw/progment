@@ -1134,7 +1134,10 @@ class Index extends CI_Controller {
 										where jenis_file = 2 AND agenda_id=".$list_item->id."
 										order by submit_date desc
 										limit 1")->row();
-		$link_absensi = count($absensi)>0?'<a href="'.base_url($this->config->item('uploads')['agenda']).'/'.$absensi->filename.'" target="_blank" class="btn btn-icon-only green" data-toggle="tooltip" title="Download Absensi" data-placement="right" ><i class="fa fa-file-text-o"></i></a>':'';
+		$link_absensi = '';
+		if(!empty($absensi)) {
+			$link_absensi = '<a href="'.base_url($this->config->item('uploads')['agenda']).'/'.$absensi->filename.'" target="_blank" class="btn btn-icon-only green" data-toggle="tooltip" title="Download Absensi" data-placement="right" ><i class="fa fa-file-text-o"></i></a>';
+		}
 							
 		$deskripsi .= 				'<li data-id="'.$list_item->id.'" data-date="'.$data_date.'">
 										<div class="mt-title">
