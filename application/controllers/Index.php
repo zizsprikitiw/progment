@@ -880,7 +880,7 @@ class Index extends CI_Controller {
 			$members = explode(',', trim($list_item->id_members, '{}'));
 			array_push($members,$list_item->pic_id,$list_item->approval_id,$admin);
 			
-			/*$file_current = $this->db->query("select user_id, submit_date, filename from v_tasks_file_current where tasks_id=".$list_item->id." AND jenis_file=2 AND status_atasan='1' AND status_awo='1'
+			/*$file_current = $this->db->query("select user_id, submit_date, filename from v_tasks_file_current where tasks_id=".$list_item->id." AND jenis_file=2 AND status_approval1='1' AND status_approval2='1'
 							order by submit_date desc limit 1")->row();*/
 							
 			$file_current = $this->db->query("select user_id, submit_date, filename from v_tasks_file_current where tasks_id=".$list_item->id." AND jenis_file=2 order by submit_date desc limit 1")->row();
