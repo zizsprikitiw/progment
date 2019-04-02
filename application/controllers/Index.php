@@ -883,7 +883,7 @@ class Index extends CI_Controller {
 			/*$file_current = $this->db->query("select user_id, submit_date, filename from v_tasks_file_current where tasks_id=".$list_item->id." AND jenis_file=2 AND status_atasan='1' AND status_awo='1'
 							order by submit_date desc limit 1")->row();*/
 							
-			$file_current = $this->db->query("select user_id, submit_date, filename from v_tasks_file_current where tasks_id=".$list_item->id." AND jenis_file=2 AND order by submit_date desc limit 1")->row();
+			$file_current = $this->db->query("select user_id, submit_date, filename from v_tasks_file_current where tasks_id=".$list_item->id." AND jenis_file=2 order by submit_date desc limit 1")->row();
 							
 			$link_doc = '';
 			if(!empty($file_current)) {
