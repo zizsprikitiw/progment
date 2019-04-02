@@ -880,8 +880,10 @@ class Index extends CI_Controller {
 			$members = explode(',', trim($list_item->id_members, '{}'));
 			array_push($members,$list_item->pic_id,$list_item->approval_id,$admin);
 			
-			$file_current = $this->db->query("select user_id, submit_date, filename from v_tasks_file_current where tasks_id=".$list_item->id." AND jenis_file=2 AND status_atasan='1' AND status_awo='1'
-							order by submit_date desc limit 1")->row();
+			/*$file_current = $this->db->query("select user_id, submit_date, filename from v_tasks_file_current where tasks_id=".$list_item->id." AND jenis_file=2 AND status_atasan='1' AND status_awo='1'
+							order by submit_date desc limit 1")->row();*/
+							
+			$file_current = $this->db->query("select user_id, submit_date, filename from v_tasks_file_current where tasks_id=".$list_item->id." AND jenis_file=2 AND order by submit_date desc limit 1")->row();
 							
 			$link_doc = '';
 			if(!empty($file_current)) {
@@ -891,7 +893,7 @@ class Index extends CI_Controller {
 			$no++;
 			$row = array();
 			$row[] = $no;
-			$row[] = (in_array($user_id,$members)?'<a href="'.base_url('index/task/'.base64_encode($list_item->id)).'">':'').'<span data-toggle="tooltip" data-html="true" data-placement="right" title="PIC: '.$list_item->nama_pic.'<br>AWO: '.$list_item->nama_approval.'">'.$list_item->nama_task.'</span>'.(in_array($user_id,$members)?'</a>':'');		
+			$row[] = (in_array($user_id,$members)?'<a href="'.base_url('index/task/'.base64_encode($list_item->id)).'">':'').'<span data-toggle="tooltip" data-html="true" data-placement="right" title="DE: '.$list_item->nama_pic.'<br>AWO: '.$list_item->nama_approval.'">'.$list_item->nama_task.'</span>'.(in_array($user_id,$members)?'</a>':'');		
 			$row[] = '<span class="label label-sm label-'.$this->custom->statusColor($list_item->nama_status).'">'.$list_item->nama_status.' <span class="badge bg-white bg-font-white" style="height:17px">'.$list_item->progress.'%</span></span> '.$reminder;		
 			$row[] = $link_doc;
 			$data[] = $row;
