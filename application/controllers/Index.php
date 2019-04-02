@@ -970,6 +970,63 @@ class Index extends CI_Controller {
 		echo json_encode($data);
 	}
 	
+	public function data_info_bar()
+	{
+		$user_id = $this->session->userdata('user_id');
+		$table_name = 'v_tasks_file_current';
+		$is_distinct = 'false';
+		$select = '*';
+		$where = " status_approval1 IS NULL AND status_approval2 IS NULL AND (userid_approval1='".$user_id."' OR userid_approval2='".$user_id."') ";
+		$where_in_field = '';
+		$where_in_array = array();
+		$order_by = 'submit_date DESC';
+		$group_by = '';
+		$limit = '';
+		
+		$list_info = $this->cms_model->get_query_rows($table_name, $is_distinct, $select, $where, $where_in_field, $where_in_array, $order_by, $group_by, $limit);
+		$info = '';
+		
+		$info .= '<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                    <i class="icon-envelope-open"></i>
+                                    '.(count($list_info)>0?'<span class="badge badge-default"> '.count($list_info).' </span>':'').'
+                                </a>
+								<ul class="dropdown-menu">
+                                    <li class="external">
+                                        <h3>You have
+                                            <span class="bold">'.count($list_info).' New</span> Messages</h3>
+                                    </li>
+                                    <li>
+                                        <ul class="dropdown-menu-list scroller" data-handle-color="#637283">';
+		
+		$n=0;
+		foreach ($list_info as $list_item) {			
+			$table_user = 'users';
+			$where_user = 'id='.$list_item->user_id.'';
+			$list_user = $this->cms_model->row_get_by_criteria($table_user, $where_user);
+			
+			$info .= '<li>
+						<a href="'.base_url('index/task/'.base64_encode($list_item->tasks_id)).'">
+							<span class="photo">
+								<img src="'.base_url($this->config->item('uploads')['users'])."/".$list_user->photo.'" class="img-circle" alt=""> </span>
+							<span class="subject">
+								<span class="from"> '.$list_user->nama.' </span>
+								<span class="time">'.strftime("%d %b %Y : %R",strtotime($list_item->submit_date)).' </span>
+							</span>
+							<span class="message"> Telah upload Dokumen Teknis '.$list_item->filename.' </span>
+						</a>
+					</li>';
+				
+			$n++;
+		}
+                                           
+        $info .= '                       </ul>
+                                    </li>
+                                </ul>';
+		
+		$data['info'] = $info;		
+		echo json_encode($data);
+	}
+	
 	public function data_dashboard_stat()
 	{
 		$user_id = $this->session->userdata('user_id');
