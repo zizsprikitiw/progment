@@ -63,7 +63,7 @@ class Beranda_task extends CI_Controller {
 			$type_file[1] = $this->config->item('files')['pdf_file_type'];
 		}
 		if($list_task->pic_id==$user_id){
-			$filter_jenis_file_task[] = array("id_item" => 2, "nama_item" => "Report");
+			$filter_jenis_file_task[] = array("id_item" => 2, "nama_item" => "Dokumen Teknis");
 			$type_file[2] = $this->config->item('files')['pdf_file_type'];
 		}
 		$filter_jenis_file_task[] = array("id_item" => 0, "nama_item" => "Other");

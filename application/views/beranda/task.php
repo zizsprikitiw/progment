@@ -122,7 +122,7 @@
 														<div class="tabbable-line">
 															<ul class="nav nav-tabs ">
 																<li class="active">
-																	<a href="#tab_1" data-toggle="tab"> Report </a>
+																	<a href="#tab_1" data-toggle="tab"> Dokumen Teknis </a>
 																</li>
 																<li>
 																	<a href="#tab_2" data-toggle="tab"> Dokumen Lainnya </a>
