@@ -976,7 +976,7 @@ class Index extends CI_Controller {
 		$table_name = 'v_tasks_file_current';
 		$is_distinct = 'false';
 		$select = '*';
-		$where = " status_approval1 IS NULL AND status_approval2 IS NULL AND (userid_approval1='".$user_id."' OR userid_approval2='".$user_id."') ";
+		$where = " (status_approval1='' AND userid_approval1='".$user_id."') OR (status_approval2='' AND userid_approval2='".$user_id."') ";
 		$where_in_field = '';
 		$where_in_array = array();
 		$order_by = 'submit_date DESC';
