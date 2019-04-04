@@ -40,8 +40,10 @@ var loadTaskTimeline = function() {
 			// create a dataset with items
             items = new vis.DataSet();
             items.add(data.data_task_timeline);
-			var today = new Date(new Date().setHours(0,0,0,0));
-			var tomorrow = new Date(new Date().setHours(23,59,59,999)+1);
+			// var today = new Date(new Date().setHours(0,0,0,0));
+			// var tomorrow = new Date(new Date().setHours(23,59,59,999)+1);
+			var today = new Date();
+			var tomorrow = new Date(30000 * 60 * 60 * 24 + (new Date()).valueOf());
 
             var options = {
 				orientation: 'top',
