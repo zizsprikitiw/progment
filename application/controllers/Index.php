@@ -40,12 +40,14 @@ class Index extends CI_Controller {
 			base_url($this->config->item('assets')['global_plugins'])."/fullcalendar-3.9.0/fullcalendar.min.css",
 			base_url($this->config->item('assets')['global_plugins'])."/jqvmap/jqvmap/jqvmap.css",
 			base_url($this->config->item('assets')['global_plugins'])."/getorgchart/getorgchart.css",
+			base_url($this->config->item('assets')['custom_plugins'])."/vis-js/vis.css",
 		);
 		
 		//tambahan javascript plugin
 		$this->data['add_javascript'] = array(
 			base_url($this->config->item('assets')['custom_scripts'])."/pages.js",
 			base_url($this->config->item('assets')['custom_scripts'])."/beranda.js",
+			base_url($this->config->item('assets')['custom_plugins'])."/vis-js/vis.js",
 			//base_url($this->config->item('assets')['custom_scripts'])."/dashboard.min.js",
 			base_url($this->config->item('assets')['pages_scripts'])."/portlet-draggable.min.js",
 			base_url($this->config->item('assets')['global_plugins'])."/moment.min.js",
@@ -1101,6 +1103,56 @@ class Index extends CI_Controller {
 			$n++;
 		}
 		$data['data_struktur'] = $data_struktur;
+		
+		echo json_encode($data);
+	}
+	
+	public function data_task_timeline()
+	{
+		$user_id = $this->session->userdata('user_id');
+		$proyek_id = $this->input->post('proyek_id');
+		
+		$table_name = 'v_tasks_modul';
+		$where = 'proyek_id='.$proyek_id.'';
+		$order_by = 'id ASC';
+		$data_task_group = array();
+		
+		$list_task_group = $this->cms_model->query_get_by_criteria($table_name, $where, $order_by);
+		
+		foreach ($list_task_group as $list_item) {
+			$data_task_group[] = array("id" => $list_item->id, "nama" => $list_item->nama_modul.' ('.$list_item->count_task.')');
+		}
+		
+		$table_name = 'v_tasks';
+		$is_distinct = 'false';
+		$select = '*';
+		$where = 'proyek_id='.$proyek_id;
+		$where_in_field = '';
+		$where_in_array = array();
+		$order_by = 'id ASC';
+		$group_by = '';
+		$limit = '';
+		
+		$list_task_timeline = $this->cms_model->get_query_rows($table_name, $is_distinct, $select, $where, $where_in_field, $where_in_array, $order_by, $group_by, $limit);
+		$data = array();
+		$data_task_timeline = array();
+		
+		foreach ($list_task_timeline as $list_item) {			
+			$data_task_timeline[] = array("id" => $list_item->id, "group" => $list_item->modul_id, "content" => $list_item->nama_task, "start" => $list_item->start_date, "end" => $list_item->due_date, "type" => 'box', "title" => 'DE: '.$list_item->nama_pic);
+		}
+		
+		/*$data_task_group[] = array("id" => 1, "nama" => "Struktur");
+		$data_task_group[] = array("id" => 2, "nama" => "Aerodinamika");
+		$data_task_group[] = array("id" => 3, "nama" => "Propulsi");
+		
+		$data_task_timeline[] = array("id" => 1, "group" => 1, "content" => 'item 1 (test)', "start" => '2019-04-04', "end" => '2019-04-08', "type" => 'box', "title" => 'Normal text');
+		$data_task_timeline[] = array("id" => 2, "group" => 1, "content" => 'item 2 (test)', "start" => '2019-04-06', "end" => '2019-04-10', "type" => 'box', "title" => 'Normal text');
+		$data_task_timeline[] = array("id" => 3, "group" => 2, "content" => 'item 3 (test)', "start" => '2019-04-08', "end" => '2019-04-10', "type" => 'box', "title" => 'Normal text');
+		$data_task_timeline[] = array("id" => 4, "group" => 2, "content" => 'item 4 (test)', "start" => '2019-04-10', "end" => '2019-04-12', "type" => 'box', "title" => 'Normal text');
+		$data_task_timeline[] = array("id" => 5, "group" => 3, "content" => 'item 5 (test)', "start" => '2019-04-14', "end" => '2019-04-18', "type" => 'box', "title" => 'Normal text');*/
+		  
+		$data['data_task_group'] = $data_task_group;
+		$data['data_task_timeline'] = $data_task_timeline;
 		
 		echo json_encode($data);
 	}

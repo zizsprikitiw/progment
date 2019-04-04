@@ -9,6 +9,7 @@ $config['assets']    = array(
 	"layouts_global" => "assets/layouts/global",
 	"apps_css" => "assets/apps/css",
 	"apps_scripts" => "assets/apps/scripts",
+	"custom_plugins" => "assets/custom",
 	"custom_css" => "assets/custom/css",
 	"custom_scripts" => "assets/custom/scripts",
 	"custom_img" => "assets/custom/img",

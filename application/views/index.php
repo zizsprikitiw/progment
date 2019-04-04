@@ -193,6 +193,22 @@
                                     </div>
                                 </div>
                                 <!-- END PORTLET-->
+								
+								<!-- BEGIN PORTLET-->
+								<div class="portlet portlet-sortable light portlet-fit bordered">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <i class="icon-directions font-green hide"></i>
+                                            <span class="caption-subject bold font-dark uppercase "> Timeline Task</span>
+                                            <span class="caption-helper"></span>
+                                        </div>
+                                    </div>
+									<div class="portlet-body">
+										<div id="task-timeline"></div>
+                                    </div>
+								</div>
+								<!-- END PORTLET-->
+								
 								<!-- empty sortable porlet required for each columns! -->
                                 <div class="portlet portlet-sortable-empty"> </div>
                             </div>

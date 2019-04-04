@@ -2,11 +2,141 @@ var loadContent = function() {
 	loadSelectModul();
 	loadSelectModulDrive();
 	loadDashboardStat();
+	loadTaskTimeline();
 	loadTimeline();
 	organisasiChart();
 	calendarProgram();
 }
 	
+//function load task timeline
+var loadTaskTimeline = function() {
+	var e = document.getElementById("filter_proyek");
+	var proyek_selected = e.options[e.selectedIndex].value;
+	var el = $('#tooltips-follow').parents('.portlet').find('.portlet-body');	
+	$.ajax({
+		url : base_url+"index/data_task_timeline" ,
+		type: "POST",
+		dataType: "JSON",
+		data: {"proyek_id":proyek_selected},
+		beforeSend: function() 
+		{    
+			App.blockUI({
+				target: el,
+				animate: true,
+				overlayColor: 'none'
+			});
+		},
+		success: function(data)
+		{
+			App.unblockUI(el);
+			
+			// create a data set with groups
+			var group = data.data_task_group;
+			var groups = new vis.DataSet();
+			for (var g = 0; g < group.length; g++) {
+				groups.add({id: group[g]['id'], content: group[g]['nama']});
+			}
+			
+			// create a dataset with items
+            items = new vis.DataSet();
+            items.add(data.data_task_timeline);
+            var options = {
+                groupOrder: 'content',  // groupOrder can be a property name or a sorting function
+				tooltip: {
+				  followMouse: true
+				}
+            };
+            var container = document.getElementById('task-timeline');
+            timeline = new vis.Timeline(container, items, groups, options);
+		},
+		error: function (jqXHR, exception) {
+			App.unblockUI(el);
+			var msgerror = ''; 
+			if (jqXHR.status === 0) {
+				msgerror = 'jaringan tidak terkoneksi.';
+			} else if (jqXHR.status == 404) {
+				msgerror = 'Halamam tidak ditemukan. [404]';
+			} else if (jqXHR.status == 500) {
+				msgerror = 'Internal Server Error [500].';
+			} else if (exception === 'parsererror') {
+				msgerror = 'Requested JSON parse gagal.';
+			} else if (exception === 'timeout') {
+				msgerror = 'RTO.';
+			} else if (exception === 'abort') {
+				msgerror = 'Gagal request ajax.';
+			} else {
+				msgerror = 'Error.\n' + jqXHR.responseText;
+			}
+			toastr.error("Error System", msgerror, 'error');
+		}		
+	});
+	
+	/* var now = moment().minutes(0).seconds(0).milliseconds(0);
+	  var groupCount = 3;
+	  var itemCount = 20;
+
+	  // create a data set with groups
+	  var names = ['John', 'Alston', 'Lee', 'Grant'];
+	  var groups = new vis.DataSet();
+	  for (var g = 0; g < groupCount; g++) {
+		groups.add({id: g, content: names[g]});
+	  }
+
+	  // create a dataset with items
+	  var items = new vis.DataSet();
+	  for (var i = 0; i < itemCount; i++) {
+		var start = now.clone().add(Math.random() * 200, 'hours');
+		var group = Math.floor(Math.random() * groupCount);
+		items.add({
+		  id: i,
+		  group: group,
+		  content: 'item ' + i +
+			  ' <span style="color:#97B0F8;">(' + names[group] + ')</span>',
+		  start: start,
+		  type: 'box',
+		  title: 'Normal text'
+		});
+	  }
+
+	  // create visualization
+	  var container = document.getElementById('tooltips-follow');
+	  var options = {
+		groupOrder: 'content',  // groupOrder can be a property name or a sorting function
+		tooltip: {
+		  followMouse: true
+		}
+	  };
+
+	  var timeline = new vis.Timeline(container);
+	  timeline.setOptions(options);
+	  timeline.setGroups(groups);
+	  timeline.setItems(items);*/
+	  
+	 /* 
+	// Create a DataSet (allows two way data-binding)
+	  var items = new vis.DataSet([
+		{id: 1, content: 'Item 1', start: '2016-01-01', end: '2016-01-02',
+		  title: 'Normal text'},
+		{id: 2, content: 'Item 2', start: '2016-01-02', title: '<b>Bold</b>'},
+		{id: 3, content: 'Item 3', start: '2016-01-03', type: 'point',
+		  title: '<span style="color: red">Red</span> text'},
+		{id: 4, content: '<h1>HTML</h1> Item', start: '2016-01-03', end: '2016-01-04',
+		  title: '<table border="1"><tr><td>Cell 1</td><td>Cell 2</td></tr></table>'}
+	  ]);
+
+
+	  // Follow options
+	  var follow_options = {
+		tooltip: {
+		  followMouse: true
+		}
+	  };
+
+	  var timelineFollow = new vis.Timeline(document.getElementById('tooltips-follow'),
+		  items, follow_options);
+		  */
+}	
+
 //function load select filter
 var loadSelectFilter = function() {
 	$.ajax({
