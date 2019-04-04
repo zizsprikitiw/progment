@@ -12,7 +12,7 @@ var loadContent = function() {
 var loadTaskTimeline = function() {
 	var e = document.getElementById("filter_proyek");
 	var proyek_selected = e.options[e.selectedIndex].value;
-	var el = $('#tooltips-follow').parents('.portlet').find('.portlet-body');	
+	var el = $('#task-timeline').parents('.portlet').find('.portlet-body');	
 	$.ajax({
 		url : base_url+"index/data_task_timeline" ,
 		type: "POST",
