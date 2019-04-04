@@ -1138,7 +1138,7 @@ class Index extends CI_Controller {
 		$data_task_timeline = array();
 		
 		foreach ($list_task_timeline as $list_item) {			
-			$data_task_timeline[] = array("id" => $list_item->id, "group" => $list_item->modul_id, "content" => $list_item->nama_task, "start" => $list_item->start_date, "end" => $list_item->due_date, "title" => 'DE: '.$list_item->nama_pic);
+			$data_task_timeline[] = array("id" => $list_item->id, "group" => $list_item->modul_id, "content" => $list_item->nama_task, "start" => $list_item->start_date, "end" => $list_item->due_date, "title" => 'DE: '.$list_item->nama_pic, "className" => ($list_item->pic_id==$user_id?'bg-green-turquoise font-white':''));
 		}
 		  
 		$data['data_task_group'] = $data_task_group;
