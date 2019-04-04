@@ -41,6 +41,16 @@ var loadTaskTimeline = function() {
             items = new vis.DataSet();
             items.add(data.data_task_timeline);
             var options = {
+				orientation: 'top',
+                align: 'left',
+				stack: true,
+				horizontalScroll: true,
+				//zoomKey: 'ctrlKey',
+				maxHeight: 500,
+				margin: {
+				  item: 10, // minimal margin between items
+				  axis: 5   // minimal margin between items and the axis
+				},
                 groupOrder: 'content',  // groupOrder can be a property name or a sorting function
 				tooltip: {
 				  followMouse: true

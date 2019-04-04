@@ -1138,18 +1138,8 @@ class Index extends CI_Controller {
 		$data_task_timeline = array();
 		
 		foreach ($list_task_timeline as $list_item) {			
-			$data_task_timeline[] = array("id" => $list_item->id, "group" => $list_item->modul_id, "content" => $list_item->nama_task, "start" => $list_item->start_date, "end" => $list_item->due_date, "type" => 'box', "title" => 'DE: '.$list_item->nama_pic);
+			$data_task_timeline[] = array("id" => $list_item->id, "group" => $list_item->modul_id, "content" => $list_item->nama_task, "start" => $list_item->start_date, "end" => $list_item->due_date, "title" => 'DE: '.$list_item->nama_pic);
 		}
-		
-		/*$data_task_group[] = array("id" => 1, "nama" => "Struktur");
-		$data_task_group[] = array("id" => 2, "nama" => "Aerodinamika");
-		$data_task_group[] = array("id" => 3, "nama" => "Propulsi");
-		
-		$data_task_timeline[] = array("id" => 1, "group" => 1, "content" => 'item 1 (test)', "start" => '2019-04-04', "end" => '2019-04-08', "type" => 'box', "title" => 'Normal text');
-		$data_task_timeline[] = array("id" => 2, "group" => 1, "content" => 'item 2 (test)', "start" => '2019-04-06', "end" => '2019-04-10', "type" => 'box', "title" => 'Normal text');
-		$data_task_timeline[] = array("id" => 3, "group" => 2, "content" => 'item 3 (test)', "start" => '2019-04-08', "end" => '2019-04-10', "type" => 'box', "title" => 'Normal text');
-		$data_task_timeline[] = array("id" => 4, "group" => 2, "content" => 'item 4 (test)', "start" => '2019-04-10', "end" => '2019-04-12', "type" => 'box', "title" => 'Normal text');
-		$data_task_timeline[] = array("id" => 5, "group" => 3, "content" => 'item 5 (test)', "start" => '2019-04-14', "end" => '2019-04-18', "type" => 'box', "title" => 'Normal text');*/
 		  
 		$data['data_task_group'] = $data_task_group;
 		$data['data_task_timeline'] = $data_task_timeline;
