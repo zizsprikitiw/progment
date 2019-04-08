@@ -2,10 +2,99 @@ var loadContent = function() {
 	loadSelectModul();
 	loadSelectModulDrive();
 	loadDashboardStat();
+	loadTaskChart();
 	loadTaskTimeline();
 	loadTimeline();
 	organisasiChart();
 	calendarProgram();
+}
+
+var loadTaskChart = function() {
+	var e = document.getElementById("filter_proyek");
+	var proyek_selected = e.options[e.selectedIndex].value;
+	var el = $('#task-chart').parents('.portlet').find('.portlet-body');	
+	
+	var chart = AmCharts.makeChart("task-chart", {
+		"type": "serial",
+		"theme": "light",
+		"pathToImages": App.getGlobalPluginsPath() + "amcharts/amcharts/images/",
+		"autoMargins": false,
+		"marginLeft": 30,
+		"marginRight": 8,
+		"marginTop": 10,
+		"marginBottom": 26,
+
+		"fontFamily": 'Open Sans',            
+		"color":    '#888',
+		"valueAxes": [{
+			"minimum": 0,
+			"maximum": 100,
+			"axisAlpha": 0,
+			"position": "left"
+		}],
+		"startDuration": 1,
+		"graphs": [{
+			"alphaField": "alpha",
+			"balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]] %</b> [[additional]]</span>",
+			"dashLengthField": "dashLengthColumn",
+			"fillAlphas": 1,
+			"title": "Persentage of Completed",
+			"type": "column",
+			"valueField": "persen"
+		}],
+		"categoryField": "modul",
+		"categoryAxis": {
+			"gridPosition": "start",
+			"axisAlpha": 0,
+			"tickLength": 0
+		}
+	});
+	
+	$.ajax({
+		url : base_url+"index/data_task_chart" ,
+		type: "POST",
+		dataType: "JSON",
+		data: {"proyek_id":proyek_selected},
+		beforeSend: function() 
+		{    
+			App.blockUI({
+				target: el,
+				animate: true,
+				overlayColor: 'none'
+			});
+		},
+		success: function(data)
+		{
+			App.unblockUI(el);
+			
+			chart.dataProvider = data.data_task_chart;
+			chart.validateData();
+		},
+		error: function (jqXHR, exception) {
+			App.unblockUI(el);
+			var msgerror = ''; 
+			if (jqXHR.status === 0) {
+				msgerror = 'jaringan tidak terkoneksi.';
+			} else if (jqXHR.status == 404) {
+				msgerror = 'Halamam tidak ditemukan. [404]';
+			} else if (jqXHR.status == 500) {
+				msgerror = 'Internal Server Error [500].';
+			} else if (exception === 'parsererror') {
+				msgerror = 'Requested JSON parse gagal.';
+			} else if (exception === 'timeout') {
+				msgerror = 'RTO.';
+			} else if (exception === 'abort') {
+				msgerror = 'Gagal request ajax.';
+			} else {
+				msgerror = 'Error.\n' + jqXHR.responseText;
+			}
+			toastr.error("Error System", msgerror, 'error');
+		}		
+	});
+
+	$('#task-chart').closest('.portlet').find('.fullscreen').click(function() {
+		chart.invalidateSize();
+	});
 }
 	
 //function load task timeline

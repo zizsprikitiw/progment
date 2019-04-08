@@ -142,6 +142,21 @@
                                     </div>
                                 </div>
                                 <!-- END PORTLET-->
+								
+								<!-- BEGIN PORTLET-->
+                                <div class="portlet portlet-sortable light bordered">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <i class="icon-share font-red-sunglo hide"></i>
+                                            <span class="caption-subject font-dark bold uppercase">Struktur Organisasi</span>
+                                            <span class="caption-helper"></span>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body">
+										<div id="people"></div>
+                                    </div>
+                                </div>
+                                <!-- END PORTLET-->
                                 
 								<!-- empty sortable porlet required for each columns! -->
                                 <div class="portlet portlet-sortable-empty"> </div>
@@ -153,7 +168,22 @@
                                     <div class="portlet-title">
                                         <div class="caption">
                                             <i class="icon-directions font-green hide"></i>
-                                            <span class="caption-subject bold font-dark uppercase "> Timeline Task</span>
+                                            <span class="caption-subject bold font-dark uppercase "> Task Chart</span>
+                                            <span class="caption-helper"></span>
+                                        </div>
+                                    </div>
+									<div class="portlet-body">
+										<div id="task-chart" class="chart" style="height: 350px;"> </div>
+                                    </div>
+								</div>
+								<!-- END PORTLET-->
+								
+								<!-- BEGIN PORTLET-->
+								<div class="portlet portlet-sortable light portlet-fit bordered">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <i class="icon-directions font-green hide"></i>
+                                            <span class="caption-subject bold font-dark uppercase "> Task Timeline</span>
                                             <span class="caption-helper"></span>
                                         </div>
                                     </div>
@@ -193,21 +223,6 @@
                                     </div>
                                     <div class="portlet-body">
                                         <div id="kalender"> </div>
-                                    </div>
-                                </div>
-                                <!-- END PORTLET-->
-								
-								<!-- BEGIN PORTLET-->
-                                <div class="portlet portlet-sortable light bordered">
-                                    <div class="portlet-title">
-                                        <div class="caption">
-                                            <i class="icon-share font-red-sunglo hide"></i>
-                                            <span class="caption-subject font-dark bold uppercase">Struktur Organisasi</span>
-                                            <span class="caption-helper"></span>
-                                        </div>
-                                    </div>
-                                    <div class="portlet-body">
-										<div id="people"></div>
                                     </div>
                                 </div>
                                 <!-- END PORTLET-->

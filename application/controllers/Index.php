@@ -40,6 +40,8 @@ class Index extends CI_Controller {
 			base_url($this->config->item('assets')['global_plugins'])."/fullcalendar-3.9.0/fullcalendar.min.css",
 			base_url($this->config->item('assets')['global_plugins'])."/jqvmap/jqvmap/jqvmap.css",
 			base_url($this->config->item('assets')['global_plugins'])."/getorgchart/getorgchart.css",
+			base_url($this->config->item('assets')['global_css'])."/components.min.css",
+			base_url($this->config->item('assets')['global_css'])."/plugins.min.css",
 			base_url($this->config->item('assets')['custom_plugins'])."/vis-js/vis.css",
 		);
 		
@@ -90,6 +92,17 @@ class Index extends CI_Controller {
 			
 			base_url($this->config->item('assets')['global_plugins'])."/getorgchart/getorgchart.js",
 			base_url($this->config->item('assets')['global_plugins'])."/bootstrap-fileinput/bootstrap-fileinput.js",
+			
+			base_url($this->config->item('assets')['global_plugins'])."/amcharts/amcharts/amcharts.js",
+			base_url($this->config->item('assets')['global_plugins'])."/amcharts/amcharts/serial.js",
+			base_url($this->config->item('assets')['global_plugins'])."/amcharts/amcharts/pie.js",
+			base_url($this->config->item('assets')['global_plugins'])."/amcharts/amcharts/radar.js",
+			base_url($this->config->item('assets')['global_plugins'])."/amcharts/amcharts/themes/light.js",
+			base_url($this->config->item('assets')['global_plugins'])."/amcharts/amcharts/themes/patterns.js",
+			base_url($this->config->item('assets')['global_plugins'])."/amcharts/amcharts/themes/chalk.js",
+			base_url($this->config->item('assets')['global_plugins'])."/amcharts/ammap/ammap.js",
+			base_url($this->config->item('assets')['global_plugins'])."/amcharts/ammap/maps/js/worldLow.js",
+			base_url($this->config->item('assets')['global_plugins'])."/amcharts/amstockcharts/amstock.js",
 		);
 		
 		$this->load->view('index',$this->data);
@@ -1128,6 +1141,34 @@ class Index extends CI_Controller {
 			$n++;
 		}
 		$data['data_struktur'] = $data_struktur;
+		
+		echo json_encode($data);
+	}
+	
+	public function data_task_chart()
+	{
+		$user_id = $this->session->userdata('user_id');
+		$proyek_id = $this->input->post('proyek_id');
+		
+		$table_name = 'v_tasks';
+		$is_distinct = 'false';
+		$select = 'modul_id, nama_modul, ROUND(AVG(progress)) as persen';
+		$where = 'proyek_id='.$proyek_id;
+		$where_in_field = '';
+		$where_in_array = array();
+		$order_by = 'modul_id ASC';
+		$group_by = 'modul_id, nama_modul';
+		$limit = '';
+		
+		$list_task_chart = $this->cms_model->get_query_rows($table_name, $is_distinct, $select, $where, $where_in_field, $where_in_array, $order_by, $group_by, $limit);
+		$data = array();
+		$data_task_chart = array();
+		
+		foreach ($list_task_chart as $list_item) {			
+			$data_task_chart[] = array("modul" => $list_item->nama_modul, "persen" => $list_item->persen);
+		}
+		  
+		$data['data_task_chart'] = $data_task_chart;
 		
 		echo json_encode($data);
 	}
