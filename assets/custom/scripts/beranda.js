@@ -15,39 +15,39 @@ var loadTaskChart = function() {
 	var el = $('#task-chart').parents('.portlet').find('.portlet-body');	
 	
 	var chart = AmCharts.makeChart("task-chart", {
-		"type": "serial",
-		"theme": "light",
-		"pathToImages": App.getGlobalPluginsPath() + "amcharts/amcharts/images/",
-		"autoMargins": false,
-		"marginLeft": 30,
-		"marginRight": 8,
-		"marginTop": 10,
-		"marginBottom": 26,
+	  "theme": "light",
+	  "type": "serial",
+	  "startDuration": 1,
+	  "valueAxes": [{
+		"minimum": 0,
+		"maximum": 100,
+		"axisAlpha": 0,
+		"position": "left",
+		"title": "Persentage of Completed (%)"
+	  }],
+	  //"dataProvider": [],
+	  "graphs": [{
+		"balloonText": "[[category]]: <b>[[value]]%</b>",
+		"fillColorsField": "color",
+		"fillAlphas": 0.9,
+		"lineAlpha": 0.2,
+		"type": "column",
+		"valueField": "persen"
+	  }],
+	  "chartCursor": {
+		"categoryBalloonEnabled": false,
+		"cursorAlpha": 0,
+		"zoomable": false
+	  },
+	  "categoryField": "modul",
+	  "categoryAxis": {
+		"gridPosition": "start",
+		"labelRotation": 45
+	  },
+	  "export": {
+		"enabled": true
+	  }
 
-		"fontFamily": 'Open Sans',            
-		"color":    '#888',
-		"valueAxes": [{
-			"minimum": 0,
-			"maximum": 120,
-			"axisAlpha": 0,
-			"position": "left"
-		}],
-		"startDuration": 1,
-		"graphs": [{
-			"alphaField": "alpha",
-			"balloonText": "<span style='font-size:13px;'>[[title]] in [[category]]:<b>[[value]] %</b> [[additional]]</span>",
-			"dashLengthField": "dashLengthColumn",
-			"fillAlphas": 1,
-			"title": "Persentage of Completed",
-			"type": "column",
-			"valueField": "persen"
-		}],
-		"categoryField": "modul",
-		"categoryAxis": {
-			"gridPosition": "start",
-			"axisAlpha": 0,
-			"tickLength": 0
-		}
 	});
 	
 	$.ajax({
@@ -90,10 +90,6 @@ var loadTaskChart = function() {
 			}
 			toastr.error("Error System", msgerror, 'error');
 		}		
-	});
-
-	$('#task-chart').closest('.portlet').find('.fullscreen').click(function() {
-		chart.invalidateSize();
 	});
 }
 	

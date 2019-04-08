@@ -1165,12 +1165,20 @@ class Index extends CI_Controller {
 		$data_task_chart = array();
 		
 		foreach ($list_task_chart as $list_item) {			
-			$data_task_chart[] = array("modul" => $list_item->nama_modul, "persen" => $list_item->persen);
+			$data_task_chart[] = array("modul" => $list_item->nama_modul, "persen" => $list_item->persen, "color" => sprintf('#%06X', mt_rand(0, 0xFFFFFF)));
 		}
 		  
 		$data['data_task_chart'] = $data_task_chart;
 		
 		echo json_encode($data);
+	}
+	
+	function string_from_first_letter_of_each_word($string){
+		$sA = explode(' ', $string); $r = '';
+		foreach($sA as $v){
+			$r .= substr($v, 0, 1);
+		}
+		return $r;
 	}
 	
 	public function data_task_timeline()
