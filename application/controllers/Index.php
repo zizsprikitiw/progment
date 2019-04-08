@@ -918,6 +918,7 @@ class Index extends CI_Controller {
 		$is_distinct = 'false';
 		$select = '*';
 		$where = 'status<>3 AND pic_id='.$user_id.'';
+		$where_complete = 'status=3 AND pic_id='.$user_id.'';
 		$where_in_field = '';
 		$where_in_array = array();
 		$order_by = 'id ASC';
@@ -925,6 +926,7 @@ class Index extends CI_Controller {
 		$limit = '';
 		
 		$list_task = $this->cms_model->get_query_rows($table_name, $is_distinct, $select, $where, $where_in_field, $where_in_array, $order_by, $group_by, $limit);
+		$list_task_complete = $this->cms_model->get_query_rows($table_name, $is_distinct, $select, $where_complete, $where_in_field, $where_in_array, $order_by, $group_by, $limit);
 		$tasks = '';
 		
 		$tasks .= '<a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
@@ -942,6 +944,29 @@ class Index extends CI_Controller {
 		
 		$n=0;
 		foreach ($list_task as $list_item) {
+			$striped = '';
+			switch(strtolower($list_item->nama_status)) {
+				case 'proses' : $striped = 'progress-striped active'; break;
+			}
+						
+			$tasks .= '<li>
+						<a href="'.base_url('index/task/'.base64_encode($list_item->id)).'">
+							<span class="task">
+								<span class="desc">'.$list_item->nama_task.' </span>
+								<span class="percent">'.$list_item->progress.'%</span>
+							</span>
+							<span class="progress '.$striped.'">
+								<span style="width: '.$list_item->progress.'%;" class="progress-bar progress-bar-'.$this->custom->statusColor($list_item->nama_status).'" aria-valuenow="'.$list_item->progress.'" aria-valuemin="0" aria-valuemax="100">
+									<span class="sr-only">'.$list_item->progress.'% '.$list_item->nama_status.'</span>
+								</span>
+							</span>
+						</a>
+					</li>';
+				
+			$n++;
+		}
+		
+		foreach ($list_task_complete as $list_item) {
 			$striped = '';
 			switch(strtolower($list_item->nama_status)) {
 				case 'proses' : $striped = 'progress-striped active'; break;
