@@ -28,7 +28,7 @@ var loadTaskChart = function() {
 		"color":    '#888',
 		"valueAxes": [{
 			"minimum": 0,
-			"maximum": 100,
+			"maximum": 120,
 			"axisAlpha": 0,
 			"position": "left"
 		}],
