@@ -126,7 +126,8 @@ class Beranda_task extends CI_Controller {
 					"photo" => $list_item->photo,
 					"submit_date" => $list_item->submit_date,
 					"message" => $list_item->message,
-					"filename" => $list_item->filename
+					"filename" => $list_item->filename,
+					"tasks_file_id" => $list_item->tasks_file_id
 				);
 			} else {
 				$array_comments[$parent_id] = array(
@@ -138,14 +139,15 @@ class Beranda_task extends CI_Controller {
 					"photo" => $list_item->photo,
 					"submit_date" => $list_item->submit_date,
 					"message" => $list_item->message,
-					"filename" => $list_item->filename
+					"filename" => $list_item->filename,
+					"tasks_file_id" => $list_item->tasks_file_id
 				);
 			}
 		}
 		
 		$el = '';
 		foreach ($array_comments as $item) {
-				$filename = $item['filename'] !=  '' ? '<a href="'.base_url($this->config->item('uploads')['tasks']).'/'.$item['user_id'].'/'.$item['filename'].'" target="_blank" class="btn btn-xs green">'.$item['filename'].' <i class="fa fa-file"></i></a>' : '<a class="btn btn-xs green">File telah dihapus</a>'; 
+				$filename = $item['filename'] !=  '' ? '<a href="'.base_url($this->config->item('uploads')['tasks']).'/'.$item['user_id'].'/'.$item['filename'].'" target="_blank" class="btn btn-xs green">'.$item['filename'].' <i class="fa fa-file"></i></a>' : ($item['tasks_file_id'] !=  '' ? '<a class="btn btn-xs green">File telah dihapus</a>' : ''); 
 				$el .= '<li class="media">
 							<a class="pull-left" href="javascript:;">
 								<img class="todo-userpic" src="'.base_url($this->config->item('uploads')['users_thumb50x50']).'/'.$item['photo'].'" onerror="this.src = \"'.base_url($this->config->item('assets')['custom_img']).'/50x50.png\" width="27px" height="27px">
@@ -182,12 +184,14 @@ class Beranda_task extends CI_Controller {
 									<img class="todo-userpic" src="'.base_url($this->config->item('uploads')['users_thumb50x50']).'/'.$user->photo.'" onerror="this.src = \"'.base_url($this->config->item('assets')['custom_img']).'/50x50.png\";" width="27px" height="27px">
 								</a>						
 								<div class="media-body">
-									<div class="form-group">
-										<textarea class="form-control todo-taskbody-taskdesc" rows="1" placeholder="Reply..."></textarea>
-									</div>
-									<div class="form-group">
-										<button type="button" class="pull-right btn btn-sm btn-circle green"> &nbsp; Submit &nbsp; </button>
-									</div>
+									<form id="reply_comment'.$item['id'].'" action="#">
+										<div class="form-group">
+											<textarea class="form-control todo-taskbody-taskdesc" name="message" rows="1" placeholder="Reply..."></textarea>
+										</div>
+										<div class="form-group">
+											<button type="button" class="pull-right btn btn-sm btn-circle green" onClick="replyComments('."'".$item['id']."','".$item['tasks_id']."'".')"> &nbsp; Submit &nbsp; </button>
+										</div>
+									</form>
 								</div>
 							</li>
 						</ul>
@@ -254,7 +258,7 @@ class Beranda_task extends CI_Controller {
 										<textarea class="form-control todo-taskbody-taskdesc" rows="1" placeholder="Reply..."></textarea>
 									</div>
 									<div class="form-group">
-										<button type="button" class="pull-right btn btn-sm btn-circle green"> &nbsp; Submit &nbsp; </button>
+										<button type="button" class="pull-right btn btn-sm btn-circle green" onClick="replyComments()"> &nbsp; Submit &nbsp; </button>
 									</div>
 								</div>
 							</li>
@@ -483,6 +487,40 @@ class Beranda_task extends CI_Controller {
 			try {				
 				$tasks_comments_id = $this->cms_model->save($additional_data, 'tasks_comments');	
 				$comment = $this->data_append_task_comments($tasks_comments_id);
+				$status = 'success';
+				$message = 'Komentar telah ditambahkan';
+			} catch (Exception $e) {
+				$status = 'error';
+				$message = $e->getMessage();
+			}
+		}else{
+			$status = 'warning';
+			$message = 'Isian harus salah satu diisi';				
+		}
+		echo json_encode(array("status" => $status, "message" => $message, "comment" => $comment));
+	}
+	
+	function data_reply_comment()
+	{
+		$status = 'error';
+        $message = 'Gagal tambah komentar';		
+		$user_id = $this->session->userdata('user_id');
+		$tasks_id = $this->input->post('tasks_id');																	
+		$parent_id = $this->input->post('parent_id');																	
+		$message = $this->input->post('message');	
+		$comment = '';
+		
+		if(!empty($message) && $message!='' && $message!='undefined' && $message!=null)
+		{
+			$additional_data = array(
+				'user_id' => $user_id,
+				'tasks_id' => $tasks_id,
+				'parent_id' => $parent_id,
+				'message' => $message,
+			);
+			
+			try {				
+				$tasks_comments_id = $this->cms_model->save($additional_data, 'tasks_comments');
 				$status = 'success';
 				$message = 'Komentar telah ditambahkan';
 			} catch (Exception $e) {

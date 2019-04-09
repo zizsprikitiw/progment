@@ -410,6 +410,57 @@ function addComments() {
 	});
 }
 
+function replyComments(id, tasks_id) {
+	var form = document.getElementById('reply_comment'+id);					  
+	var form_data = new FormData(form);	
+	form_data.append("parent_id", id);
+	form_data.append("tasks_id", tasks_id);
+			
+	// ajax adding data to database
+	$.ajax({
+		url : base_url+"beranda_task/data_reply_comment",
+		type: "POST",
+		data: form_data,
+		processData: false,
+		contentType: false,
+		dataType: "JSON",
+		success: function(data)
+		{
+			if(data.status=='success'){
+				toastr.success(data.message);
+				$('#reply_comment'+id)[0].reset();
+				// if($("#form_add_file_comment").is(':visible')){
+					// $("#form_add_file_comment").toggle("slow");
+				// }
+				loadComments();
+			} else if (data.status=='warning'){
+				toastr.warning(data.message);
+			} else {
+				toastr.error(data.message);
+			}			   					  
+		},
+		error: function (jqXHR, exception) {
+			var msgerror = ''; 
+			if (jqXHR.status === 0) {
+				msgerror = 'jaringan tidak terkoneksi.';
+			} else if (jqXHR.status == 404) {
+				msgerror = 'Halamam tidak ditemukan. [404]';
+			} else if (jqXHR.status == 500) {
+				msgerror = 'Internal Server Error [500].';
+			} else if (exception === 'parsererror') {
+				msgerror = 'Requested JSON parse gagal.';
+			} else if (exception === 'timeout') {
+				msgerror = 'RTO.';
+			} else if (exception === 'abort') {
+				msgerror = 'Gagal request ajax.';
+			} else {
+				msgerror = 'Error.\n' + jqXHR.responseText;
+			}
+			toastr.error("Error System", msgerror, 'error');
+		}		
+	});
+}
+
 function show_laporan(file_id)
 {				 				
 	var form_data = {
