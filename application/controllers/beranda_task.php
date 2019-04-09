@@ -293,7 +293,16 @@ class Beranda_task extends CI_Controller {
 			$status_approve = false;
 			if($is_admin){
 				$hapus = '<li><a href="javascript:;" onclick="data_delete('."'".$list_item->id."','".$list_item->filename."'".')"><i class="fa fa-trash font-red"></i> Hapus </a></li>';
+			} else if ($user_id==$list_item->user_id) {
+				$hapus = '';
+				$date = strtotime($list_item->submit_date);
+				$dateweek = strtotime("+7 day", $date);
+				$datenow = strtotime("now");
+				if($datenow<=$dateweek) {
+					$hapus = '<li><a href="javascript:;" onclick="data_delete('."'".$list_item->id."','".$list_item->filename."'".')"><i class="fa fa-trash font-red"></i> Hapus </a></li>';
+				}
 			}
+			
 			$approval = explode('","', trim($list_item->approval, '{""}'));
 			$arraydata = array();
 			$col_approval = '';
@@ -306,7 +315,7 @@ class Beranda_task extends CI_Controller {
 				
 				$status_approve = $arraydata[1]==$user_id&&$arraydata[5]==null?true:$status_approve;
 				
-				$col_approval .= '<img class="todo-userpic" style="'.$border.'" src="'.($arraydata[3]!=''?base_url($this->config->item('uploads')['users_thumb50x50']).'/'.$arraydata[3]:base_url($this->config->item('assets')['custom_img']).'/50x50.png').'" onerror="this.src = \"'.base_url($this->config->item('assets')['custom_img']).'/50x50.png\" title="'.$title.'" width="27px" height="27px">';
+				$col_approval .= '<a href="javascript:;" onclick="show_deskripsi('."'".$list_item->id."','".$arraydata[1]."','".$nama_approval."'".')"><img class="todo-userpic" style="'.$border.'" src="'.($arraydata[3]!=''?base_url($this->config->item('uploads')['users_thumb50x50']).'/'.$arraydata[3]:base_url($this->config->item('assets')['custom_img']).'/50x50.png').'" onerror="this.src = \"'.base_url($this->config->item('assets')['custom_img']).'/50x50.png\" title="'.$title.'" width="27px" height="27px"></a>';
 			}
 			
 			if($status_approve) {
@@ -367,6 +376,13 @@ class Beranda_task extends CI_Controller {
 			$aksi = '';
 			if($is_admin){
 				$aksi .= '<a class="btn btn-xs btn-danger" href="javascript:void()" title="Hapus" onclick="data_delete('."'".$list_item->id."','".$list_item->filename."'".')"><i class="fa fa-times"></i></a>';
+			} else if ($user_id==$list_item->user_id) {
+				$date = strtotime($list_item->submit_date);
+				$dateweek = strtotime("+7 day", $date);
+				$datenow = strtotime("now");
+				if($datenow<=$dateweek) {
+					$aksi .= '<a class="btn btn-xs btn-danger" href="javascript:void()" title="Hapus" onclick="data_delete('."'".$list_item->id."','".$list_item->filename."'".')"><i class="fa fa-times"></i></a>';
+				}
 			}
 			
 			$no++;
@@ -530,6 +546,33 @@ class Beranda_task extends CI_Controller {
 							
 		$data['filename_url'] = base_url()."assets/custom/scripts/angular_pdf/pdf_loader_".$new_filename;
 		$data['filename_path'] = $file_template;		
+		echo json_encode($data);	
+	}
+	
+	function show_deskripsi()
+	{
+		$file_id = $this->input->post('file_id');	
+		$user_id = $this->input->post('user_id');	
+		$table_name = 'tasks_file_approval';
+		$where = 'tasks_file_id='.$file_id.' AND user_id='.$user_id;
+		
+		$deskripsi_row = $this->cms_model->row_get_by_criteria($table_name, $where);
+		
+		$status = '<span class="label label-default">Belum disetujui</span>';
+		$keterangan = '-';
+		
+		if(!empty($deskripsi_row)) {
+			$keterangan = $deskripsi_row->keterangan;
+			$submit_date = strftime("%d %b %Y, %R",strtotime($deskripsi_row->submit_date));
+			if($deskripsi_row->status==1) {
+				$status = '<span class="label label-success">Disetujui</span> <i>'.$submit_date.'</i>';
+			} else if($deskripsi_row->status==2) {
+				$status = '<span class="label label-danger">Ditolak</span> <i>'.$submit_date.'</i>';
+			}
+		}
+							
+		$data['status'] = $status;
+		$data['keterangan'] = $keterangan;			
 		echo json_encode($data);	
 	}
 	

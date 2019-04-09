@@ -43,6 +43,7 @@ class Index extends CI_Controller {
 			base_url($this->config->item('assets')['global_css'])."/components.min.css",
 			base_url($this->config->item('assets')['global_css'])."/plugins.min.css",
 			base_url($this->config->item('assets')['custom_plugins'])."/vis-js/vis.css",
+			base_url($this->config->item('assets')['global_plugins'])."/amcharts/amcharts/plugins/export/export.css",
 		);
 		
 		//tambahan javascript plugin
@@ -95,14 +96,8 @@ class Index extends CI_Controller {
 			
 			base_url($this->config->item('assets')['global_plugins'])."/amcharts/amcharts/amcharts.js",
 			base_url($this->config->item('assets')['global_plugins'])."/amcharts/amcharts/serial.js",
-			base_url($this->config->item('assets')['global_plugins'])."/amcharts/amcharts/pie.js",
-			base_url($this->config->item('assets')['global_plugins'])."/amcharts/amcharts/radar.js",
 			base_url($this->config->item('assets')['global_plugins'])."/amcharts/amcharts/themes/light.js",
-			base_url($this->config->item('assets')['global_plugins'])."/amcharts/amcharts/themes/patterns.js",
-			base_url($this->config->item('assets')['global_plugins'])."/amcharts/amcharts/themes/chalk.js",
-			base_url($this->config->item('assets')['global_plugins'])."/amcharts/ammap/ammap.js",
-			base_url($this->config->item('assets')['global_plugins'])."/amcharts/ammap/maps/js/worldLow.js",
-			base_url($this->config->item('assets')['global_plugins'])."/amcharts/amstockcharts/amstock.js",
+			base_url($this->config->item('assets')['global_plugins'])."/amcharts/amcharts/plugins/export/export.js",
 		);
 		
 		$this->load->view('index',$this->data);

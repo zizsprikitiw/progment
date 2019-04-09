@@ -219,6 +219,47 @@
 						<!-- Modal END:UPDATE TASK-->
 						
 						<!-- Modal BEGIN:BACA DOKUMEN-->
+						<div id="modalStatus" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+							<div class="modal-dialog modal-md">
+								<div class="modal-content">					
+									  <div class="modal-header">			                        
+										<h4 class="modal-title">STATUS APPROVAL</h4>
+									  </div>
+									  <div class="modal-body">	
+										<form class="form-horizontal">
+											<div class="form-group">
+											  <label class="col-lg-4 control-label" for="status">Approval</label>
+											  <div class="col-lg-8">
+												<div id="approval" class="form-control-static"></div>
+											  </div>							  
+											</div>			
+											
+											<div class="form-group">
+											  <label class="col-lg-4 control-label" for="status">Status</label>
+											  <div class="col-lg-8">
+												<div id="status" class="form-control-static"></div>
+											  </div>							  
+											</div>		
+
+											<div class="form-group">
+											  <label class="col-lg-4 control-label" for="keterangan">Keterangan</label>
+											  <div class="col-lg-8">
+												<div id="keterangan" class="form-control-static"></div>
+											  </div>							  
+											</div>		
+										</form>
+										<div class="clearfix"></div>
+									  </div>	<!--END modal-body-->
+									  <div class="modal-footer">										
+										<button type="button" class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>														
+									  </div>
+								  
+								</div>	<!--END modal-content-->
+							</div>	<!--END modal-dialog-->
+						</div>
+						<!-- Modal END:BACA DOKUMEN-->
+						
+						<!-- Modal BEGIN:BACA DOKUMEN-->
 						<div id="modalLaporan" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 							<div class="modal-dialog modal-lg">
 								<div class="modal-content">					

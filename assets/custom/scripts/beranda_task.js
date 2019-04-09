@@ -435,6 +435,32 @@ function show_laporan(file_id)
 	});									
 }
 
+function show_deskripsi(file_id,user_id,nama_approval)
+{				 				
+	var form_data = {
+		file_id: file_id,			
+		user_id: user_id					
+	};
+		
+	$.ajax({
+		url : base_url+"beranda_task/show_deskripsi",
+		type: "POST",
+		dataType: "JSON",
+		data: form_data,
+		success: function(data)
+		{	
+			$('#modalStatus #approval').html('<b>' + nama_approval + '</b>');					    														
+			$('#modalStatus #status').html(data['status']);					    														
+			$('#modalStatus #keterangan').html(data['keterangan']);																																					
+			$('#modalStatus').modal('show'); // show bootstrap modal when complete loaded																			   				   					  
+		},
+		error: function (jqXHR, textStatus, errorThrown)
+		{						
+			alert('Error adding / update data');									
+		}
+	});									
+}
+
 function approval_laporan(id, nama, judul, file_id, jenis_approve)
 {
 	if(id != ''){
