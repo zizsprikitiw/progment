@@ -90,16 +90,16 @@
 												</button>
                                                 <ul class="dropdown-menu pull-right" id="table_tools">
                                                     <li>
-                                                        <a href="javascript:;" data-action="2" class="tool-action">
+                                                        <a href="javascript:;" data-action="0" class="tool-action">
                                                             <i class="icon-doc"></i> PDF</a>
                                                     </li>
                                                     <li>
-                                                        <a href="javascript:;" data-action="3" class="tool-action">
+                                                        <a href="javascript:;" data-action="1" class="tool-action">
                                                             <i class="icon-paper-clip"></i> Excel</a>
                                                     </li>
                                                     <li class="divider"> </li>
                                                     <li>
-                                                        <a href="javascript:;" data-action="5" class="tool-action">
+                                                        <a href="javascript:;" data-action="2" class="tool-action">
                                                             <i class="icon-refresh"></i> Reload</a>
                                                     </li>
                                                     </li>
