@@ -1656,10 +1656,14 @@ var loadTabelTask = function(modul_id) {
 	var e = document.getElementById("filter_proyek");
 	var proyek_selected = e.options[e.selectedIndex].value;
 	//load data table																
-	$('#table_task').DataTable({ 			
+	oTable = $('#table_task').DataTable({ 			
 		"processing": true, //Feature control the processing indicator.
 		"serverSide": true, //Feature control DataTables' server-side processing mode.
-		
+		"buttons": [
+			{ extend: 'pdf', className: 'btn green btn-outline' },
+			{ extend: 'excel', className: 'btn yellow btn-outline ' },
+			{ extend: 'reload', className: 'btn dark btn-outline' }
+		],
 		// Load data for the table's content from an Ajax source
 		"ajax": {
 			"url": base_url+"index/data_list_task",
@@ -1692,6 +1696,20 @@ var loadTabelTask = function(modul_id) {
 		},
 
 	});//end load data table
+	
+	// handle datatable custom tools
+	$('#table_tools > li > a.tool-action').on('click', function() {
+		var action = $(this).attr('data-action');
+		oTable.button(action).trigger();
+	});
+	
+	// handle datatable custom reload tools
+	$.fn.dataTable.ext.buttons.reload = {
+		text: 'Reload',
+		action: function ( e, dt, node, config ) {
+			dt.ajax.reload();
+		}
+	};
 }
 
 var loadTabelDrive = function(modul_id) {

@@ -84,6 +84,27 @@
                                                 </a>
 											</div>
 											<?php } ?>
+											<div class="btn-group">
+												<button class="btn green  btn-outline btn-circle dropdown-toggle" data-toggle="dropdown">Export
+													<i class="fa fa-angle-down"></i>
+												</button>
+                                                <ul class="dropdown-menu pull-right" id="table_tools">
+                                                    <li>
+                                                        <a href="javascript:;" data-action="2" class="tool-action">
+                                                            <i class="icon-doc"></i> PDF</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="javascript:;" data-action="3" class="tool-action">
+                                                            <i class="icon-paper-clip"></i> Excel</a>
+                                                    </li>
+                                                    <li class="divider"> </li>
+                                                    <li>
+                                                        <a href="javascript:;" data-action="5" class="tool-action">
+                                                            <i class="icon-refresh"></i> Reload</a>
+                                                    </li>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="portlet-body">
