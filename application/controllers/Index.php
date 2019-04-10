@@ -1088,9 +1088,20 @@ class Index extends CI_Controller {
 		$limit = '1';
 		$list_tasks = $this->cms_model->get_query_rows($table_name, $is_distinct, $select, $where, $where_in_field, $where_in_array, $order_by, $group_by, $limit);
 		
+		$table_name = 'v_tasks';
+		$is_distinct = 'false';
+		$select = 'COUNT(id) as total_tasks';
+		$where = 'status=3 AND progress=100 AND proyek_id='.$proyek_id;
+		$where_in_field = '';
+		$where_in_array = array();
+		$order_by = '';
+		$group_by = '';
+		$limit = '1';
+		$list_tasks_completed = $this->cms_model->get_query_rows($table_name, $is_distinct, $select, $where, $where_in_field, $where_in_array, $order_by, $group_by, $limit);
+		
 		$data['count_member'] = '<span data-counter="counterup" data-value="'.$list_member[0]->member.'">0</span>';	
 		$data['count_wp'] = '<span data-counter="counterup" data-value="'.$list_member[0]->wp.'">0</span>';	
-		$data['count_tasks'] = '<span data-counter="counterup" data-value="0">0</span>/'.$list_tasks[0]->total_tasks.' ';	
+		$data['count_tasks'] = '<span data-counter="counterup" data-value="'.$list_tasks_completed[0]->total_tasks.'">0</span>/'.$list_tasks[0]->total_tasks.' ';	
 		$data['avg_progress'] = '<span data-counter="counterup" data-value="'.round($list_tasks[0]->percentage,0,PHP_ROUND_HALF_UP).'">0</span>%';	
 		echo json_encode($data);
 	}
