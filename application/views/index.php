@@ -287,15 +287,12 @@
 												</div>
 										  
 												<div class="clearfix">
-													<label class="control-label" for="nama">Due Date</label>
-													<div class="input-group date date-picker" data-date-format="yyyy-mm-dd" today-highlight="true">
+													<label class="control-label" for="nama">Waktu</label>
+													<div class="input-group date date-picker input-daterange" data-date-format="yyyy-mm-dd" today-highlight="true">
+														<input type="text" class="form-control" name="start_date" readonly>
+														<span class="input-group-addon"> to </span>
 														<input type="text" class="form-control" name="due_date" readonly>
-														<span class="input-group-btn">
-															<button class="btn default" type="button">
-																<i class="fa fa-calendar"></i>
-															</button>
-														</span>
-													</div>						  
+													</div>				  
 												</div>
 											</div>
 											<div class="col-md-6">

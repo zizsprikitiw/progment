@@ -558,6 +558,7 @@ class Index extends CI_Controller {
 		$modul_id = $this->input->post('modul_id');														
 		$nama_task = $this->input->post('nama_task');
 		$deskripsi = $this->input->post('deskripsi');			
+		$start_date = new DateTime($this->input->post('start_date'));
 		$due_date = new DateTime($this->input->post('due_date'));
 		$posisi_pic_id = $this->input->post('posisi_pic_id');			
 		$posisi_approval_id = $this->input->post('posisi_approval_id');			
@@ -570,6 +571,7 @@ class Index extends CI_Controller {
 			'posisi_pic_id' => $posisi_pic_id,
 			'posisi_approval_id' => $posisi_approval_id,
 			'deskripsi' => $deskripsi,
+			'start_date' => $due_date->format('Y-m-d'),
 			'due_date' => $due_date->format('Y-m-d'),
 		);
 		

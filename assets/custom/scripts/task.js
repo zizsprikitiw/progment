@@ -8,10 +8,7 @@ var loadTable = function() {
 	//load data table														
 	oTable = $('#table').DataTable({ 			
 		"processing": true, //Feature control the processing indicator.
-		"serverSide": true, //Feature control DataTables' server-side processing mode.							
-		"paging": false,	//"deferLoading": 0, // here		
-		"ordering": false,
-		"bFilter": false,
+		"serverSide": true, //Feature control DataTables' server-side processing mode.
 		"buttons": [
 			{ extend: 'print', className: 'btn dark btn-outline' },
 			{ extend: 'copy', className: 'btn red btn-outline' },
@@ -27,11 +24,6 @@ var loadTable = function() {
 		},
 		"columnDefs": [
 			{
-				"className": "dt-right", 
-				"width": "18%",
-				"targets": -1
-			},
-			{
 				"className": "dt-head-center", 
 				"targets": [1,2,-1]
 			},
@@ -41,7 +33,7 @@ var loadTable = function() {
 			},
 		],
 		"drawCallback": function( settings ) {
-
+			$('[data-toggle="tooltip"]').tooltip();
 			SweetAlert.init();
 
 		},
@@ -63,23 +55,29 @@ var loadTable = function() {
 }
 	
 var loadFormAdd = function() {
-	//save_method = 'add';
 	$('#add_form')[0].reset(); // reset form on modals		  
 	$('#modal_message').html('');  //reset message		
+	save_method = 'add';
+	$('#modalAddForm [name="save_method"]').val(save_method); 
   
 	//Ajax Load data from ajax
 	$.ajax({
-		url : "cms_menu/data_add" ,
+		url : "task/data_form_add" ,
 		type: "POST",
 		dataType: "JSON",
 		success: function(data)
 		{
-			// var item_sel=["ref_id"];
-			// var item_select = {"ref_id":-1};															
-			// select_box(data,item_select, item_sel);		
-															
+			var item_sel=["filter_program_form"];
+			var item_select = {"filter_program_form":-1};															
+			select_box(data,item_select, item_sel);	
+			
 			$('#modalAddForm').modal('show'); // show bootstrap modal
-			$('.modal-title').text('Tambah Data'); // Set Title to Bootstrap modal title					
+			$('.modal-title').text('Tambah Task'); // Set Title to Bootstrap modal title
+			
+			loadSelectFormAdd();
+			$('#filter_program_form').change(function(){
+				loadSelectFormAdd();
+			});
 		},
 		error: function (jqXHR, exception) {
 			var msgerror = ''; 
@@ -101,6 +99,218 @@ var loadFormAdd = function() {
 			toastr.error("Error System", msgerror, 'error');
 		}		
 	});					
+}
+
+var loadFormUpdate = function(id) {
+	$('#add_form')[0].reset(); // reset form on modals		  
+	$('#modal_message').html('');  //reset message		
+	save_method = 'update';
+	$('#modalAddForm [name="save_method"]').val(save_method); 
+  
+	//Ajax Load data from ajax
+	$.ajax({
+		url : "task/data_form_update" ,
+		type: "POST",
+		dataType: "JSON",
+		data: {"tasks_id":id},
+		success: function(data)
+		{
+			var item_sel=["filter_program_form"];
+			var item_select = {"filter_program_form":data.list_task.proyek_id};															
+			select_box(data,item_select, item_sel);	
+			
+			$('#modalAddForm').modal('show'); // show bootstrap modal
+			$('.modal-title').text('Update Task'); // Set Title to Bootstrap modal title
+			
+			$('#modalAddForm [name="id"]').val(data.list_task.id);
+			$('#modalAddForm [name="nama_task"]').val(data.list_task.nama_task);
+			$('#modalAddForm [name="deskripsi"]').val(data.list_task.deskripsi);
+			$('#modalAddForm [name="start_date"]').val(data.list_task.start_date);
+			$('#modalAddForm [name="due_date"]').val(data.list_task.due_date);
+			
+			loadSelectFormUpdate(data.list_task);
+			$('#filter_program_form').change(function(){
+				loadSelectFormAdd();
+			});
+		},
+		error: function (jqXHR, exception) {
+			var msgerror = ''; 
+			if (jqXHR.status === 0) {
+				msgerror = 'jaringan tidak terkoneksi.';
+			} else if (jqXHR.status == 404) {
+				msgerror = 'Halamam tidak ditemukan. [404]';
+			} else if (jqXHR.status == 500) {
+				msgerror = 'Internal Server Error [500].';
+			} else if (exception === 'parsererror') {
+				msgerror = 'Requested JSON parse gagal.';
+			} else if (exception === 'timeout') {
+				msgerror = 'RTO.';
+			} else if (exception === 'abort') {
+				msgerror = 'Gagal request ajax.';
+			} else {
+				msgerror = 'Error.\n' + jqXHR.responseText;
+			}
+			toastr.error("Error System", msgerror, 'error');
+		}		
+	});					
+}
+	
+//function load select modul
+var loadSelectFormAdd = function() {
+	var e = document.getElementById("filter_program_form");
+	var proyek_selected = e.options[e.selectedIndex].value;
+	
+	$.ajax({
+		url : base_url+"task/data_select_form_add" ,
+		type: "POST",
+		dataType: "JSON",
+		data: {"proyek_id":proyek_selected},
+		success: function(data)
+		{				
+			var item_sel=["filter_modul_form"];
+			var item_select = {"filter_modul_form":-1};															
+			select_box(data,item_select, item_sel);		
+			
+			var item_sel=["filter_pic","filter_approval","filter_member"];
+			var item_select = {"filter_pic":[-1],"filter_approval":[-1],"filter_member":[-1]};															
+			select_box_group(data,item_select, item_sel);	
+			
+			$('#modalAddForm .mt-multiselect').multiselect('destroy');
+			$('#modalAddForm .mt-multiselect').multiselect({
+				enableClickableOptGroups: true,
+				enableCollapsibleOptGroups: true,
+				collapseOptGroupsByDefault: true,
+				enableFiltering: true,
+				includeSelectAllOption: true,
+				maxHeight: 200,
+				buttonWidth: '100%',
+			});				
+		},
+		error: function (jqXHR, exception) {
+			var msgerror = ''; 
+			if (jqXHR.status === 0) {
+				msgerror = 'jaringan tidak terkoneksi.';
+			} else if (jqXHR.status == 404) {
+				msgerror = 'Halamam tidak ditemukan. [404]';
+			} else if (jqXHR.status == 500) {
+				msgerror = 'Internal Server Error [500].';
+			} else if (exception === 'parsererror') {
+				msgerror = 'Requested JSON parse gagal.';
+			} else if (exception === 'timeout') {
+				msgerror = 'RTO.';
+			} else if (exception === 'abort') {
+				msgerror = 'Gagal request ajax.';
+			} else {
+				msgerror = 'Error.\n' + jqXHR.responseText;
+			}
+			toastr.error("Error System", msgerror, 'error');
+		}		
+	});
+}
+	
+//function load select modul
+var loadSelectFormUpdate = function(list_task) {
+	var e = document.getElementById("filter_program_form");
+	var proyek_selected = e.options[e.selectedIndex].value;
+	
+	$.ajax({
+		url : base_url+"task/data_select_form_add" ,
+		type: "POST",
+		dataType: "JSON",
+		data: {"proyek_id":proyek_selected},
+		success: function(data)
+		{				
+			var item_sel=["filter_modul_form"];
+			var item_select = {"filter_modul_form":list_task.modul_id};															
+			select_box(data,item_select, item_sel);		
+			
+			var item_sel=["filter_pic","filter_approval","filter_member"];
+			var item_select = {"filter_pic":[list_task.posisi_pic_id],"filter_approval":[list_task.posisi_approval_id],"filter_member":[list_task.id_members]};															
+			select_box_group(data,item_select, item_sel);	
+			
+			$('#modalAddForm .mt-multiselect').multiselect('destroy');
+			$('#modalAddForm .mt-multiselect').multiselect({
+				enableClickableOptGroups: true,
+				enableCollapsibleOptGroups: true,
+				collapseOptGroupsByDefault: true,
+				enableFiltering: true,
+				includeSelectAllOption: true,
+				maxHeight: 200,
+				buttonWidth: '100%'
+			});				
+			
+			$("#filter_pic").val(list_task.posisi_pic_id);
+			$("#filter_approval").val(list_task.posisi_approval_id);
+			$("#filter_member").val(list_task.id_members);
+			$("#filter_pic,#filter_approval,#filter_member").multiselect("refresh");
+		},
+		error: function (jqXHR, exception) {
+			var msgerror = ''; 
+			if (jqXHR.status === 0) {
+				msgerror = 'jaringan tidak terkoneksi.';
+			} else if (jqXHR.status == 404) {
+				msgerror = 'Halamam tidak ditemukan. [404]';
+			} else if (jqXHR.status == 500) {
+				msgerror = 'Internal Server Error [500].';
+			} else if (exception === 'parsererror') {
+				msgerror = 'Requested JSON parse gagal.';
+			} else if (exception === 'timeout') {
+				msgerror = 'RTO.';
+			} else if (exception === 'abort') {
+				msgerror = 'Gagal request ajax.';
+			} else {
+				msgerror = 'Error.\n' + jqXHR.responseText;
+			}
+			toastr.error("Error System", msgerror, 'error');
+		}		
+	});
+}
+
+function saveTask() {
+	var form = document.getElementById('add_form');					  
+	var form_data = new FormData(form);	
+			
+	// ajax adding data to database
+	$.ajax({
+		url : base_url+"task/data_save",
+		type: "POST",
+		data: form_data,
+		processData: false,
+		contentType: false,
+		dataType: "JSON",
+		success: function(data)
+		{
+			if(data.status=='success'){
+				//saved data																
+				$('#modalAddForm').modal('hide');	
+				reloadTable();
+				toastr.success(data.message);
+			} else if (data.status=='warning'){
+				toastr.warning(data.message);
+			} else {
+				toastr.error(data.message);
+			}			   					  
+		},
+		error: function (jqXHR, exception) {
+			var msgerror = ''; 
+			if (jqXHR.status === 0) {
+				msgerror = 'jaringan tidak terkoneksi.';
+			} else if (jqXHR.status == 404) {
+				msgerror = 'Halamam tidak ditemukan. [404]';
+			} else if (jqXHR.status == 500) {
+				msgerror = 'Internal Server Error [500].';
+			} else if (exception === 'parsererror') {
+				msgerror = 'Requested JSON parse gagal.';
+			} else if (exception === 'timeout') {
+				msgerror = 'RTO.';
+			} else if (exception === 'abort') {
+				msgerror = 'Gagal request ajax.';
+			} else {
+				msgerror = 'Error.\n' + jqXHR.responseText;
+			}
+			toastr.error("Error System", msgerror, 'error');
+		}		
+	});
 }
  
 var data_edit_status = function(id) {
@@ -298,6 +508,67 @@ var data_delete = function (id, nama_id){
 			}
 		});					
 	}		*/		
+}
+
+var select_box = function(data,item_select,item_sel) {
+	//insert select item				
+	var len_item = item_sel.length;
+	select_val = -1;
+	for(var i=0; i<len_item; i++){
+		//get id selected
+		for(var key in item_select){
+			if(key == item_sel[i]){
+				select_val = item_select[key];
+			} 
+		}
+		
+		var sel = $("#"+item_sel[i]);						
+		sel.empty();					
+		var len_sub = data[item_sel[i]].length;
+		htmlString = "";//<option value='-- Pilih --' >-- Pilih --</option>						
+		for(var j=0; j<len_sub; j++){
+			if((select_val == -1) & (j==0)){
+				selected_str = "selected='selected'";
+			}else if(data[item_sel[i]][j].id_item == select_val){
+				selected_str = "selected='selected'";
+			}else{
+				selected_str = "";
+			}
+			
+			htmlString = htmlString+ "<Option value="+data[item_sel[i]][j].id_item+" "+selected_str+">"+data[item_sel[i]][j].nama_item+"</option>"							
+		}
+		sel.html(htmlString);	
+	}	
+}
+
+var select_box_group = function(data,item_select,item_sel) {
+	//insert select item				
+	var len_item = item_sel.length;
+	select_val = [-1];
+	for(var i=0; i<len_item; i++){
+		//get id selected
+		for(var key in item_select){
+			if(key == item_sel[i]){
+				select_val = item_select[key];
+			} 
+		}
+		
+		var sel = $("#"+item_sel[i]);						
+		sel.empty();	
+		$.each(data[item_sel[i]], function(key, value){
+			var group = $('<optgroup label="' + key + '" />');
+			$.each(value, function(){
+				if(select_val.includes(parseInt(this.id_item)) === true){
+					selected_str = 'selected="selected"';
+				}else{
+					selected_str = '';
+				}
+				
+				$('<option value="'+this.id_item+'"  '+selected_str+'>'+this.nama_item+'</option>').appendTo(group);
+			});
+			group.appendTo(sel);
+		});
+	}
 }	
 			
  jQuery(document).ready(function() {

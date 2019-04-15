@@ -59,11 +59,10 @@
 												<tr>
 													<th>#</th>
 													<th>Nama Task</th>
-													<th>PIC</th>
+													<th>DE</th>
 													<th>AWO</th>
-													<th>Member</th>
 													<th>Status</th>
-													<th>Waktu</th>
+													<th>Due Date</th>
 													<th>Aksi</th>
 												</tr>
 											</thead>
@@ -75,8 +74,7 @@
                                 <!-- END EXAMPLE TABLE PORTLET-->
                             </div>
                         </div>
-						
-		<!-- Modal BEGIN:ADD TASK-->
+				<!-- Modal BEGIN:ADD TASK-->
 				<div id="modalAddForm" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 					<div class="modal-dialog">
 						<div class="modal-content">
@@ -112,20 +110,17 @@
 												</div>
 										  
 												<div class="clearfix">
-													<label class="control-label" for="nama">Due Date</label>
-													<div class="input-group date date-picker" data-date-format="yyyy-mm-dd" today-highlight="true">
+													<label class="control-label" for="nama">Waktu</label>
+													<div class="input-group date date-picker input-daterange" data-date-format="yyyy-mm-dd" today-highlight="true">
+														<input type="text" class="form-control" name="start_date" readonly>
+														<span class="input-group-addon"> to </span>
 														<input type="text" class="form-control" name="due_date" readonly>
-														<span class="input-group-btn">
-															<button class="btn default" type="button">
-																<i class="fa fa-calendar"></i>
-															</button>
-														</span>
-													</div>						  
+													</div>															
 												</div>
 											</div>
 											<div class="col-md-6">
 												<div class="clearfix">
-													<label class="control-label" for="nama">PIC</label>
+													<label class="control-label" for="nama">DE</label>
 													<select class="mt-multiselect btn btn-default" name="posisi_pic_id" id="filter_pic"></select>						  
 												</div>
 										

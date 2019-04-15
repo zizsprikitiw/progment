@@ -63,74 +63,223 @@ class Task extends CI_Controller {
 	}
 	
 	public function data_list()
-	{	
-		$chkSearch = $this->input->post('chkSearch');
+	{
+		$is_admin = $this->cms_model->user_is_admin(); 
+		$user_id = $this->session->userdata('user_id');
+		
+		$datatable_name = 'v_tasks';
 		$where = '';
-		//$where['tahun'] =  $this->input->post('filter_tahun');
-		//$where['user_id_penerima'] = $this->session->userdata('user_id');					
-						
-		if($chkSearch[0] != "")
-		{			
-			foreach($chkSearch as $chkSearch_item)						
-			{				
-				if($chkSearch_item == "bulan"){
-					$where['bulan'] =  $this->input->post('filter_bulan');	
-				}
-				if($chkSearch_item == "nama"){
-					$where['nama_user_pengirim ~*'] = strtolower($this->input->post('nama'));
-				}		
-				if($chkSearch_item == "posisi"){
-					$where['posisi_id_pengirim'] =  $this->input->post('filter_posisi');	
-				}		
-				if($chkSearch_item == "jenis"){
-					$where['status'] = strtolower($this->input->post('jenis_laporan'));
-				}					
-			}
-		}
-			
-		//print_r($where);		
-		$datatable_name = "v_tasks";	
-		$search_column = '';
-		$search_order = '';
-		$order_by = 'update_date desc';								
+		$search_column = array('nama_task');
+		$search_order = array();
+		$order_by = 'nama_task ASC';		
 		
 		$list = $this->cms_model->get_datatables_where($datatable_name, $search_column, $search_order, $where, $order_by);
+		
 		$data = array();
 		$no = $_POST['start'];
 		foreach ($list as $list_item) {
-			$member = '<ul>';
-			$members = explode(',', trim($list_item->id_members, '{}'));
-			foreach($members as $m) {
-				$user = $this->cms_model->row_get_by_criteria('users', array('id'=>$m));
-				$member .= '<li>'.$user->nama.'</li>';
+			$aksi = '';
+			if($is_admin){
+				$aksi .= '<a class="btn btn-xs btn-warning" href="javascript:void()" data-toggle="tooltip" title="Edit" onclick="loadFormUpdate('."'".$list_item->id."'".')"><i class="fa fa-pencil"></i></a>';
 			}
-			$member .= '<ul>';
-			//$user = $this->cms_model->row_get_by_criteria('user', 'id'=)
+			
+			$reminder = '';
+			
+			//reminder due date
+			$date1=date_create(date('Y-m-d'));
+			$date2=date_create($list_item->due_date);
+			$diff=date_diff($date1,$date2);
+			
+			if($diff->format('%R%a')<=14 && strtolower($list_item->nama_status)!='completed'){
+				$reminder = '<span class="task-bell" data-toggle="tooltip" data-placement="right" title="'.$diff->format('%R%a days').'"><i class="fa fa-bell-o"></i></span>';
+			}
+			
+			$admin = '';
+			if ($is_admin) {
+				$admin = $user_id;
+			}
+			$members = explode(',', trim($list_item->id_members, '{}'));
+			array_push($members,$list_item->pic_id,$list_item->approval_id,$admin);
+							
+			$file_current = $this->db->query("select user_id, submit_date, filename from v_tasks_file_current where tasks_id=".$list_item->id." AND jenis_file=2 order by submit_date desc limit 1")->row();
+							
+			$link_doc = '';
+			if(!empty($file_current)) {
+				$link_doc = '<a href="'.base_url($this->config->item('uploads')['tasks']).'/'.$file_current->user_id.'/'.$file_current->filename.'" target="_blank"  class="btn btn-xs red" data-toggle="tooltip" title="Download Dokumen" data-placement="left" ><i class="fa fa-file-pdf-o"></i></a>';
+			}
+			
 			$no++;
 			$row = array();
-			$row[] = $no;		
-			$row[] = $list_item->nama_task.' ['.$list_item->nama_modul.'-'.$list_item->nama_program.']';
-			$row[] = $list_item->nama_pic;		
-			$row[] = $list_item->nama_approval;		
-			$row[] = $member;
-			$row[] = '<div class="progress">
-                                            <div class="progress-bar progress-bar-success progress-xs" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                                                <span class="sr-only"> 40% Complete (success) </span>
-                                            </div>
-                                        </div>';
-			$row[] = '';
-			$row[] = '';
-																														
+			$row[] = $no;			
+			$row[] = (in_array($user_id,$members)?'<a href="'.base_url('index/task/'.base64_encode($list_item->id)).'" target="_blank">':'').$list_item->nama_task.(in_array($user_id,$members)?'</a>':'');	
+			$row[] = $list_item->nama_pic;
+			$row[] = $list_item->nama_approval;
+			$row[] = '<span class="label label-sm label-'.$this->custom->statusColor($list_item->nama_status).'">'.$list_item->nama_status.' <span class="badge bg-white bg-font-white" style="height:17px">'.$list_item->progress.'%</span></span> ';		
+			$row[] = $list_item->due_date;	
+			$row[] = $link_doc.$aksi;
 			$data[] = $row;
 		}
-
+		
 		$output = array(
-						"draw" => $_POST['draw'],
-						"recordsTotal" => $this->cms_model->count_all_where($datatable_name, $where),
-						"recordsFiltered" => $this->cms_model->count_filtered_where($datatable_name, $search_column, $search_order, $where, $order_by),
-						"data" => $data,						
-				);
-		//output to json format
-		echo json_encode($output);			
+				"draw" => $_POST['draw'],
+				"recordsTotal" => $this->cms_model->count_all_where($datatable_name, $where),
+				"recordsFiltered" => $this->cms_model->count_filtered_where($datatable_name, $search_column, $search_order, $where, $order_by),
+				"data" => $data,
+		);
+		
+		echo json_encode($output);
 	}
+	
+	public function data_form_add()
+	{
+		$table_name = 'proyek';
+		$where = '';
+		$order_by = 'id ASC';
+		$filter_program = array();
+		
+		$list_program = $this->cms_model->query_get_by_criteria($table_name, $where, $order_by);
+		
+		foreach ($list_program as $list_item) {
+			$filter_program[] = array("id_item" => $list_item->id, "nama_item" => $list_item->nama);
+		}
+			
+		$data['filter_program_form'] = $filter_program;
+		echo json_encode($data);
+	}
+	
+	public function data_form_update()
+	{
+		$tasks_id = $this->input->post('tasks_id');
+		$table_name = 'v_tasks';
+		$where = 'id='.$tasks_id.'';
+		
+		$list_task = $this->cms_model->row_get_by_criteria($table_name, $where);
+		
+		$table_name = 'proyek';
+		$where = '';
+		$order_by = 'id ASC';
+		$filter_program = array();
+		
+		$list_program = $this->cms_model->query_get_by_criteria($table_name, $where, $order_by);
+		
+		foreach ($list_program as $list_item) {
+			$filter_program[] = array("id_item" => $list_item->id, "nama_item" => $list_item->nama);
+		}
+			
+		$data['list_task'] = $list_task;
+		$data['filter_program_form'] = $filter_program;
+		echo json_encode($data);
+	}
+	
+	public function data_select_form_add()
+	{
+		$user_id = $this->session->userdata('user_id');
+		$proyek_id = $this->input->post('proyek_id');
+		$table_name = 'v_users_posisi';
+		$where = 'proyek_id='.$proyek_id.'';
+		$order_by = 'id ASC';
+		$filter_posisi = array();
+		$filter_user = array();
+		
+		$list_user = $this->cms_model->query_get_by_criteria($table_name, $where, $order_by);
+		
+		foreach ($list_user as $list_item) {
+			$filter_posisi[$list_item->leader_nama][] = array("id_item" => $list_item->id, "nama_item" => ($list_item->nama_user.' ['.$list_item->nama_posisi.']'));
+			$filter_user[$list_item->leader_nama][] = array("id_item" => $list_item->user_id, "nama_item" => ($list_item->nama_user.' ['.$list_item->nama_posisi.']'));
+		}
+		
+		$table_name = 'tasks_modul';
+		$where = 'proyek_id='.$proyek_id.'';
+		$order_by = 'id ASC';
+		$filter_modul = array();
+		
+		$list_modul = $this->cms_model->query_get_by_criteria($table_name, $where, $order_by);
+		
+		foreach ($list_modul as $list_item) {
+			$filter_modul[] = array("id_item" => $list_item->id, "nama_item" => $list_item->nama_modul);
+		}
+			
+		$data['filter_pic'] = $filter_posisi;
+		$data['filter_approval'] = $filter_posisi;
+		$data['filter_member'] = $filter_user;
+		$data['filter_modul_form'] = $filter_modul;
+		echo json_encode($data);
+	}
+	
+	function data_save()
+	{
+		$status = 'error';
+        $message = 'Task gagal disimpan';		
+		$save_method = $this->input->post('save_method');
+		$user_id = $this->session->userdata('user_id');		
+		$tasks_id = $this->input->post('id');															
+		$modul_id = $this->input->post('modul_id');														
+		$nama_task = $this->input->post('nama_task');
+		$deskripsi = $this->input->post('deskripsi');			
+		$start_date = new DateTime($this->input->post('start_date'));
+		$due_date = new DateTime($this->input->post('due_date'));
+		$posisi_pic_id = $this->input->post('posisi_pic_id');			
+		$posisi_approval_id = $this->input->post('posisi_approval_id');			
+		$member_id = $this->input->post('member_id');	
+		
+		$additional_data = array(
+			'update_user' => $user_id,
+			'modul_id' => $modul_id,
+			'nama_task' => $nama_task,
+			'posisi_pic_id' => $posisi_pic_id,
+			'posisi_approval_id' => $posisi_approval_id,
+			'deskripsi' => $deskripsi,
+			'start_date' => $start_date->format('Y-m-d'),
+			'due_date' => $due_date->format('Y-m-d'),
+		);
+		
+		if($save_method == "update" ){
+			$additional_data['update_date'] = gmdate("Y-m-d H:i:s", time()+60*60*7);
+		}else{
+			$additional_data['user_id'] = $user_id;
+		}
+		
+		if($save_method == "update" ){
+			try {
+				$this->cms_model->update(array('id' => $tasks_id),$additional_data,'tasks');	
+				try {
+					$this->cms_model->delete('tasks_members', array('tasks_id' => $tasks_id));	
+				} catch (Exception $e) {
+					$e->getMessage();
+				}	
+				$status = 'success';
+				$message = "Task berhasil diubah";
+			} catch (Exception $e) {
+				$status = 'error';
+				$message = "Task gagal diubah";
+			}
+		} else {
+			try {
+				$tasks_id = $this->cms_model->save($additional_data, 'tasks');
+				try {
+					$this->cms_model->delete('tasks_members', array('tasks_id' => $tasks_id));	
+				} catch (Exception $e) {
+					$e->getMessage();
+				}	
+				$status = 'success';
+				$message = "Task berhasil disimpan";
+			} catch (Exception $e) {
+				$status = 'error';
+				$message = "Task gagal disimpan";
+			}
+		}
+		
+		if($member_id!=''){
+			foreach($member_id as $item) {
+				$user_data = array(
+					'tasks_id' => $tasks_id,
+					'user_id' => $item
+				);
+				
+				$tasks_members_is = $this->cms_model->save($user_data, "tasks_members");
+			}
+		}
+		
+		echo json_encode(array("status" => $status, "message" => $message));
+	}	
 }

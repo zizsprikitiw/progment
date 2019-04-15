@@ -1241,7 +1241,7 @@ var loadFormAddTask = function() {
 	var e = document.getElementById("filter_proyek");
 	var proyek_selected = e.options[e.selectedIndex].value;
 	save_method = 'add';
-	$('#modalFormAddAgenda [name="save_method"]').val(save_method);  
+	$('#modalFormAddTask [name="save_method"]').val(save_method);  
 	$('#add_form_task')[0].reset(); // reset form on modals		  
 	$('#modal_message').html('');  //reset message					 			  
 	//document.getElementById('ref_id').disabled = false;
