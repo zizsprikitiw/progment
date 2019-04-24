@@ -62,16 +62,45 @@ class Task extends CI_Controller {
 		$this->load->view('task',$this->data);
 	}
 	
+	public function data_init()
+	{
+		$table_name = 'tasks_modul';
+		$where = '';
+		$order_by = 'id ASC';
+		$filter_modul = array();
+		
+		$list_modul = $this->cms_model->query_get_by_criteria($table_name, $where, $order_by);
+		
+		foreach ($list_modul as $list_item) {
+			$filter_modul[] = array("id_item" => $list_item->id, "nama_item" => $list_item->nama_modul);
+		}
+						
+		$data['filter_modul'] = $filter_modul;  
+			
+		echo json_encode($data);
+	}
+	
 	public function data_list()
 	{
 		$is_admin = $this->cms_model->user_is_admin(); 
 		$user_id = $this->session->userdata('user_id');
+		$chkSearch = $this->input->post('chkSearch');
 		
 		$datatable_name = 'v_tasks';
-		$where = '';
+		$where = array();
 		$search_column = array('nama_task');
 		$search_order = array();
-		$order_by = 'nama_task ASC';		
+		$order_by = 'nama_task ASC';	
+
+		if($chkSearch[0] != "")
+		{			
+			foreach($chkSearch as $chkSearch_item)						
+			{
+				if($chkSearch_item == "modul"){
+					$where['modul_id'] =  $this->input->post('filter_modul');					
+				}
+			}
+		}		
 		
 		$list = $this->cms_model->get_datatables_where($datatable_name, $search_column, $search_order, $where, $order_by);
 		

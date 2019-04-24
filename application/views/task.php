@@ -4,6 +4,21 @@
                         <!-- END PAGE TITLE-->
                         <!-- END PAGE HEADER-->
 						<div class="row">
+							<div class="col-sm-12 form-group">
+								<div class="row">
+									<div class="col-md-4">
+										<label class="col-md-5 checkbox-inline"><b>
+										  <input type="checkbox" name="chkSearch[]" id="chkSearch[]" value="modul"> Modul:</b>
+										</label>								
+										<div class="col-md-7">                               
+											<select name="filter_modul" id="filter_modul" class="form-control"><option>--Pilih--</option></select> 
+										</div>
+									</div>
+									<div class="col-md-2">
+										<button type="button" class="btn btn-primary" id="btnSearch" onclick="data_search()"><i class="fa fa-search"></i> Cari</button>	
+									</div>	
+								</div>	
+							</div>
                             <div class="col-md-12">
                                 <!-- BEGIN EXAMPLE TABLE PORTLET-->
                                 <div class="portlet light bordered">

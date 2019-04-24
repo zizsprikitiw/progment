@@ -1,7 +1,30 @@
 var oTable;
 
 var reloadTable = function() {	
-  oTable.ajax.reload(null,false); //reload datatable ajax 
+	oTable.ajax.reload(null,false); //reload datatable ajax 
+}
+
+var data_search = function() {							
+	oTable.ajax.reload(null,false); //reload datatable ajax 
+}
+
+var loadSelectFilter = function() {
+	 $.ajax({
+		url : "task/data_init",
+		type: "POST",
+		dataType: "JSON",
+		success: function(data)
+		{
+			var item_sel=["filter_modul"];
+			var item_select = {"filter_modul":-1};															
+			select_box(data,item_select, item_sel);			
+			loadTable();																	
+		},
+		error: function (jqXHR, textStatus, errorThrown)
+		{
+			alert('Error get data from ajax');
+		}
+	});	
 }
 
 var loadTable = function() {
@@ -20,7 +43,17 @@ var loadTable = function() {
 		// Load data for the table's content from an Ajax source
 		"ajax": {
 			"url": "task/data_list",
-			"type": "POST"										
+			"type": "POST",
+			"data": function ( d ) {
+				var chkSearch = [];
+				$.each($("input[name='chkSearch[]']:checked"), function(){
+					chkSearch.push($(this).val());
+				});
+				
+				d.chkSearch = chkSearch;
+				var item_selectbox = document.getElementById('filter_modul');
+				d.filter_modul = item_selectbox.options[item_selectbox.selectedIndex].value;																																
+			}							
 		},
 		"columnDefs": [
 			{
@@ -572,6 +605,6 @@ var select_box_group = function(data,item_select,item_sel) {
 }	
 			
  jQuery(document).ready(function() {
-    loadTable();
+    loadSelectFilter();
 });
 			
