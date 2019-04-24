@@ -405,7 +405,7 @@ class cms_model extends CI_Model {
 			foreach($search_column as $item) 
 			{
 				if($_POST['search']['value'])
-					($i==0) ? $this->db->like($item, strtolower($_POST['search']['value'])) : $this->db->or_like($item, strtolower($_POST['search']['value']));
+					($i==0) ? $this->db->like('LOWER(' .$item. ')', strtolower($_POST['search']['value'])) : $this->db->or_like($item, strtolower($_POST['search']['value']));
 				$column[$i] = $item;
 				$i++;
 			}
