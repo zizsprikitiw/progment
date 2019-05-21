@@ -4,6 +4,7 @@
             <a href="<?php echo site_url(); ?>">
                 <img src="<?php echo base_url($this->config->item('assets')['custom_img']); ?>/logo-big.png" alt="" /> </a>
 				<h3 class="font-white uppercase">Program Management Pustekbang</h3>
+				<h3 class="font-white uppercase">(Sistem Dokumentasi Rancang Bangun Pesawat Udara)</h3>
         </div>
         <!-- END LOGO -->
         <!-- BEGIN LOGIN -->
